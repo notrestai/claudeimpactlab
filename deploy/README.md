@@ -1,22 +1,24 @@
 # Launching on relayhealth.dev (Cloudflare)
 
-## Connect GitHub to Cloudflare Pages (frontend, automatic on every save)
+## Connect GitHub to Cloudflare (frontend, automatic on every save)
 
-In the Cloudflare dashboard: **Workers & Pages → Create → Pages → Connect to Git**, authorize GitHub for
-`notrestai/claudeimpactlab`, then:
+Cloudflare dashboard: **Workers & Pages → Create → Import a repository**, pick `notrestai/claudeimpactlab`, then:
 
 | Setting | Value |
 |---|---|
-| Production branch | `claude/sleepy-planck-khriw0` (the project's main line today) |
-| Framework preset | None |
+| Project name | `claudeimpactlab` (must match `name` in the root `wrangler.toml`) |
 | Build command | leave empty |
-| Build output directory | `frontend` |
+| Deploy command | `npx wrangler deploy` |
+| Root directory | `/` |
+| API token | pick **Create new token** so it has every permission the build needs |
+| Build variables | none |
 
-Save and deploy. Then **Custom domains → Set up a custom domain → relayhealth.dev**. Every save to the
-project republishes the page within a minute. `frontend/config.js` already points the page at
-`https://api.relayhealth.dev` when it is opened from relayhealth.dev or a `*.pages.dev` preview.
+Press Deploy. The root `wrangler.toml` tells Cloudflare to publish `frontend/` as a static-assets Worker.
+When the first deploy is green, open the Worker → **Settings → Domains & Routes → Add → Custom domain →
+`relayhealth.dev`**. Every save to the project redeploys within a minute. `frontend/config.js` points the page
+at `https://api.relayhealth.dev` whenever it is opened from relayhealth.dev or a `*.workers.dev` address.
 
-The backend cannot live on Pages (it is Python that renders PDFs and calls Claude), so it runs on a laptop
+The backend cannot live on a Worker (it is Python that renders PDFs and calls Claude), so it runs on a laptop
 or a container host and is reached through a Cloudflare Tunnel at `api.relayhealth.dev`:
 
 ```bash
@@ -67,18 +69,16 @@ cloudflared tunnel --config deploy/cloudflared.yml run relayhealth-api
 
 `deploy/cloudflared.yml` points `api.relayhealth.dev` at `http://127.0.0.1:8000`. Fill in the tunnel id it prints.
 
-## 2. Frontend on Pages
+## 2. Frontend by hand (if the GitHub connection is not used)
 
 Set the API address the page should call, then publish the `frontend/` folder:
 
 ```bash
-echo "window.SST_API_BASE = 'https://api.relayhealth.dev';" > frontend/config.js
-npx wrangler pages project create relayhealth --production-branch main
-npx wrangler pages deploy frontend --project-name relayhealth
+npx wrangler login
+npx wrangler deploy          # uses the root wrangler.toml; publishes frontend/ as a static-assets Worker
 ```
 
-Then in the Cloudflare dashboard: Pages, the `relayhealth` project, Custom domains, add `relayhealth.dev`.
-`deploy/wrangler.toml` holds the same settings for `wrangler pages deploy` without flags.
+Then in the dashboard add the custom domain `relayhealth.dev` to the Worker.
 
 ## 3. CORS
 

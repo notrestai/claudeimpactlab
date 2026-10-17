@@ -1,5 +1,0 @@
-# Cloudflare Pages settings for the static frontend.
-# npx wrangler pages deploy frontend --project-name relayhealth
-name = "relayhealth"
-pages_build_output_dir = "frontend"
-compatibility_date = "2026-10-01"

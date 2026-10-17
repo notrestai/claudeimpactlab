@@ -1,0 +1,9 @@
+# Cloudflare Worker that serves the static frontend (frontend/). No server code runs here: the backend is
+# Python and runs behind a Cloudflare Tunnel at api.relayhealth.dev (see deploy/README.md).
+# Deployed by Cloudflare's GitHub integration with: npx wrangler deploy
+name = "claudeimpactlab"
+compatibility_date = "2026-10-01"
+
+[assets]
+directory = "./frontend"
+not_found_handling = "single-page-application"
