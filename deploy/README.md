@@ -1,5 +1,17 @@
 # Launching on relayhealth.dev (Cloudflare)
 
+**Fastest path (five minutes, from the laptop that has the key):**
+
+```bash
+export ANTHROPIC_API_KEY=...        # or put it in .env
+./deploy/launch.sh                  # backend on :8000 + Cloudflare Tunnel to relayhealth.dev
+```
+
+`deploy/launch.sh` installs the Python dependencies, creates the tunnel if needed, routes the domain to it,
+starts the backend (which also serves the frontend) and opens the tunnel. Ctrl-C stops both.
+A `Dockerfile` at the repo root runs the same thing on any container host if the demo should outlive a laptop.
+
+
 The backend is Python (FastAPI, the Anthropic SDK, a PDF renderer). It does not run inside a Cloudflare
 Worker, so the launch has two halves:
 
