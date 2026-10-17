@@ -74,8 +74,13 @@ def _postprocess(section_obj: dict, section: str):
 
     def walk(node, path):
         if isinstance(node, dict) and "status" in node and "value" in node and "evidence" in node:
+            node.setdefault("conflicts", [])
+            node.setdefault("confidence", None)
+            node.setdefault("note", None)
             for ev in node["evidence"]:
                 ev.setdefault("source", "packet")
+                ev.setdefault("ref", None)
+                ev.setdefault("timestamp", None)
                 ev["quote"], flags = scrub.scrub(ev.get("quote") or "")
                 if ev.get("page") is None and ev["source"] == "packet":
                     ev["page"] = 0

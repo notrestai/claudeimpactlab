@@ -39,27 +39,75 @@ def client():
     return _client
 
 
-def structured(system, content: list, schema: dict, *, model: str = MODEL_MAIN, max_tokens: int = 16000,
-               effort: str = "high", stream: bool = True):
-    """Returns (parsed_json, usage_dict, model). Raises ClaudeError on refusal, truncation or bad JSON."""
-    kwargs = dict(model=model, max_tokens=max_tokens, system=system,
-                  messages=[{"role": "user", "content": content}],
-                  output_config={"format": {"type": "json_schema", "schema": schema}, "effort": effort})
-    c = client()
+# Schemas the API refused to compile into an output grammar ("compiled grammar is too large"), by content hash.
+# Those calls ask for JSON in the prompt instead and validate the answer locally against the same schema.
+_too_large: set[str] = set()
+
+
+def _schema_key(schema: dict) -> str:
+    import hashlib
+    return hashlib.sha256(json.dumps(schema, sort_keys=True).encode()).hexdigest()
+
+
+def _call(c, kwargs: dict, stream: bool):
     if stream:
         with c.messages.stream(**kwargs) as s:
-            msg = s.get_final_message()
-    else:
-        msg = c.messages.create(**kwargs)
+            return s.get_final_message()
+    return c.messages.create(**kwargs)
+
+
+def _parse_json_text(text: str):
+    t = text.strip()
+    if t.startswith("```"):
+        t = t.split("\n", 1)[1] if "\n" in t else t[3:]
+        t = t.rsplit("```", 1)[0]
+    try:
+        return json.loads(t)
+    except json.JSONDecodeError as e:
+        raise ClaudeError(f"bad JSON: {e}")
+
+
+def structured(system, content: list, schema: dict, *, model: str = MODEL_MAIN, max_tokens: int = 16000,
+               effort: str = "high", stream: bool = True):
+    """Returns (parsed_json, usage_dict, model). Raises ClaudeError on refusal, truncation or bad JSON.
+
+    Uses the API's constrained JSON output when the schema compiles. Some SST sections are too large for the
+    output grammar; for those the schema goes into the prompt and the reply is validated here with jsonschema."""
+    import anthropic
+    c = client()
+    key = _schema_key(schema)
+    by_prompt = key in _too_large
+    if not by_prompt:
+        kwargs = dict(model=model, max_tokens=max_tokens, system=system,
+                      messages=[{"role": "user", "content": content}],
+                      output_config={"format": {"type": "json_schema", "schema": schema}, "effort": effort})
+        try:
+            msg = _call(c, kwargs, stream)
+        except anthropic.BadRequestError as e:
+            if "grammar is too large" not in str(e):
+                raise
+            _too_large.add(key)
+            by_prompt = True
+    if by_prompt:
+        ask = {"type": "text", "text": "Reply with one JSON object and nothing else (no prose, no code fence). "
+                                       "It must validate against this JSON schema exactly, every required key present:\n"
+               + json.dumps(schema, ensure_ascii=False)}
+        kwargs = dict(model=model, max_tokens=max_tokens, system=system,
+                      messages=[{"role": "user", "content": content + [ask]}],
+                      output_config={"effort": effort})
+        msg = _call(c, kwargs, stream)
     if msg.stop_reason in ("refusal", "max_tokens"):
         raise ClaudeError(f"stopped: {msg.stop_reason}")
     text = next((b.text for b in msg.content if b.type == "text"), None)
     if text is None:
         raise ClaudeError("no text block in response")
-    try:
-        data = json.loads(text)
-    except json.JSONDecodeError as e:
-        raise ClaudeError(f"bad JSON: {e}")
+    data = _parse_json_text(text)
+    if by_prompt:
+        import jsonschema
+        errors = sorted(jsonschema.Draft202012Validator(schema).iter_errors(data), key=lambda e: list(e.path))
+        if errors:
+            e = errors[0]
+            raise ClaudeError(f"schema: {'/'.join(map(str, e.path))}: {e.message[:120]}")
     usage = msg.usage.model_dump() if hasattr(msg.usage, "model_dump") else dict(msg.usage)
     return data, usage, msg.model
 

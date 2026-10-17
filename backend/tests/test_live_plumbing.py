@@ -26,6 +26,19 @@ def live_path(monkeypatch):
     yield
 
 
+def strip_bookkeeping(node):
+    """What the model is asked for omits the bookkeeping the pipeline fills in afterwards (sstlib.OUTPUT_DROP)."""
+    if isinstance(node, list):
+        return [strip_bookkeeping(n) for n in node]
+    if isinstance(node, dict):
+        if "status" in node and "value" in node and "evidence" in node:
+            node = {k: v for k, v in node.items() if k not in sstlib.OUTPUT_DROP["Field_"]}
+            node["evidence"] = [{k: v for k, v in ev.items() if k not in sstlib.OUTPUT_DROP["Evidence"]} for ev in node["evidence"]]
+            return node
+        return {k: strip_bookkeeping(v) for k, v in node.items()}
+    return node
+
+
 def fake_structured(system, content, schema, **kw):
     """Validate the request shape like the API would, then answer from the fictional example."""
     assert isinstance(system, list) and system[-1].get("cache_control"), "system must be cached blocks"
@@ -36,7 +49,7 @@ def fake_structured(system, content, schema, **kw):
     key = schema["required"][0]
     CALLS.append(key)
     if key in EX:
-        out = {key: json.loads(json.dumps(EX[key]))}
+        out = {key: strip_bookkeeping(json.loads(json.dumps(EX[key])))}
     elif key == "pages":
         pages = [int(b["text"].split()[1]) for b in content if b.get("type") == "text" and b["text"].startswith("[Page ")]
         out = {"pages": [{"page": n, "doc_type": "other", "orientation": "upright", "legibility": "good", "from_earlier_stay": False, "duplicate_of_page": None} for n in pages]}

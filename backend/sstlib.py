@@ -229,6 +229,23 @@ def _prune_defs(node: dict, defs: dict) -> dict:
     return {k: defs[k] for k in defs if k in keep}
 
 
+# Bookkeeping the extractor never needs to produce; the pipeline fills them after the call (extract._postprocess).
+OUTPUT_DROP = {"Field_": ("updated_by", "updated_at"), "Evidence": ("source", "ref", "timestamp")}
+
+
+def _slim_defs(defs: dict) -> dict:
+    """Drop the bookkeeping properties from Field_* and Evidence so the output grammar stays small."""
+    out = {}
+    for name, d in defs.items():
+        drop = OUTPUT_DROP["Field_"] if name.startswith("Field_") else OUTPUT_DROP.get(name, ())
+        if drop and isinstance(d, dict) and "properties" in d:
+            d = dict(d)
+            d["properties"] = {k: v for k, v in d["properties"].items() if k not in drop}
+            d["required"] = [r for r in d.get("required", []) if r not in drop]
+        out[name] = d
+    return out
+
+
 def section_schema(section: str) -> dict:
     """A self-contained schema for one top-level SST section, for Claude's structured output."""
     schema = load_schema()
@@ -238,7 +255,7 @@ def section_schema(section: str) -> dict:
         "properties": {section: sec},
         "required": [section],
         "additionalProperties": False,
-        "$defs": _prune_defs(sec, schema["$defs"]),
+        "$defs": _slim_defs(_prune_defs(sec, schema["$defs"])),
     })
 
 
