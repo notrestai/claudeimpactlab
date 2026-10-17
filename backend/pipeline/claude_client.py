@@ -68,15 +68,17 @@ def _parse_json_text(text: str):
 
 
 def structured(system, content: list, schema: dict, *, model: str = MODEL_MAIN, max_tokens: int = 16000,
-               effort: str = "high", stream: bool = True):
+               effort: str = "high", stream: bool = True, constrained: bool = True):
     """Returns (parsed_json, usage_dict, model). Raises ClaudeError on refusal, truncation or bad JSON.
 
-    Uses the API's constrained JSON output when the schema compiles. Some SST sections are too large for the
-    output grammar; for those the schema goes into the prompt and the reply is validated here with jsonschema."""
+    constrained=True uses the API's constrained JSON output when the schema compiles; a schema the API refuses
+    as too large falls back to the prompt. constrained=False always puts the schema in the prompt and validates
+    the reply here with jsonschema (the schema then stays out of the cached prefix, so calls that share a
+    system prompt and page images share the cache)."""
     import anthropic
     c = client()
     key = _schema_key(schema)
-    by_prompt = key in _too_large
+    by_prompt = (not constrained) or key in _too_large
     if not by_prompt:
         kwargs = dict(model=model, max_tokens=max_tokens, system=system,
                       messages=[{"role": "user", "content": content}],

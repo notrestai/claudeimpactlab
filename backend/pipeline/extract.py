@@ -1,5 +1,9 @@
 """Stage B: fill the SST section by section from the page images, with evidence. Runs sections in parallel;
-the packet images are a shared cached prefix. Never overwrites a confirmed or entered value."""
+the packet images are a shared cached prefix. Never overwrites a confirmed or entered value.
+
+Section calls ask for JSON in the prompt and validate it locally (claude_client.structured with constrained=False):
+the API's constrained output puts the schema into the cached prefix, so with one schema per section no section
+call hit the cache, and the larger sections exceeded its grammar limit anyway."""
 from __future__ import annotations
 import concurrent.futures as cf
 from .. import sstlib, scrub
@@ -72,18 +76,25 @@ def _postprocess(section_obj: dict, section: str):
     """Evidence gate and identifier scrub on everything the model returned."""
     ann = sstlib.annotations()
 
+    def fix_evidence(evs):
+        for ev in evs:
+            if not isinstance(ev, dict):
+                continue
+            ev.setdefault("source", "packet")
+            ev.setdefault("ref", None)
+            ev.setdefault("timestamp", None)
+            ev["quote"], flags = scrub.scrub(ev.get("quote") or "")
+            if ev.get("page") is None and ev["source"] == "packet":
+                ev["page"] = 0
+
     def walk(node, path):
+        if isinstance(node, dict) and isinstance(node.get("evidence"), list):
+            fix_evidence(node["evidence"])  # fields and rows (problem list, wounds, cultures) all carry evidence
         if isinstance(node, dict) and "status" in node and "value" in node and "evidence" in node:
             node.setdefault("conflicts", [])
             node.setdefault("confidence", None)
             node.setdefault("note", None)
-            for ev in node["evidence"]:
-                ev.setdefault("source", "packet")
-                ev.setdefault("ref", None)
-                ev.setdefault("timestamp", None)
-                ev["quote"], flags = scrub.scrub(ev.get("quote") or "")
-                if ev.get("page") is None and ev["source"] == "packet":
-                    ev["page"] = 0
+            walk(node["value"], path + ["value"])
             if node["status"] == "found" and not node["evidence"]:
                 node["status"] = "cant_tell"
                 node["note"] = (node.get("note") or "") + " Extractor gave no evidence; downgraded."
@@ -155,10 +166,10 @@ def extract(sst: dict, rid: str, sections: list[str] | None = None, pages: list[
         content = images + [{"type": "text", "text": _instruction(section, sst)}]
         def call():
             try:
-                return cc.structured(system, content, schema, max_tokens=16000, effort="high")
+                return cc.structured(system, content, schema, max_tokens=16000, effort="high", constrained=False)
             except cc.ClaudeError as e:
                 retry = content + [{"type": "text", "text": f"The previous attempt failed ({e}). Return valid JSON for the schema; set unclear fields to status cant_tell."}]
-                return cc.structured(system, retry, schema, max_tokens=16000, effort="high")
+                return cc.structured(system, retry, schema, max_tokens=16000, effort="high", constrained=False)
         try:
             data = cc.logged(rid, f"extract:{section}", call, f"{len(pages)} pages")
             return section, data[section], None
