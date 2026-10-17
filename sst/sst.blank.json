@@ -1,0 +1,1896 @@
+{
+  "meta": {
+    "sst_version": "0.1",
+    "referral_id": "",
+    "created_at": null,
+    "updated_at": null,
+    "fictional": false,
+    "packet": {
+      "source_file": null,
+      "page_count": null,
+      "pages": []
+    },
+    "parties": {
+      "hospital": {
+        "label": null,
+        "contact_role": null
+      },
+      "patient": {
+        "label": "Patient"
+      },
+      "providers": []
+    }
+  },
+  "documents": {
+    "doc_1_referral_form": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "doc_2_demographics": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "doc_3_authorization": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "doc_4_history_and_physical": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "doc_5_progress_notes": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "doc_6_vitals_last_24h": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "doc_7_medication_list": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "doc_8_pt_ot_or_nursing_notes": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "doc_9_cultures": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "doc_10_meds_30_day_supply": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    }
+  },
+  "referral": {
+    "referring_facility": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "referring_unit": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "referrer_role": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "source_setting": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "chief_complaint_or_admitting_dx": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "admit_date": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "anticipated_discharge_date": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "length_of_stay_authorized_days": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "insurance_plan": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "authorization_status": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "sent_to_other_providers": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    }
+  },
+  "patient": {
+    "age_years": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "gender": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "preferred_language": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "interpreter_needed": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "has_phone": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "has_car": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "service_animal": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "hospice_enrolled": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "four_plus_homeless_episodes_3y": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    }
+  },
+  "housing": {
+    "housing_situation": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "too_ill_to_recover_outside": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "lives_alone_no_supports": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "readmission_risk": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    }
+  },
+  "function": {
+    "adls": {
+      "bathing": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "gathers_supplies_and_transfers_to_shower": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "dressing": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "toileting": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "eating": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "hygiene_independent": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      }
+    },
+    "continence": {
+      "bowel_bladder_continent": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "uses_briefs": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "ostomy": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "foley_catheter": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "can_empty_catheter_bag": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "self_catheterizes": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      }
+    },
+    "mobility": {
+      "ambulatory": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "ambulation_distance_ft": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "ambulation_assist_level": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "dme_type": {
+        "value": [],
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "dme_independent": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "wheelchair_dependent": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "transfers_independent": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "weight_bearing_status": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "pt_ot_recommendation": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      }
+    }
+  },
+  "cognition": {
+    "orientation": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "cognitive_impairment": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "forgetful_flag": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "can_self_administer_meds": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "can_self_administer_insulin": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "can_receive_education": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "understands_glucometer": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    }
+  },
+  "mental_health": {
+    "psychiatric_diagnoses": {
+      "value": [],
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "stable_on_medications": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "suicidal_ideation": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "command_hallucinations": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "conservatorship_or_fsp": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "aggressive_toward_staff_or_patients": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "psychiatry_consult_present": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    }
+  },
+  "substance_use": {
+    "admitted_with_acute_alcohol_intoxication": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "hours_since_intoxication_admission": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "ciwa_latest_score": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "withdrawal_signs": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "detox_noncompliance_or_refusal_to_abstain": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "active_substances": {
+      "value": [],
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    }
+  },
+  "safety_legal": {
+    "registered_sex_offender": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "offense_involved_violence": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    }
+  },
+  "infection_control": {
+    "mrsa_swab_result": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "covid_test_result": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "covid_test_within_24h_of_admission": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "isolation_status": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "tb_screen_result": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "c_diff": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "active_infection_cleared_by_physician": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    }
+  },
+  "medications": {
+    "list_present": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "medication_count": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "high_risk_categories": {
+      "value": [],
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "insulin_regimen": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "insulin_pump": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "insulin_started_less_than_24h_before_admission": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "oral_diabetes_meds": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "anticoagulant": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "iv_medications_ongoing_at_discharge": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "iv_antihypertensive_last_24h": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "self_administers_all_meds": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "thirty_day_supply_arranged": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    }
+  },
+  "lines_devices_oxygen": {
+    "iv_access": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "oxygen_required": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "oxygen_flow_lpm": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "oxygen_continuous": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "baseline_spo2_room_air": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "cpap": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "bipap": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "tracheostomy": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "dialysis": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "external_fixation_device": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "breathing_treatments": {
+      "value": [],
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "respiratory_therapy_notes_present": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    }
+  },
+  "wounds": {
+    "any_wounds": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "items": {
+      "value": [],
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "patient_independent_with_wound_care": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    }
+  },
+  "vitals": {
+    "sets": {
+      "value": [],
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "set_count": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "sepsis_signs": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "bp_stable_on_oral_meds_24h": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "spo2_stable_at_baseline": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    }
+  },
+  "labs": {
+    "glucose_readings": {
+      "value": [],
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "glucose_reading_count": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "glucose_trend": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "hypoglycemia_last_week": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "a1c": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "dka_status": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "troponin_results": {
+      "value": [],
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "troponin_count": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "troponin_negative_count": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "cultures": {
+      "value": [],
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "wbc_latest": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "inr_latest": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "hemoglobin_hematocrit_normal": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    }
+  },
+  "imaging_cardiac": {
+    "chest_imaging_present": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "chest_imaging_impression": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "ekg_present": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "ekg_impression": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "ejection_fraction_percent": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "ef_is_patient_baseline": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "unstable_arrhythmia": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "atrial_fibrillation": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    }
+  },
+  "conditions": {
+    "primary_diagnosis": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "problem_list": {
+      "value": [],
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "flags": {
+      "stroke_with_residual_deficit": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "new_onset_seizure_with_deficit": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "tbi_severity": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "spinal_fusion": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "immediately_post_neurosurgery": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "pulmonary_embolism": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "pneumothorax_or_hemothorax": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "open_fracture": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "osteomyelitis": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "recent_amputation_with_wounds": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "jaw_wired": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "decompensated_cirrhosis": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "recent_gi_bleed_or_varices": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "immediately_post_parathyroidectomy": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "alcoholic_ketoacidosis": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "recent_heart_attack": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "on_chemotherapy": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "post_cabg_or_valve_surgery": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "hypertension_uncontrolled_or_symptomatic": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "diabetes": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "active_infection": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "respiratory_illness": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "cardiac_condition": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      }
+    }
+  },
+  "disease_specific": {
+    "diabetes": {
+      "pcp_followup_within_7_days": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "written_glucose_treatment_plan": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      }
+    },
+    "infection": {
+      "location": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "on_oral_antibiotics": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "on_iv_antibiotics": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "can_self_administer_oral_antibiotics": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      }
+    },
+    "respiratory": {
+      "on_antibiotics_for_respiratory": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      }
+    },
+    "cardiac": {
+      "anticoag_independent_and_understands_inr": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      }
+    }
+  },
+  "arrangements": {
+    "home_health_status": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "home_health_purpose": {
+      "value": [],
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "wound_care_scheduled": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "pt_scheduled": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "hospice_arranged": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "pcp_followup_scheduled": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "specialty_followups": {
+      "value": [],
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "oxygen_ordered_tank_ready_day_before": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    },
+    "dialysis_schedule_confirmed": {
+      "value": null,
+      "status": "pending",
+      "evidence": [],
+      "conflicts": [],
+      "confidence": null,
+      "updated_by": null,
+      "updated_at": null,
+      "note": null
+    }
+  },
+  "eligibility": {
+    "provider_id": null,
+    "profile_version": null,
+    "evaluated_at": null,
+    "rules": [],
+    "hard_stops": [],
+    "open_questions": [],
+    "recommendation": null,
+    "recommendation_rationale": null,
+    "coordinator_decision": {
+      "decision": null,
+      "reason": null,
+      "decided_by": null,
+      "decided_at": null
+    }
+  },
+  "gaps": [],
+  "patient_summary": {
+    "language": null,
+    "requires_staff_review": true,
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "where_things_stand": null,
+    "what_is_still_needed": [],
+    "your_options": [],
+    "questions_to_ask_your_team": []
+  },
+  "history": []
+}

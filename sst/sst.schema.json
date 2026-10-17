@@ -1,0 +1,6276 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/notrestai/claudeimpactlab/sst/sst.schema.json",
+  "title": "Single Source of Truth (SST) for a recuperative care referral",
+  "description": "One shared, structured record built from a hospital referral packet. Every clinical field is wrapped: value + status + evidence + who last changed it. Unknown is unknown; nothing defaults to normal. Contains no names, dates of birth, record numbers or addresses.",
+  "x-status_meaning": {
+    "pending": "Nobody has looked yet. The blank SST starts here.",
+    "found": "Read from the packet. Evidence lists the page(s) and quote.",
+    "entered": "Typed in by a party (hospital, patient or provider), not read from the packet.",
+    "confirmed": "A person checked an extracted value and confirmed it.",
+    "not_in_packet": "Looked for it; the packet does not contain it. Unknown, never 'normal'.",
+    "redacted": "The packet has the field but it is blacked out for privacy (names, dates). Not a missing document.",
+    "cant_tell": "Information is present but not enough to answer (needs a date or hours, or is illegible).",
+    "conflict": "Two places in the packet disagree. Both are listed under conflicts; a person decides."
+  },
+  "type": "object",
+  "properties": {
+    "meta": {
+      "$ref": "#/$defs/Meta"
+    },
+    "documents": {
+      "type": "object",
+      "properties": {
+        "doc_1_referral_form": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "IHH referral form present",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-1"
+          ],
+          "x-patient_visible": true
+        },
+        "doc_2_demographics": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Face sheet / demographic page present",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-2"
+          ],
+          "x-patient_visible": true
+        },
+        "doc_3_authorization": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "CalOptima / CalAIM authorization form, LOA or auth present",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-3"
+          ],
+          "x-patient_visible": true
+        },
+        "doc_4_history_and_physical": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "History and physical present",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-4"
+          ],
+          "x-patient_visible": true
+        },
+        "doc_5_progress_notes": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Current progress notes present",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": true
+        },
+        "doc_6_vitals_last_24h": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Vital signs from the last 24 hours present",
+          "x-owner": "hospital",
+          "x-rules": [
+            "ID-1",
+            "RESP-2",
+            "CARD-1"
+          ],
+          "x-docs": [
+            "DOC-6"
+          ],
+          "x-patient_visible": true
+        },
+        "doc_7_medication_list": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Medication list present",
+          "x-owner": "hospital",
+          "x-rules": [
+            "COG-1"
+          ],
+          "x-docs": [
+            "DOC-7"
+          ],
+          "x-patient_visible": true
+        },
+        "doc_8_pt_ot_or_nursing_notes": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "PT/OT or nursing notes present",
+          "x-owner": "hospital",
+          "x-rules": [
+            "MOB-2"
+          ],
+          "x-docs": [
+            "DOC-8"
+          ],
+          "x-patient_visible": true
+        },
+        "doc_9_cultures": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Blood or wound culture results present (if an infection is involved)",
+          "x-owner": "hospital",
+          "x-rules": [
+            "ID-Q2"
+          ],
+          "x-docs": [
+            "DOC-9"
+          ],
+          "x-patient_visible": true
+        },
+        "doc_10_meds_30_day_supply": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "30-day supply of all medications arranged (usually confirmed by the hospital, rarely in the packet)",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-10"
+          ],
+          "x-patient_visible": true
+        }
+      },
+      "required": [
+        "doc_1_referral_form",
+        "doc_2_demographics",
+        "doc_3_authorization",
+        "doc_4_history_and_physical",
+        "doc_5_progress_notes",
+        "doc_6_vitals_last_24h",
+        "doc_7_medication_list",
+        "doc_8_pt_ot_or_nursing_notes",
+        "doc_9_cultures",
+        "doc_10_meds_30_day_supply"
+      ],
+      "additionalProperties": false,
+      "description": "The referral checklist from IHH's form (DOC-1 to DOC-10): is each document in the packet, and on which pages."
+    },
+    "referral": {
+      "type": "object",
+      "properties": {
+        "referring_facility": {
+          "$ref": "#/$defs/Field_text",
+          "description": "Hospital name. Redacted in the event packets.",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-1"
+          ],
+          "x-patient_visible": true
+        },
+        "referring_unit": {
+          "$ref": "#/$defs/Field_text",
+          "description": "Department or floor",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-1"
+          ],
+          "x-patient_visible": false
+        },
+        "referrer_role": {
+          "$ref": "#/$defs/Field_text",
+          "description": "Case manager, social worker or nurse who sent it",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-1"
+          ],
+          "x-patient_visible": false
+        },
+        "source_setting": {
+          "$ref": "#/$defs/Field_enum_inpatient_emergency_department_other",
+          "description": "Where the patient is being referred from. Several rules only apply to inpatient or only to the emergency department.",
+          "x-owner": "hospital",
+          "x-rules": [
+            "INF-1",
+            "INF-2",
+            "DM-1",
+            "DM-2",
+            "DM-4"
+          ],
+          "x-docs": [
+            "DOC-4"
+          ],
+          "x-patient_visible": true
+        },
+        "chief_complaint_or_admitting_dx": {
+          "$ref": "#/$defs/Field_text",
+          "description": "Why the patient is in hospital, as written",
+          "x-owner": "hospital",
+          "x-rules": [
+            "GEN-1"
+          ],
+          "x-docs": [
+            "DOC-1",
+            "DOC-4"
+          ],
+          "x-patient_visible": true
+        },
+        "admit_date": {
+          "$ref": "#/$defs/Field_text",
+          "description": "Admission date. Redacted in the event packets, so hour-based rules are cant_tell.",
+          "x-owner": "hospital",
+          "x-rules": [
+            "MH-4",
+            "DM-3"
+          ],
+          "x-docs": [
+            "DOC-1",
+            "DOC-4"
+          ],
+          "x-patient_visible": false
+        },
+        "anticipated_discharge_date": {
+          "$ref": "#/$defs/Field_text",
+          "description": "When the hospital expects to discharge",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-1"
+          ],
+          "x-patient_visible": true
+        },
+        "length_of_stay_authorized_days": {
+          "$ref": "#/$defs/Field_int",
+          "description": "Days authorized, from the referral form",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-1",
+            "DOC-3"
+          ],
+          "x-patient_visible": true
+        },
+        "insurance_plan": {
+          "$ref": "#/$defs/Field_text",
+          "description": "Health plan (for example CalOptima Health)",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-2",
+            "DOC-3"
+          ],
+          "x-patient_visible": true
+        },
+        "authorization_status": {
+          "$ref": "#/$defs/Field_enum_not_requested_requested_approved_denied",
+          "description": "Status of the health plan authorization for recuperative care",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-3"
+          ],
+          "x-patient_visible": true
+        },
+        "sent_to_other_providers": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Whether the hospital also referred to other recuperative care providers",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [],
+          "x-patient_visible": true
+        }
+      },
+      "required": [
+        "referring_facility",
+        "referring_unit",
+        "referrer_role",
+        "source_setting",
+        "chief_complaint_or_admitting_dx",
+        "admit_date",
+        "anticipated_discharge_date",
+        "length_of_stay_authorized_days",
+        "insurance_plan",
+        "authorization_status",
+        "sent_to_other_providers"
+      ],
+      "additionalProperties": false,
+      "description": "Facts about the referral itself: who sent it, why the patient is in hospital, insurance and authorization, and where the patient is coming from (inpatient vs emergency department changes several rules)."
+    },
+    "patient": {
+      "type": "object",
+      "properties": {
+        "age_years": {
+          "$ref": "#/$defs/Field_int",
+          "description": "Age in years. Charts sometimes disagree page to page; record a conflict.",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-2",
+            "DOC-4"
+          ],
+          "x-patient_visible": true
+        },
+        "gender": {
+          "$ref": "#/$defs/Field_text",
+          "description": "As recorded",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-2"
+          ],
+          "x-patient_visible": true
+        },
+        "preferred_language": {
+          "$ref": "#/$defs/Field_text",
+          "description": "Preferred language. Drives the patient view's language.",
+          "x-owner": "patient",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-1",
+            "DOC-2"
+          ],
+          "x-patient_visible": true
+        },
+        "interpreter_needed": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Needs an interpreter",
+          "x-owner": "patient",
+          "x-rules": [],
+          "x-docs": [],
+          "x-patient_visible": true
+        },
+        "has_phone": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Has a working phone (patient-supplied)",
+          "x-owner": "patient",
+          "x-rules": [],
+          "x-docs": [],
+          "x-patient_visible": true
+        },
+        "has_car": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Referral form asks this",
+          "x-owner": "patient",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-1"
+          ],
+          "x-patient_visible": true
+        },
+        "service_animal": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Referral form asks this",
+          "x-owner": "patient",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-1"
+          ],
+          "x-patient_visible": true
+        },
+        "hospice_enrolled": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "On hospice",
+          "x-owner": "hospital",
+          "x-rules": [
+            "EOL-1"
+          ],
+          "x-docs": [
+            "DOC-1",
+            "DOC-4"
+          ],
+          "x-patient_visible": true
+        },
+        "four_plus_homeless_episodes_3y": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Referral form: 4+ episodes of homelessness in the past 3 years",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-1"
+          ],
+          "x-patient_visible": false
+        }
+      },
+      "required": [
+        "age_years",
+        "gender",
+        "preferred_language",
+        "interpreter_needed",
+        "has_phone",
+        "has_car",
+        "service_animal",
+        "hospice_enrolled",
+        "four_plus_homeless_episodes_3y"
+      ],
+      "additionalProperties": false,
+      "description": "Non-identifying facts about the person. No names, dates of birth, record numbers or addresses are ever stored here."
+    },
+    "housing": {
+      "type": "object",
+      "properties": {
+        "housing_situation": {
+          "$ref": "#/$defs/Field_enum_unhoused_at_risk_inadequate_environment_housed",
+          "description": "Housing status as documented",
+          "x-owner": "hospital",
+          "x-rules": [
+            "GEN-1",
+            "FORM-M1"
+          ],
+          "x-docs": [
+            "DOC-1",
+            "DOC-4"
+          ],
+          "x-patient_visible": true
+        },
+        "too_ill_to_recover_outside": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Too ill or frail to recover on the street or in a shelter",
+          "x-owner": "hospital",
+          "x-rules": [
+            "GEN-1",
+            "GEN-2"
+          ],
+          "x-docs": [
+            "DOC-4",
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "lives_alone_no_supports": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Lives alone with no formal supports",
+          "x-owner": "hospital",
+          "x-rules": [
+            "GEN-2"
+          ],
+          "x-docs": [
+            "DOC-4"
+          ],
+          "x-patient_visible": false
+        },
+        "readmission_risk": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "At risk of hospitalization or re-hospitalization",
+          "x-owner": "hospital",
+          "x-rules": [
+            "GEN-3"
+          ],
+          "x-docs": [
+            "DOC-4",
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        }
+      },
+      "required": [
+        "housing_situation",
+        "too_ill_to_recover_outside",
+        "lives_alone_no_supports",
+        "readmission_risk"
+      ],
+      "additionalProperties": false,
+      "description": "Why recuperative care is being requested (IHH general criteria GEN-1 to GEN-3)."
+    },
+    "function": {
+      "type": "object",
+      "properties": {
+        "adls": {
+          "type": "object",
+          "properties": {
+            "bathing": {
+              "$ref": "#/$defs/Field_enum_independent_seated_shower_independent_needs_assist",
+              "description": "Bathing / showering. A seated shower done alone counts as independent.",
+              "x-owner": "hospital",
+              "x-rules": [
+                "ADL-1",
+                "ADL-2",
+                "FORM-M4",
+                "FORM-X2"
+              ],
+              "x-docs": [
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            },
+            "gathers_supplies_and_transfers_to_shower": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Can gather own supplies and get to the shower alone",
+              "x-owner": "hospital",
+              "x-rules": [
+                "ADL-2"
+              ],
+              "x-docs": [
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            },
+            "dressing": {
+              "$ref": "#/$defs/Field_enum_independent_needs_assist",
+              "description": "Dressing",
+              "x-owner": "hospital",
+              "x-rules": [
+                "ADL-1",
+                "FORM-M4"
+              ],
+              "x-docs": [
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            },
+            "toileting": {
+              "$ref": "#/$defs/Field_enum_independent_changes_own_briefs_needs_assist",
+              "description": "Toileting, or changing own briefs",
+              "x-owner": "hospital",
+              "x-rules": [
+                "ADL-3",
+                "FORM-M4"
+              ],
+              "x-docs": [
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            },
+            "eating": {
+              "$ref": "#/$defs/Field_enum_independent_needs_assist",
+              "description": "Eating",
+              "x-owner": "hospital",
+              "x-rules": [
+                "ADL-1"
+              ],
+              "x-docs": [
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            },
+            "hygiene_independent": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Personal hygiene done independently",
+              "x-owner": "hospital",
+              "x-rules": [
+                "ADL-1",
+                "ADL-2"
+              ],
+              "x-docs": [
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            }
+          },
+          "required": [
+            "bathing",
+            "gathers_supplies_and_transfers_to_shower",
+            "dressing",
+            "toileting",
+            "eating",
+            "hygiene_independent"
+          ],
+          "additionalProperties": false
+        },
+        "continence": {
+          "type": "object",
+          "properties": {
+            "bowel_bladder_continent": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Continent of bowel and bladder",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1",
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            },
+            "uses_briefs": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Uses briefs / diapers",
+              "x-owner": "hospital",
+              "x-rules": [
+                "ADL-3"
+              ],
+              "x-docs": [
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            },
+            "ostomy": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Colostomy or ileostomy",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "foley_catheter": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Indwelling catheter",
+              "x-owner": "hospital",
+              "x-rules": [
+                "GU-E6"
+              ],
+              "x-docs": [
+                "DOC-1",
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            },
+            "can_empty_catheter_bag": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Can empty the catheter bag alone",
+              "x-owner": "hospital",
+              "x-rules": [
+                "GU-E6"
+              ],
+              "x-docs": [
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            },
+            "self_catheterizes": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Intermittent catheterization done by the patient (eligible) vs by staff (not eligible)",
+              "x-owner": "hospital",
+              "x-rules": [
+                "GU-E5",
+                "GU-X1"
+              ],
+              "x-docs": [
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            }
+          },
+          "required": [
+            "bowel_bladder_continent",
+            "uses_briefs",
+            "ostomy",
+            "foley_catheter",
+            "can_empty_catheter_bag",
+            "self_catheterizes"
+          ],
+          "additionalProperties": false
+        },
+        "mobility": {
+          "type": "object",
+          "properties": {
+            "ambulatory": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Walks",
+              "x-owner": "hospital",
+              "x-rules": [
+                "MOB-3",
+                "FORM-M6"
+              ],
+              "x-docs": [
+                "DOC-1",
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            },
+            "ambulation_distance_ft": {
+              "$ref": "#/$defs/Field_number",
+              "description": "Farthest documented walking distance in feet (PT note). Rest breaks are fine.",
+              "x-owner": "hospital",
+              "x-rules": [
+                "MOB-3",
+                "FORM-M6",
+                "FORM-X3"
+              ],
+              "x-docs": [
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            },
+            "ambulation_assist_level": {
+              "$ref": "#/$defs/Field_enum_independent_modified_independent_supervision_contact_guard_min_assist_mod_assist_max_assist_non_ambulatory",
+              "description": "Assistance level for walking, as PT writes it",
+              "x-owner": "hospital",
+              "x-rules": [
+                "MOB-3"
+              ],
+              "x-docs": [
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            },
+            "dme_type": {
+              "$ref": "#/$defs/Field_list",
+              "description": "Equipment used: walker, cane, wheelchair, shower bench",
+              "x-owner": "hospital",
+              "x-rules": [
+                "MOB-1"
+              ],
+              "x-docs": [
+                "DOC-1",
+                "DOC-8"
+              ],
+              "x-patient_visible": true
+            },
+            "dme_independent": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Uses the equipment without help",
+              "x-owner": "hospital",
+              "x-rules": [
+                "MOB-1",
+                "FORM-X3"
+              ],
+              "x-docs": [
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            },
+            "wheelchair_dependent": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Relies on a wheelchair. Eligible if transfers are independent (outline wins over the form).",
+              "x-owner": "hospital",
+              "x-rules": [
+                "MOB-4"
+              ],
+              "x-docs": [
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            },
+            "transfers_independent": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Bed to chair and similar transfers done alone",
+              "x-owner": "hospital",
+              "x-rules": [
+                "MOB-4",
+                "FORM-M6",
+                "FORM-X3"
+              ],
+              "x-docs": [
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            },
+            "weight_bearing_status": {
+              "$ref": "#/$defs/Field_text",
+              "description": "For example NWB left leg",
+              "x-owner": "hospital",
+              "x-rules": [
+                "MSK-E1",
+                "MSK-X1"
+              ],
+              "x-docs": [
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            },
+            "pt_ot_recommendation": {
+              "$ref": "#/$defs/Field_text",
+              "description": "Where PT/OT recommends discharge to (home, SNF, acute rehab)",
+              "x-owner": "hospital",
+              "x-rules": [
+                "MOB-2"
+              ],
+              "x-docs": [
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            }
+          },
+          "required": [
+            "ambulatory",
+            "ambulation_distance_ft",
+            "ambulation_assist_level",
+            "dme_type",
+            "dme_independent",
+            "wheelchair_dependent",
+            "transfers_independent",
+            "weight_bearing_status",
+            "pt_ot_recommendation"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "adls",
+        "continence",
+        "mobility"
+      ],
+      "additionalProperties": false,
+      "description": "What the person can do for themselves: daily living activities, continence, mobility and transfers."
+    },
+    "cognition": {
+      "type": "object",
+      "properties": {
+        "orientation": {
+          "$ref": "#/$defs/Field_enum_AOx4_AOx3_AOx2_AOx1_AOx0",
+          "description": "Alert and oriented level, latest documented",
+          "x-owner": "hospital",
+          "x-rules": [
+            "COG-2",
+            "FORM-M3"
+          ],
+          "x-docs": [
+            "DOC-4",
+            "DOC-5",
+            "DOC-8"
+          ],
+          "x-patient_visible": false
+        },
+        "cognitive_impairment": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Dementia, Alzheimer's or other cognitive impairment documented",
+          "x-owner": "hospital",
+          "x-rules": [
+            "FORM-X1",
+            "NEU-X4"
+          ],
+          "x-docs": [
+            "DOC-4",
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "forgetful_flag": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Referral form flags forgetfulness",
+          "x-owner": "hospital",
+          "x-rules": [
+            "COG-1"
+          ],
+          "x-docs": [
+            "DOC-1"
+          ],
+          "x-patient_visible": false
+        },
+        "can_self_administer_meds": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Takes own medications",
+          "x-owner": "hospital",
+          "x-rules": [
+            "COG-1",
+            "FORM-M5"
+          ],
+          "x-docs": [
+            "DOC-1",
+            "DOC-8"
+          ],
+          "x-patient_visible": false
+        },
+        "can_self_administer_insulin": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Gives own insulin (must be confirmed when on insulin)",
+          "x-owner": "hospital",
+          "x-rules": [
+            "COG-1",
+            "DM-6"
+          ],
+          "x-docs": [
+            "DOC-8"
+          ],
+          "x-patient_visible": false
+        },
+        "can_receive_education": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Can take in medical teaching",
+          "x-owner": "hospital",
+          "x-rules": [
+            "COG-1"
+          ],
+          "x-docs": [
+            "DOC-8"
+          ],
+          "x-patient_visible": false
+        },
+        "understands_glucometer": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Knows how to check own blood sugar",
+          "x-owner": "hospital",
+          "x-rules": [
+            "DM-5"
+          ],
+          "x-docs": [
+            "DOC-8"
+          ],
+          "x-patient_visible": false
+        }
+      },
+      "required": [
+        "orientation",
+        "cognitive_impairment",
+        "forgetful_flag",
+        "can_self_administer_meds",
+        "can_self_administer_insulin",
+        "can_receive_education",
+        "understands_glucometer"
+      ],
+      "additionalProperties": false,
+      "description": "Orientation and the ability to manage one's own medications and learn."
+    },
+    "mental_health": {
+      "type": "object",
+      "properties": {
+        "psychiatric_diagnoses": {
+          "$ref": "#/$defs/Field_list",
+          "description": "Diagnoses as written",
+          "x-owner": "hospital",
+          "x-rules": [
+            "MH-1"
+          ],
+          "x-docs": [
+            "DOC-4"
+          ],
+          "x-patient_visible": false
+        },
+        "stable_on_medications": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Mentally stable on current medications",
+          "x-owner": "hospital",
+          "x-rules": [
+            "MH-1",
+            "FORM-M2"
+          ],
+          "x-docs": [
+            "DOC-4",
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "suicidal_ideation": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Current suicidal ideation",
+          "x-owner": "hospital",
+          "x-rules": [
+            "MH-2"
+          ],
+          "x-docs": [
+            "DOC-4",
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "command_hallucinations": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Commanding auditory or visual hallucinations",
+          "x-owner": "hospital",
+          "x-rules": [
+            "MH-3"
+          ],
+          "x-docs": [
+            "DOC-4",
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "conservatorship_or_fsp": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Under, qualifies for, or history of conservatorship or Full Service Partnership",
+          "x-owner": "hospital",
+          "x-rules": [
+            "MH-5"
+          ],
+          "x-docs": [
+            "DOC-4"
+          ],
+          "x-patient_visible": false
+        },
+        "aggressive_toward_staff_or_patients": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Verbal or physical aggression documented",
+          "x-owner": "hospital",
+          "x-rules": [
+            "OTH-1",
+            "FORM-X7"
+          ],
+          "x-docs": [
+            "DOC-5",
+            "DOC-8"
+          ],
+          "x-patient_visible": false
+        },
+        "psychiatry_consult_present": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "A psychiatry consult is in the packet",
+          "x-owner": "hospital",
+          "x-rules": [
+            "MH-1"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        }
+      },
+      "required": [
+        "psychiatric_diagnoses",
+        "stable_on_medications",
+        "suicidal_ideation",
+        "command_hallucinations",
+        "conservatorship_or_fsp",
+        "aggressive_toward_staff_or_patients",
+        "psychiatry_consult_present"
+      ],
+      "additionalProperties": false,
+      "description": "Psychiatric stability and the behaviours IHH cannot accept."
+    },
+    "substance_use": {
+      "type": "object",
+      "properties": {
+        "admitted_with_acute_alcohol_intoxication": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Admitted intoxicated",
+          "x-owner": "hospital",
+          "x-rules": [
+            "MH-4"
+          ],
+          "x-docs": [
+            "DOC-4"
+          ],
+          "x-patient_visible": false
+        },
+        "hours_since_intoxication_admission": {
+          "$ref": "#/$defs/Field_number",
+          "description": "Hours held since admission. cant_tell when dates are redacted.",
+          "x-owner": "hospital",
+          "x-rules": [
+            "MH-4"
+          ],
+          "x-docs": [
+            "DOC-4",
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "ciwa_latest_score": {
+          "$ref": "#/$defs/Field_number",
+          "description": "Latest CIWA-Ar score (under 8 is acceptable)",
+          "x-owner": "hospital",
+          "x-rules": [
+            "MH-4"
+          ],
+          "x-docs": [
+            "DOC-5",
+            "DOC-8"
+          ],
+          "x-patient_visible": false
+        },
+        "withdrawal_signs": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Signs of alcohol withdrawal documented",
+          "x-owner": "hospital",
+          "x-rules": [
+            "MH-4",
+            "NEU-E1"
+          ],
+          "x-docs": [
+            "DOC-5",
+            "DOC-8"
+          ],
+          "x-patient_visible": false
+        },
+        "detox_noncompliance_or_refusal_to_abstain": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Form exclusion: non-compliance with detox or refusal to abstain",
+          "x-owner": "hospital",
+          "x-rules": [
+            "FORM-X5"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "active_substances": {
+          "$ref": "#/$defs/Field_list",
+          "description": "Substances in active use, as written",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-4"
+          ],
+          "x-patient_visible": false
+        }
+      },
+      "required": [
+        "admitted_with_acute_alcohol_intoxication",
+        "hours_since_intoxication_admission",
+        "ciwa_latest_score",
+        "withdrawal_signs",
+        "detox_noncompliance_or_refusal_to_abstain",
+        "active_substances"
+      ],
+      "additionalProperties": false,
+      "description": "Alcohol and drug facts that the admission rules turn on."
+    },
+    "safety_legal": {
+      "type": "object",
+      "properties": {
+        "registered_sex_offender": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Registered sex offender. Case by case; never auto-deny.",
+          "x-owner": "hospital",
+          "x-rules": [
+            "OTH-2",
+            "FORM-X6"
+          ],
+          "x-docs": [
+            "DOC-1"
+          ],
+          "x-patient_visible": false
+        },
+        "offense_involved_violence": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "If a registered offender, whether the offense involved violence",
+          "x-owner": "hospital",
+          "x-rules": [
+            "OTH-2"
+          ],
+          "x-docs": [
+            "DOC-1"
+          ],
+          "x-patient_visible": false
+        }
+      },
+      "required": [
+        "registered_sex_offender",
+        "offense_involved_violence"
+      ],
+      "additionalProperties": false,
+      "description": "Registered sex offender status, handled case by case under IHH's rules."
+    },
+    "infection_control": {
+      "type": "object",
+      "properties": {
+        "mrsa_swab_result": {
+          "$ref": "#/$defs/Field_enum_negative_positive_pending_not_done",
+          "description": "MRSA nasal swab result (needed if coming from inpatient)",
+          "x-owner": "hospital",
+          "x-rules": [
+            "INF-1",
+            "FORM-X4"
+          ],
+          "x-docs": [
+            "DOC-5",
+            "DOC-9"
+          ],
+          "x-patient_visible": false
+        },
+        "covid_test_result": {
+          "$ref": "#/$defs/Field_enum_negative_positive_pending_not_done",
+          "description": "COVID test result",
+          "x-owner": "hospital",
+          "x-rules": [
+            "INF-2"
+          ],
+          "x-docs": [
+            "DOC-5",
+            "DOC-9"
+          ],
+          "x-patient_visible": false
+        },
+        "covid_test_within_24h_of_admission": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Whether the swab is within 24 hours of arrival. Usually cant_tell before an admission date is set.",
+          "x-owner": "hospital",
+          "x-rules": [
+            "INF-2"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "isolation_status": {
+          "$ref": "#/$defs/Field_enum_none_contact_droplet_airborne",
+          "description": "Current isolation precautions",
+          "x-owner": "hospital",
+          "x-rules": [
+            "OTH-4",
+            "ID-Q3"
+          ],
+          "x-docs": [
+            "DOC-5",
+            "DOC-8"
+          ],
+          "x-patient_visible": false
+        },
+        "tb_screen_result": {
+          "$ref": "#/$defs/Field_enum_negative_positive_pending_not_done",
+          "description": "PPD / TB test or chest X-ray screen for TB",
+          "x-owner": "hospital",
+          "x-rules": [
+            "FORM-X4"
+          ],
+          "x-docs": [
+            "DOC-1",
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "c_diff": {
+          "$ref": "#/$defs/Field_enum_negative_positive_not_tested",
+          "description": "C. difficile status",
+          "x-owner": "hospital",
+          "x-rules": [
+            "GI-X3",
+            "FORM-X4"
+          ],
+          "x-docs": [
+            "DOC-5",
+            "DOC-9"
+          ],
+          "x-patient_visible": false
+        },
+        "active_infection_cleared_by_physician": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "A doctor has documented the infection as cleared or not contagious",
+          "x-owner": "hospital",
+          "x-rules": [
+            "FORM-X4"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        }
+      },
+      "required": [
+        "mrsa_swab_result",
+        "covid_test_result",
+        "covid_test_within_24h_of_admission",
+        "isolation_status",
+        "tb_screen_result",
+        "c_diff",
+        "active_infection_cleared_by_physician"
+      ],
+      "additionalProperties": false,
+      "description": "Swabs, isolation and the infections that block admission until cleared."
+    },
+    "medications": {
+      "type": "object",
+      "properties": {
+        "list_present": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "A medication list is in the packet",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-7"
+          ],
+          "x-patient_visible": true
+        },
+        "medication_count": {
+          "$ref": "#/$defs/Field_int",
+          "description": "Number of active medications",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-7"
+          ],
+          "x-patient_visible": false
+        },
+        "high_risk_categories": {
+          "$ref": "#/$defs/Field_list",
+          "description": "Present categories: insulin, anticoagulant, opioid, iv_antibiotic, chemotherapy, controlled_substance, oxygen",
+          "x-owner": "hospital",
+          "x-rules": [
+            "COG-1"
+          ],
+          "x-docs": [
+            "DOC-7"
+          ],
+          "x-patient_visible": false
+        },
+        "insulin_regimen": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "On insulin",
+          "x-owner": "hospital",
+          "x-rules": [
+            "DM-Q1",
+            "DM-3",
+            "DM-6"
+          ],
+          "x-docs": [
+            "DOC-7"
+          ],
+          "x-patient_visible": false
+        },
+        "insulin_pump": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Insulin by pump",
+          "x-owner": "hospital",
+          "x-rules": [
+            "DM-Q1"
+          ],
+          "x-docs": [
+            "DOC-7"
+          ],
+          "x-patient_visible": false
+        },
+        "insulin_started_less_than_24h_before_admission": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Insulin regimen started under 24 hours before recuperative care admission. Usually cant_tell.",
+          "x-owner": "hospital",
+          "x-rules": [
+            "DM-3"
+          ],
+          "x-docs": [
+            "DOC-5",
+            "DOC-7"
+          ],
+          "x-patient_visible": false
+        },
+        "oral_diabetes_meds": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "On oral diabetes medication",
+          "x-owner": "hospital",
+          "x-rules": [
+            "DM-Q2",
+            "DM-4"
+          ],
+          "x-docs": [
+            "DOC-7"
+          ],
+          "x-patient_visible": false
+        },
+        "anticoagulant": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "On a blood thinner",
+          "x-owner": "hospital",
+          "x-rules": [
+            "CARD-4"
+          ],
+          "x-docs": [
+            "DOC-7"
+          ],
+          "x-patient_visible": false
+        },
+        "iv_medications_ongoing_at_discharge": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Will still need IV medication after discharge",
+          "x-owner": "hospital",
+          "x-rules": [
+            "OTH-3",
+            "ID-3"
+          ],
+          "x-docs": [
+            "DOC-7"
+          ],
+          "x-patient_visible": false
+        },
+        "iv_antihypertensive_last_24h": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "IV blood pressure medication in the last 24 hours",
+          "x-owner": "hospital",
+          "x-rules": [
+            "CARD-6",
+            "CIR-X2"
+          ],
+          "x-docs": [
+            "DOC-7",
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "self_administers_all_meds": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Referral form: self-administers all medications",
+          "x-owner": "hospital",
+          "x-rules": [
+            "FORM-M5",
+            "COG-1"
+          ],
+          "x-docs": [
+            "DOC-1"
+          ],
+          "x-patient_visible": false
+        },
+        "thirty_day_supply_arranged": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "30-day supply will come with the patient",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-10"
+          ],
+          "x-patient_visible": true
+        }
+      },
+      "required": [
+        "list_present",
+        "medication_count",
+        "high_risk_categories",
+        "insulin_regimen",
+        "insulin_pump",
+        "insulin_started_less_than_24h_before_admission",
+        "oral_diabetes_meds",
+        "anticoagulant",
+        "iv_medications_ongoing_at_discharge",
+        "iv_antihypertensive_last_24h",
+        "self_administers_all_meds",
+        "thirty_day_supply_arranged"
+      ],
+      "additionalProperties": false,
+      "description": "The medication list and the medication facts the rules ask about."
+    },
+    "lines_devices_oxygen": {
+      "type": "object",
+      "properties": {
+        "iv_access": {
+          "$ref": "#/$defs/Field_enum_none_peripheral_midline_picc_port",
+          "description": "IV access the patient will leave with",
+          "x-owner": "hospital",
+          "x-rules": [
+            "OTH-3",
+            "ID-3",
+            "INT-E3"
+          ],
+          "x-docs": [
+            "DOC-5",
+            "DOC-8"
+          ],
+          "x-patient_visible": false
+        },
+        "oxygen_required": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Needs supplemental oxygen",
+          "x-owner": "hospital",
+          "x-rules": [
+            "RESP-3",
+            "RSP-E3"
+          ],
+          "x-docs": [
+            "DOC-1",
+            "DOC-5"
+          ],
+          "x-patient_visible": true
+        },
+        "oxygen_flow_lpm": {
+          "$ref": "#/$defs/Field_number",
+          "description": "Liters per minute",
+          "x-owner": "hospital",
+          "x-rules": [
+            "RESP-3"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "oxygen_continuous": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Continuous (not eligible for COPD on continuous O2) vs as needed",
+          "x-owner": "hospital",
+          "x-rules": [
+            "RSP-E3"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "baseline_spo2_room_air": {
+          "$ref": "#/$defs/Field_number",
+          "description": "Usual oxygen saturation on room air",
+          "x-owner": "hospital",
+          "x-rules": [
+            "RSP-E5",
+            "RESP-2"
+          ],
+          "x-docs": [
+            "DOC-5",
+            "DOC-6"
+          ],
+          "x-patient_visible": false
+        },
+        "cpap": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Uses CPAP (eligible)",
+          "x-owner": "hospital",
+          "x-rules": [
+            "RSP-E7"
+          ],
+          "x-docs": [
+            "DOC-7"
+          ],
+          "x-patient_visible": false
+        },
+        "bipap": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Requires BiPAP (not eligible)",
+          "x-owner": "hospital",
+          "x-rules": [
+            "RSP-X5"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "tracheostomy": {
+          "$ref": "#/$defs/Field_enum_none_mature_self_care_ventilator_other",
+          "description": "Trach status",
+          "x-owner": "hospital",
+          "x-rules": [
+            "RSP-E6",
+            "RSP-X3"
+          ],
+          "x-docs": [
+            "DOC-4",
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "dialysis": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "On dialysis",
+          "x-owner": "hospital",
+          "x-rules": [
+            "GU-E7"
+          ],
+          "x-docs": [
+            "DOC-4"
+          ],
+          "x-patient_visible": false
+        },
+        "external_fixation_device": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "External fixator in place (not eligible)",
+          "x-owner": "hospital",
+          "x-rules": [
+            "MSK-X3"
+          ],
+          "x-docs": [
+            "DOC-4",
+            "DOC-8"
+          ],
+          "x-patient_visible": false
+        },
+        "breathing_treatments": {
+          "$ref": "#/$defs/Field_list",
+          "description": "Nebulizers, inhalers, as written",
+          "x-owner": "hospital",
+          "x-rules": [
+            "RESP-Q1"
+          ],
+          "x-docs": [
+            "DOC-7"
+          ],
+          "x-patient_visible": false
+        },
+        "respiratory_therapy_notes_present": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "RT notes in the packet",
+          "x-owner": "hospital",
+          "x-rules": [
+            "RESP-4"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        }
+      },
+      "required": [
+        "iv_access",
+        "oxygen_required",
+        "oxygen_flow_lpm",
+        "oxygen_continuous",
+        "baseline_spo2_room_air",
+        "cpap",
+        "bipap",
+        "tracheostomy",
+        "dialysis",
+        "external_fixation_device",
+        "breathing_treatments",
+        "respiratory_therapy_notes_present"
+      ],
+      "additionalProperties": false,
+      "description": "IV lines, oxygen, breathing devices, catheters, dialysis and fixation devices."
+    },
+    "wounds": {
+      "type": "object",
+      "properties": {
+        "any_wounds": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Any wound documented",
+          "x-owner": "hospital",
+          "x-rules": [
+            "INT-E1"
+          ],
+          "x-docs": [
+            "DOC-1",
+            "DOC-5"
+          ],
+          "x-patient_visible": true
+        },
+        "items": {
+          "$ref": "#/$defs/Field_rows_WoundRow",
+          "description": "One row per wound",
+          "x-owner": "hospital",
+          "x-rules": [
+            "INT-E1",
+            "INT-E2",
+            "INT-E3",
+            "INT-E4",
+            "INT-E5",
+            "INT-E6",
+            "INT-E7",
+            "INT-X1",
+            "INT-X2",
+            "INT-X3"
+          ],
+          "x-docs": [
+            "DOC-1",
+            "DOC-5",
+            "DOC-8"
+          ],
+          "x-patient_visible": false
+        },
+        "patient_independent_with_wound_care": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Referral form: independent with wound care",
+          "x-owner": "hospital",
+          "x-rules": [
+            "INT-E2"
+          ],
+          "x-docs": [
+            "DOC-1",
+            "DOC-8"
+          ],
+          "x-patient_visible": false
+        }
+      },
+      "required": [
+        "any_wounds",
+        "items",
+        "patient_independent_with_wound_care"
+      ],
+      "additionalProperties": false,
+      "description": "Every wound, with the details IHH's wound rules need."
+    },
+    "vitals": {
+      "type": "object",
+      "properties": {
+        "sets": {
+          "$ref": "#/$defs/Field_rows_VitalsRow",
+          "description": "Most recent sets of vital signs, newest first",
+          "x-owner": "hospital",
+          "x-rules": [
+            "ID-1",
+            "RESP-2",
+            "CARD-1"
+          ],
+          "x-docs": [
+            "DOC-6"
+          ],
+          "x-patient_visible": false
+        },
+        "set_count": {
+          "$ref": "#/$defs/Field_int",
+          "description": "How many sets are in the packet (rules ask for 5)",
+          "x-owner": "hospital",
+          "x-rules": [
+            "ID-1",
+            "RESP-2",
+            "CARD-1"
+          ],
+          "x-docs": [
+            "DOC-6"
+          ],
+          "x-patient_visible": false
+        },
+        "sepsis_signs": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Continued fever, fast heart rate or low blood pressure",
+          "x-owner": "hospital",
+          "x-rules": [
+            "ID-1"
+          ],
+          "x-docs": [
+            "DOC-6"
+          ],
+          "x-patient_visible": false
+        },
+        "bp_stable_on_oral_meds_24h": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Blood pressure stable on oral medication for at least 24 hours",
+          "x-owner": "hospital",
+          "x-rules": [
+            "CARD-1",
+            "CIR-E6"
+          ],
+          "x-docs": [
+            "DOC-6",
+            "DOC-7"
+          ],
+          "x-patient_visible": false
+        },
+        "spo2_stable_at_baseline": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Oxygen readings stable and at the patient's normal",
+          "x-owner": "hospital",
+          "x-rules": [
+            "RESP-2",
+            "RSP-E5"
+          ],
+          "x-docs": [
+            "DOC-6"
+          ],
+          "x-patient_visible": false
+        }
+      },
+      "required": [
+        "sets",
+        "set_count",
+        "sepsis_signs",
+        "bp_stable_on_oral_meds_24h",
+        "spo2_stable_at_baseline"
+      ],
+      "additionalProperties": false,
+      "description": "The last sets of vital signs and what they show."
+    },
+    "labs": {
+      "type": "object",
+      "properties": {
+        "glucose_readings": {
+          "$ref": "#/$defs/Field_rows_LabRow",
+          "description": "Finger-stick glucose readings, newest first",
+          "x-owner": "hospital",
+          "x-rules": [
+            "DM-1",
+            "END-E1"
+          ],
+          "x-docs": [
+            "DOC-5",
+            "DOC-6"
+          ],
+          "x-patient_visible": false
+        },
+        "glucose_reading_count": {
+          "$ref": "#/$defs/Field_int",
+          "description": "How many consecutive readings are in the packet (rule asks for 5)",
+          "x-owner": "hospital",
+          "x-rules": [
+            "DM-1"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "glucose_trend": {
+          "$ref": "#/$defs/Field_enum_improving_stable_worsening_insufficient_data",
+          "description": "Improvement and stabilization",
+          "x-owner": "hospital",
+          "x-rules": [
+            "DM-1",
+            "END-E1"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "hypoglycemia_last_week": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Any hypoglycemia episode in the last week",
+          "x-owner": "hospital",
+          "x-rules": [
+            "DM-4"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "a1c": {
+          "$ref": "#/$defs/Field_number",
+          "description": "Last hemoglobin A1C (informational, not limiting)",
+          "x-owner": "hospital",
+          "x-rules": [
+            "DM-Q3"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "dka_status": {
+          "$ref": "#/$defs/Field_enum_current_resolved_none",
+          "description": "Diabetic ketoacidosis. Rules do not say whether resolved DKA still excludes: show the gap.",
+          "x-owner": "hospital",
+          "x-rules": [
+            "DM-2",
+            "END-X3"
+          ],
+          "x-docs": [
+            "DOC-4",
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "troponin_results": {
+          "$ref": "#/$defs/Field_rows_LabRow",
+          "description": "Troponin series",
+          "x-owner": "hospital",
+          "x-rules": [
+            "CARD-2"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "troponin_count": {
+          "$ref": "#/$defs/Field_int",
+          "description": "Number of troponin results (rule asks for 3, with 2 negative)",
+          "x-owner": "hospital",
+          "x-rules": [
+            "CARD-2"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "troponin_negative_count": {
+          "$ref": "#/$defs/Field_int",
+          "description": "Number of negative troponins",
+          "x-owner": "hospital",
+          "x-rules": [
+            "CARD-2"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "cultures": {
+          "$ref": "#/$defs/Field_rows_CultureRow",
+          "description": "Blood, wound, urine cultures and results",
+          "x-owner": "hospital",
+          "x-rules": [
+            "ID-Q2"
+          ],
+          "x-docs": [
+            "DOC-9"
+          ],
+          "x-patient_visible": false
+        },
+        "wbc_latest": {
+          "$ref": "#/$defs/Field_number",
+          "description": "Latest white blood cell count",
+          "x-owner": "hospital",
+          "x-rules": [
+            "ID-1"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "inr_latest": {
+          "$ref": "#/$defs/Field_number",
+          "description": "Latest INR if on warfarin",
+          "x-owner": "hospital",
+          "x-rules": [
+            "CARD-4"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "hemoglobin_hematocrit_normal": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Post cardiac surgery: normal hemoglobin and hematocrit",
+          "x-owner": "hospital",
+          "x-rules": [
+            "CIR-E5"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        }
+      },
+      "required": [
+        "glucose_readings",
+        "glucose_reading_count",
+        "glucose_trend",
+        "hypoglycemia_last_week",
+        "a1c",
+        "dka_status",
+        "troponin_results",
+        "troponin_count",
+        "troponin_negative_count",
+        "cultures",
+        "wbc_latest",
+        "inr_latest",
+        "hemoglobin_hematocrit_normal"
+      ],
+      "additionalProperties": false,
+      "description": "Glucose, troponin, cultures and the few other labs the rules name."
+    },
+    "imaging_cardiac": {
+      "type": "object",
+      "properties": {
+        "chest_imaging_present": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Chest X-ray, CT or MRI in the packet",
+          "x-owner": "hospital",
+          "x-rules": [
+            "RESP-1"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "chest_imaging_impression": {
+          "$ref": "#/$defs/Field_text",
+          "description": "Radiology impression, as written",
+          "x-owner": "hospital",
+          "x-rules": [
+            "RESP-1",
+            "RSP-X1",
+            "RSP-X2"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "ekg_present": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "EKG in the packet",
+          "x-owner": "hospital",
+          "x-rules": [
+            "CARD-3"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "ekg_impression": {
+          "$ref": "#/$defs/Field_text",
+          "description": "EKG reading, as written",
+          "x-owner": "hospital",
+          "x-rules": [
+            "CARD-3",
+            "CIR-X1"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "ejection_fraction_percent": {
+          "$ref": "#/$defs/Field_number",
+          "description": "EF from echo or cath report",
+          "x-owner": "hospital",
+          "x-rules": [
+            "CARD-5",
+            "CIR-E7",
+            "CIR-E5"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "ef_is_patient_baseline": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Low EF established as the patient's baseline",
+          "x-owner": "hospital",
+          "x-rules": [
+            "CARD-5"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "unstable_arrhythmia": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Unstable arrhythmia documented",
+          "x-owner": "hospital",
+          "x-rules": [
+            "CIR-X1"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "atrial_fibrillation": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "History or new diagnosis of atrial fibrillation",
+          "x-owner": "hospital",
+          "x-rules": [
+            "CARD-4"
+          ],
+          "x-docs": [
+            "DOC-4",
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        }
+      },
+      "required": [
+        "chest_imaging_present",
+        "chest_imaging_impression",
+        "ekg_present",
+        "ekg_impression",
+        "ejection_fraction_percent",
+        "ef_is_patient_baseline",
+        "unstable_arrhythmia",
+        "atrial_fibrillation"
+      ],
+      "additionalProperties": false,
+      "description": "Chest imaging, EKG and heart function."
+    },
+    "conditions": {
+      "type": "object",
+      "properties": {
+        "primary_diagnosis": {
+          "$ref": "#/$defs/Field_text",
+          "description": "Primary diagnosis for this stay",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-4"
+          ],
+          "x-patient_visible": true
+        },
+        "problem_list": {
+          "$ref": "#/$defs/Field_rows_ProblemRow",
+          "description": "Active problems, each tagged to a body system and the rule IDs it touches",
+          "x-owner": "hospital",
+          "x-rules": [],
+          "x-docs": [
+            "DOC-4",
+            "DOC-5"
+          ],
+          "x-patient_visible": false
+        },
+        "flags": {
+          "type": "object",
+          "properties": {
+            "stroke_with_residual_deficit": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Stroke with ongoing deficit (not eligible)",
+              "x-owner": "hospital",
+              "x-rules": [
+                "NEU-X1"
+              ],
+              "x-docs": [
+                "DOC-4",
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            },
+            "new_onset_seizure_with_deficit": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "New seizure with deficit (not eligible)",
+              "x-owner": "hospital",
+              "x-rules": [
+                "NEU-X2"
+              ],
+              "x-docs": [
+                "DOC-4"
+              ],
+              "x-patient_visible": false
+            },
+            "tbi_severity": {
+              "$ref": "#/$defs/Field_enum_none_mild_moderate_severe",
+              "description": "Traumatic brain injury severity",
+              "x-owner": "hospital",
+              "x-rules": [
+                "NEU-E3",
+                "NEU-X3"
+              ],
+              "x-docs": [
+                "DOC-4"
+              ],
+              "x-patient_visible": false
+            },
+            "spinal_fusion": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Cervical or lumbar fusion (not eligible)",
+              "x-owner": "hospital",
+              "x-rules": [
+                "NEU-X5"
+              ],
+              "x-docs": [
+                "DOC-4"
+              ],
+              "x-patient_visible": false
+            },
+            "immediately_post_neurosurgery": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Just had neurosurgery (escalate for clinical review)",
+              "x-owner": "hospital",
+              "x-rules": [
+                "NEU-X6"
+              ],
+              "x-docs": [
+                "DOC-4"
+              ],
+              "x-patient_visible": false
+            },
+            "pulmonary_embolism": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "PE (not eligible)",
+              "x-owner": "hospital",
+              "x-rules": [
+                "RSP-X4"
+              ],
+              "x-docs": [
+                "DOC-4",
+                "DOC-5"
+              ],
+              "x-patient_visible": false
+            },
+            "pneumothorax_or_hemothorax": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Not eligible",
+              "x-owner": "hospital",
+              "x-rules": [
+                "RSP-X1",
+                "RSP-X2"
+              ],
+              "x-docs": [
+                "DOC-4",
+                "DOC-5"
+              ],
+              "x-patient_visible": false
+            },
+            "open_fracture": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Open fracture (not eligible); closed fractures are eligible",
+              "x-owner": "hospital",
+              "x-rules": [
+                "MSK-X1",
+                "MSK-E1"
+              ],
+              "x-docs": [
+                "DOC-4"
+              ],
+              "x-patient_visible": false
+            },
+            "osteomyelitis": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Bone infection (not eligible)",
+              "x-owner": "hospital",
+              "x-rules": [
+                "MSK-X2"
+              ],
+              "x-docs": [
+                "DOC-4",
+                "DOC-5"
+              ],
+              "x-patient_visible": false
+            },
+            "recent_amputation_with_wounds": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Not eligible immediately after",
+              "x-owner": "hospital",
+              "x-rules": [
+                "MSK-X4"
+              ],
+              "x-docs": [
+                "DOC-4"
+              ],
+              "x-patient_visible": false
+            },
+            "jaw_wired": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Facial fracture with jaw wiring (not eligible)",
+              "x-owner": "hospital",
+              "x-rules": [
+                "MSK-X5"
+              ],
+              "x-docs": [
+                "DOC-4"
+              ],
+              "x-patient_visible": false
+            },
+            "decompensated_cirrhosis": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Ascites, varices, encephalopathy or jaundice (not eligible)",
+              "x-owner": "hospital",
+              "x-rules": [
+                "GI-X1"
+              ],
+              "x-docs": [
+                "DOC-4",
+                "DOC-5"
+              ],
+              "x-patient_visible": false
+            },
+            "recent_gi_bleed_or_varices": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Not eligible immediately after",
+              "x-owner": "hospital",
+              "x-rules": [
+                "GI-X2"
+              ],
+              "x-docs": [
+                "DOC-4"
+              ],
+              "x-patient_visible": false
+            },
+            "immediately_post_parathyroidectomy": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Not eligible",
+              "x-owner": "hospital",
+              "x-rules": [
+                "END-X1"
+              ],
+              "x-docs": [
+                "DOC-4"
+              ],
+              "x-patient_visible": false
+            },
+            "alcoholic_ketoacidosis": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Not eligible",
+              "x-owner": "hospital",
+              "x-rules": [
+                "END-X2"
+              ],
+              "x-docs": [
+                "DOC-4"
+              ],
+              "x-patient_visible": false
+            },
+            "recent_heart_attack": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Being discharged after a heart attack (needs normal EF)",
+              "x-owner": "hospital",
+              "x-rules": [
+                "CIR-E7",
+                "CARD-5"
+              ],
+              "x-docs": [
+                "DOC-4"
+              ],
+              "x-patient_visible": false
+            },
+            "on_chemotherapy": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "On chemotherapy",
+              "x-owner": "hospital",
+              "x-rules": [
+                "CARD-5"
+              ],
+              "x-docs": [
+                "DOC-4",
+                "DOC-7"
+              ],
+              "x-patient_visible": false
+            },
+            "post_cabg_or_valve_surgery": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Post bypass or valve surgery",
+              "x-owner": "hospital",
+              "x-rules": [
+                "CIR-E5"
+              ],
+              "x-docs": [
+                "DOC-4"
+              ],
+              "x-patient_visible": false
+            },
+            "hypertension_uncontrolled_or_symptomatic": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Hypertension needing IV meds, symptomatic, or not responding to oral meds",
+              "x-owner": "hospital",
+              "x-rules": [
+                "CIR-X2",
+                "CIR-E4",
+                "CIR-E6"
+              ],
+              "x-docs": [
+                "DOC-5",
+                "DOC-6"
+              ],
+              "x-patient_visible": false
+            },
+            "diabetes": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Has diabetes",
+              "x-owner": "hospital",
+              "x-rules": [
+                "DM-1",
+                "DM-2",
+                "DM-3",
+                "DM-4",
+                "DM-5",
+                "DM-6",
+                "END-E1"
+              ],
+              "x-docs": [
+                "DOC-1",
+                "DOC-4"
+              ],
+              "x-patient_visible": false
+            },
+            "active_infection": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Active infection being treated",
+              "x-owner": "hospital",
+              "x-rules": [
+                "ID-1",
+                "ID-2",
+                "ID-3",
+                "FORM-X4"
+              ],
+              "x-docs": [
+                "DOC-1",
+                "DOC-4"
+              ],
+              "x-patient_visible": false
+            },
+            "respiratory_illness": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Pneumonia, COPD, asthma, bronchitis or similar",
+              "x-owner": "hospital",
+              "x-rules": [
+                "RESP-1",
+                "RESP-2",
+                "RESP-3",
+                "RESP-4"
+              ],
+              "x-docs": [
+                "DOC-4"
+              ],
+              "x-patient_visible": false
+            },
+            "cardiac_condition": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "A cardiac reason for the stay",
+              "x-owner": "hospital",
+              "x-rules": [
+                "CARD-1",
+                "CARD-2",
+                "CARD-3"
+              ],
+              "x-docs": [
+                "DOC-4"
+              ],
+              "x-patient_visible": false
+            }
+          },
+          "required": [
+            "stroke_with_residual_deficit",
+            "new_onset_seizure_with_deficit",
+            "tbi_severity",
+            "spinal_fusion",
+            "immediately_post_neurosurgery",
+            "pulmonary_embolism",
+            "pneumothorax_or_hemothorax",
+            "open_fracture",
+            "osteomyelitis",
+            "recent_amputation_with_wounds",
+            "jaw_wired",
+            "decompensated_cirrhosis",
+            "recent_gi_bleed_or_varices",
+            "immediately_post_parathyroidectomy",
+            "alcoholic_ketoacidosis",
+            "recent_heart_attack",
+            "on_chemotherapy",
+            "post_cabg_or_valve_surgery",
+            "hypertension_uncontrolled_or_symptomatic",
+            "diabetes",
+            "active_infection",
+            "respiratory_illness",
+            "cardiac_condition"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "primary_diagnosis",
+        "problem_list",
+        "flags"
+      ],
+      "additionalProperties": false,
+      "description": "Diagnoses and the condition flags that map onto IHH's eligible and ineligible lists by body system."
+    },
+    "disease_specific": {
+      "type": "object",
+      "properties": {
+        "diabetes": {
+          "type": "object",
+          "properties": {
+            "pcp_followup_within_7_days": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Primary care follow-up scheduled within 5 to 7 days (ED referrals)",
+              "x-owner": "hospital",
+              "x-rules": [
+                "DM-4"
+              ],
+              "x-docs": [
+                "DOC-5"
+              ],
+              "x-patient_visible": false
+            },
+            "written_glucose_treatment_plan": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Sliding scale or hold parameters written down",
+              "x-owner": "hospital",
+              "x-rules": [
+                "DM-4"
+              ],
+              "x-docs": [
+                "DOC-5",
+                "DOC-7"
+              ],
+              "x-patient_visible": false
+            }
+          },
+          "required": [
+            "pcp_followup_within_7_days",
+            "written_glucose_treatment_plan"
+          ],
+          "additionalProperties": false
+        },
+        "infection": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "$ref": "#/$defs/Field_text",
+              "description": "Where the infection is",
+              "x-owner": "hospital",
+              "x-rules": [
+                "ID-Q1"
+              ],
+              "x-docs": [
+                "DOC-4"
+              ],
+              "x-patient_visible": false
+            },
+            "on_oral_antibiotics": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Oral antibiotics at discharge",
+              "x-owner": "hospital",
+              "x-rules": [
+                "ID-2",
+                "INT-E1"
+              ],
+              "x-docs": [
+                "DOC-7"
+              ],
+              "x-patient_visible": false
+            },
+            "on_iv_antibiotics": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "IV antibiotics at discharge (needs home health)",
+              "x-owner": "hospital",
+              "x-rules": [
+                "ID-3",
+                "INT-E3"
+              ],
+              "x-docs": [
+                "DOC-7"
+              ],
+              "x-patient_visible": false
+            },
+            "can_self_administer_oral_antibiotics": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Can take oral antibiotics alone",
+              "x-owner": "hospital",
+              "x-rules": [
+                "ID-2"
+              ],
+              "x-docs": [
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            }
+          },
+          "required": [
+            "location",
+            "on_oral_antibiotics",
+            "on_iv_antibiotics",
+            "can_self_administer_oral_antibiotics"
+          ],
+          "additionalProperties": false
+        },
+        "respiratory": {
+          "type": "object",
+          "properties": {
+            "on_antibiotics_for_respiratory": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Antibiotics for the respiratory condition",
+              "x-owner": "hospital",
+              "x-rules": [
+                "RESP-Q2"
+              ],
+              "x-docs": [
+                "DOC-7"
+              ],
+              "x-patient_visible": false
+            }
+          },
+          "required": [
+            "on_antibiotics_for_respiratory"
+          ],
+          "additionalProperties": false
+        },
+        "cardiac": {
+          "type": "object",
+          "properties": {
+            "anticoag_independent_and_understands_inr": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Takes anticoagulant alone and understands INR checks",
+              "x-owner": "hospital",
+              "x-rules": [
+                "CARD-4"
+              ],
+              "x-docs": [
+                "DOC-8"
+              ],
+              "x-patient_visible": false
+            }
+          },
+          "required": [
+            "anticoag_independent_and_understands_inr"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "diabetes",
+        "infection",
+        "respiratory",
+        "cardiac"
+      ],
+      "additionalProperties": false,
+      "description": "The extra questions IHH asks for diabetes, infection, respiratory and cardiac cases."
+    },
+    "arrangements": {
+      "type": "object",
+      "properties": {
+        "home_health_status": {
+          "$ref": "#/$defs/Field_enum_none_ordered_established_coordinated_and_scheduled",
+          "description": "Home health. The rules use four different thresholds; record the strongest one documented.",
+          "x-owner": "hospital",
+          "x-rules": [
+            "OTH-3",
+            "ID-3",
+            "INT-E2",
+            "INT-E3",
+            "INT-E6",
+            "INT-E7",
+            "CIR-E5"
+          ],
+          "x-docs": [
+            "DOC-1",
+            "DOC-5"
+          ],
+          "x-patient_visible": true
+        },
+        "home_health_purpose": {
+          "$ref": "#/$defs/Field_list",
+          "description": "What home health is for: IV, wound care, therapy",
+          "x-owner": "hospital",
+          "x-rules": [
+            "OTH-3",
+            "ID-3",
+            "INT-E2"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": true
+        },
+        "wound_care_scheduled": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Wound care visits scheduled, matching dressing frequency",
+          "x-owner": "hospital",
+          "x-rules": [
+            "INT-E2",
+            "INT-E6",
+            "INT-E7"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": true
+        },
+        "pt_scheduled": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Outpatient or home PT scheduled",
+          "x-owner": "hospital",
+          "x-rules": [
+            "MSK-E2"
+          ],
+          "x-docs": [
+            "DOC-5",
+            "DOC-8"
+          ],
+          "x-patient_visible": true
+        },
+        "hospice_arranged": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Hospice agency arranged and everyone told staff cannot give medications",
+          "x-owner": "hospital",
+          "x-rules": [
+            "EOL-1"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": true
+        },
+        "pcp_followup_scheduled": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Primary care follow-up booked",
+          "x-owner": "hospital",
+          "x-rules": [
+            "DM-4",
+            "CIR-E4"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": true
+        },
+        "specialty_followups": {
+          "$ref": "#/$defs/Field_list",
+          "description": "Booked follow-ups: suture removal, catheter removal, cardiac surgery clinic",
+          "x-owner": "hospital",
+          "x-rules": [
+            "INT-E5",
+            "GU-E6",
+            "CIR-E5"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": true
+        },
+        "oxygen_ordered_tank_ready_day_before": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Hospital ordered O2 and the tank will be at the site the day before",
+          "x-owner": "hospital",
+          "x-rules": [
+            "RESP-3"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": true
+        },
+        "dialysis_schedule_confirmed": {
+          "$ref": "#/$defs/Field_bool",
+          "description": "Dialysis days and chair confirmed",
+          "x-owner": "hospital",
+          "x-rules": [
+            "GU-E7"
+          ],
+          "x-docs": [
+            "DOC-5"
+          ],
+          "x-patient_visible": true
+        }
+      },
+      "required": [
+        "home_health_status",
+        "home_health_purpose",
+        "wound_care_scheduled",
+        "pt_scheduled",
+        "hospice_arranged",
+        "pcp_followup_scheduled",
+        "specialty_followups",
+        "oxygen_ordered_tank_ready_day_before",
+        "dialysis_schedule_confirmed"
+      ],
+      "additionalProperties": false,
+      "description": "Things that must be set up before the person arrives: home health, wound care, therapy, hospice, follow-up visits, oxygen delivery."
+    },
+    "eligibility": {
+      "$ref": "#/$defs/Eligibility"
+    },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Gap"
+      }
+    },
+    "patient_summary": {
+      "$ref": "#/$defs/PatientSummary"
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/HistoryRow"
+      }
+    }
+  },
+  "required": [
+    "meta",
+    "documents",
+    "referral",
+    "patient",
+    "housing",
+    "function",
+    "cognition",
+    "mental_health",
+    "substance_use",
+    "safety_legal",
+    "infection_control",
+    "medications",
+    "lines_devices_oxygen",
+    "wounds",
+    "vitals",
+    "labs",
+    "imaging_cardiac",
+    "conditions",
+    "disease_specific",
+    "arrangements",
+    "eligibility",
+    "gaps",
+    "patient_summary",
+    "history"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "Evidence": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "integer",
+          "description": "1-based page number in the packet PDF"
+        },
+        "doc_type": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "What kind of page: referral_form, face_sheet, h_and_p, progress_note, pt_ot_eval, nursing_note, mar, labs, imaging, ekg, auth_form, fax_cover, social_work_note, consult, other"
+        },
+        "quote": {
+          "type": "string",
+          "description": "Short verbatim text from the page that supports the value. Never paraphrase into a quote."
+        }
+      },
+      "required": [
+        "page",
+        "doc_type",
+        "quote"
+      ],
+      "additionalProperties": false,
+      "description": "Where a value came from. Every 'found' value needs at least one."
+    },
+    "Conflict": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "integer"
+        },
+        "doc_type": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "quote": {
+          "type": "string"
+        },
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The value this page supports, as text"
+        }
+      },
+      "required": [
+        "page",
+        "doc_type",
+        "quote",
+        "value"
+      ],
+      "additionalProperties": false,
+      "description": "A second source that disagrees with the recorded value."
+    },
+    "WoundRow": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "wound_type": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "pressure_injury",
+            "surgical_incision",
+            "abscess",
+            "cellulitis",
+            "laceration",
+            "burn",
+            "diabetic_ulcer",
+            "other",
+            null
+          ]
+        },
+        "stage": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "unstageable",
+            "deep_tissue_injury",
+            "not_applicable",
+            null
+          ]
+        },
+        "size": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "As written, for example 3 x 2 x 0.5 cm"
+        },
+        "infected": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "dressing_change_frequency": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "hard_to_reach_area": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Coccyx, sacrum, back, back of thighs, perineum: needs at least one wound-care visit (INT-E2)"
+        },
+        "staples_or_sutures": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "removal_followup_scheduled": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "burn_tbsa_percent": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "inhalation_injury": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "requires_skin_graft": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "complicated_large_abscess": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Undefined in the rules; flag for the coordinator"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        }
+      },
+      "required": [
+        "location",
+        "wound_type",
+        "stage",
+        "size",
+        "infected",
+        "dressing_change_frequency",
+        "hard_to_reach_area",
+        "staples_or_sutures",
+        "removal_followup_scheduled",
+        "burn_tbsa_percent",
+        "inhalation_injury",
+        "requires_skin_graft",
+        "complicated_large_abscess",
+        "evidence"
+      ],
+      "additionalProperties": false,
+      "description": "One wound."
+    },
+    "VitalsRow": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Time or sequence label as written; dates are redacted in the event packets"
+        },
+        "temp_f": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "heart_rate": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "bp_systolic": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "bp_diastolic": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "resp_rate": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "spo2": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "on_oxygen": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "page": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "label",
+        "temp_f",
+        "heart_rate",
+        "bp_systolic",
+        "bp_diastolic",
+        "resp_rate",
+        "spo2",
+        "on_oxygen",
+        "page"
+      ],
+      "additionalProperties": false,
+      "description": "One set of vital signs."
+    },
+    "LabRow": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Time or sequence label as written"
+        },
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Result as written, including units"
+        },
+        "flag": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "normal",
+            "high",
+            "low",
+            "critical",
+            "negative",
+            "positive",
+            null
+          ]
+        },
+        "page": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "label",
+        "value",
+        "flag",
+        "page"
+      ],
+      "additionalProperties": false,
+      "description": "One lab result."
+    },
+    "CultureRow": {
+      "type": "object",
+      "properties": {
+        "specimen": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "blood",
+            "wound",
+            "urine",
+            "sputum",
+            "nasal",
+            "stool",
+            "other",
+            null
+          ]
+        },
+        "result": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Organism or 'no growth', as written"
+        },
+        "final": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Final vs preliminary"
+        },
+        "page": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "specimen",
+        "result",
+        "final",
+        "page"
+      ],
+      "additionalProperties": false,
+      "description": "One culture."
+    },
+    "ProblemRow": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "body_system": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "integumentary",
+            "ophthalmology",
+            "respiratory",
+            "musculoskeletal",
+            "gi",
+            "endocrine",
+            "gu",
+            "circulatory",
+            "neurology",
+            "psychiatric",
+            "infectious",
+            "other",
+            null
+          ]
+        },
+        "matched_rule_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "IDs from the provider's criteria this problem touches, for example INT-E1 or GI-X1"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        }
+      },
+      "required": [
+        "text",
+        "body_system",
+        "matched_rule_ids",
+        "evidence"
+      ],
+      "additionalProperties": false,
+      "description": "One active problem."
+    },
+    "PageRow": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "integer"
+        },
+        "doc_type": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "orientation": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "upright",
+            "rotated_90",
+            "rotated_180",
+            "rotated_270",
+            "mixed",
+            null
+          ]
+        },
+        "legibility": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "good",
+            "partial",
+            "poor",
+            "blank",
+            null
+          ]
+        },
+        "from_earlier_stay": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "duplicate_of_page": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "page",
+        "doc_type",
+        "orientation",
+        "legibility",
+        "from_earlier_stay",
+        "duplicate_of_page"
+      ],
+      "additionalProperties": false,
+      "description": "What is on one page of the packet. Built first so the extractor and the people can navigate."
+    },
+    "RuleResult": {
+      "type": "object",
+      "properties": {
+        "rule_id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "met",
+            "not_met",
+            "cant_tell",
+            "not_applicable",
+            "needs_confirmation",
+            "pending"
+          ]
+        },
+        "basis": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "One or two sentences on why, in plain language"
+        },
+        "sst_fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "SST field paths used"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "confirmed_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Role of the person who confirmed, if any"
+        },
+        "confirmed_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "rule_id",
+        "status",
+        "basis",
+        "sst_fields",
+        "evidence",
+        "confirmed_by",
+        "confirmed_at"
+      ],
+      "additionalProperties": false,
+      "description": "The result of checking one rule against the SST."
+    },
+    "Eligibility": {
+      "type": "object",
+      "properties": {
+        "provider_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Which provider's requirements were applied, for example ihh"
+        },
+        "profile_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evaluated_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RuleResult"
+          }
+        },
+        "hard_stops": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Rule IDs that are not_met and exclude on their own"
+        },
+        "open_questions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "rule_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "question": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "rule_id",
+              "question"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "recommendation": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "likely_eligible",
+            "likely_ineligible",
+            "request_information",
+            "cant_tell",
+            null
+          ]
+        },
+        "recommendation_rationale": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "coordinator_decision": {
+          "type": "object",
+          "properties": {
+            "decision": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "approve",
+                "deny",
+                "request_information",
+                null
+              ]
+            },
+            "reason": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "decided_by": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "decided_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "decision",
+            "reason",
+            "decided_by",
+            "decided_at"
+          ],
+          "additionalProperties": false,
+          "description": "The human decision. The tool recommends; the coordinator decides."
+        }
+      },
+      "required": [
+        "provider_id",
+        "profile_version",
+        "evaluated_at",
+        "rules",
+        "hard_stops",
+        "open_questions",
+        "recommendation",
+        "recommendation_rationale",
+        "coordinator_decision"
+      ],
+      "additionalProperties": false,
+      "description": "Computed by the provider's requirements profile. Never extracted from the packet directly."
+    },
+    "Gap": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "what": {
+          "type": "string",
+          "description": "What is missing or unclear, in plain language"
+        },
+        "why_rule_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "doc_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sst_fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "who_can_supply": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "hospital_case_manager",
+            "hospital_nurse",
+            "physician",
+            "pt_ot",
+            "pharmacy",
+            "patient",
+            "provider",
+            null
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "open",
+            "requested",
+            "received",
+            "resolved",
+            "not_available"
+          ]
+        },
+        "requested_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "received_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "draft_request_text": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Draft wording for the hospital. Drafted only; nothing is sent by the tool."
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "what",
+        "why_rule_ids",
+        "doc_ids",
+        "sst_fields",
+        "who_can_supply",
+        "status",
+        "requested_at",
+        "received_at",
+        "draft_request_text",
+        "note"
+      ],
+      "additionalProperties": false,
+      "description": "One thing to ask the hospital (or the patient) for while the patient is still in the hospital."
+    },
+    "PatientSummary": {
+      "type": "object",
+      "properties": {
+        "language": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Language the summary is written in"
+        },
+        "requires_staff_review": {
+          "type": "boolean",
+          "description": "True until a staff member has read it"
+        },
+        "reviewed_by": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reviewed_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "where_things_stand": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Two or three plain sentences. No medical advice."
+        },
+        "what_is_still_needed": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "what": {
+                "type": "string"
+              },
+              "who_is_getting_it": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "status": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "what",
+              "who_is_getting_it",
+              "status"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "your_options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "provider_name": {
+                "type": "string"
+              },
+              "what_it_is": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "status": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "provider_name",
+              "what_it_is",
+              "status"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "questions_to_ask_your_team": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "language",
+        "requires_staff_review",
+        "reviewed_by",
+        "reviewed_at",
+        "where_things_stand",
+        "what_is_still_needed",
+        "your_options",
+        "questions_to_ask_your_team"
+      ],
+      "additionalProperties": false,
+      "description": "What the patient sees. Status and logistics only; clinical interpretation stays with staff."
+    },
+    "HistoryRow": {
+      "type": "object",
+      "properties": {
+        "ts": {
+          "type": "string"
+        },
+        "actor_role": {
+          "type": "string",
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system"
+          ]
+        },
+        "actor_label": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Display label, never a real name in the event build"
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "extracted",
+            "edited",
+            "confirmed",
+            "requested",
+            "received",
+            "evaluated",
+            "decided",
+            "viewed",
+            "commented"
+          ]
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Dotted SST path affected"
+        },
+        "old_value": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "new_value": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "ts",
+        "actor_role",
+        "actor_label",
+        "action",
+        "path",
+        "old_value",
+        "new_value",
+        "note"
+      ],
+      "additionalProperties": false,
+      "description": "One change. The SST is append-only in history."
+    },
+    "Meta": {
+      "type": "object",
+      "properties": {
+        "sst_version": {
+          "type": "string"
+        },
+        "referral_id": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "fictional": {
+          "type": "boolean",
+          "description": "True for made-up test data"
+        },
+        "packet": {
+          "type": "object",
+          "properties": {
+            "source_file": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Path on disk, never committed"
+            },
+            "page_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pages": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/PageRow"
+              }
+            }
+          },
+          "required": [
+            "source_file",
+            "page_count",
+            "pages"
+          ],
+          "additionalProperties": false
+        },
+        "parties": {
+          "type": "object",
+          "properties": {
+            "hospital": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "contact_role": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "label",
+                "contact_role"
+              ],
+              "additionalProperties": false
+            },
+            "patient": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Display label only, for example 'Patient'"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "additionalProperties": false
+            },
+            "providers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "provider_id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "not_sent",
+                      "sent",
+                      "reviewing",
+                      "information_requested",
+                      "approved",
+                      "denied",
+                      "withdrawn"
+                    ]
+                  },
+                  "updated_at": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "provider_id",
+                  "name",
+                  "status",
+                  "updated_at"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "hospital",
+            "patient",
+            "providers"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "sst_version",
+        "referral_id",
+        "created_at",
+        "updated_at",
+        "fictional",
+        "packet",
+        "parties"
+      ],
+      "additionalProperties": false
+    },
+    "Field_bool": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_text": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_enum_inpatient_emergency_department_other": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "inpatient",
+            "emergency_department",
+            "other",
+            null
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_int": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_enum_not_requested_requested_approved_denied": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "not_requested",
+            "requested",
+            "approved",
+            "denied",
+            null
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_enum_unhoused_at_risk_inadequate_environment_housed": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "unhoused",
+            "at_risk",
+            "inadequate_environment",
+            "housed",
+            null
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_enum_independent_seated_shower_independent_needs_assist": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "independent",
+            "seated_shower_independent",
+            "needs_assist",
+            null
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_enum_independent_needs_assist": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "independent",
+            "needs_assist",
+            null
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_enum_independent_changes_own_briefs_needs_assist": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "independent",
+            "changes_own_briefs",
+            "needs_assist",
+            null
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_number": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_enum_independent_modified_independent_supervision_contact_guard_min_assist_mod_assist_max_assist_non_ambulatory": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "independent",
+            "modified_independent",
+            "supervision",
+            "contact_guard",
+            "min_assist",
+            "mod_assist",
+            "max_assist",
+            "non_ambulatory",
+            null
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_list": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_enum_AOx4_AOx3_AOx2_AOx1_AOx0": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "AOx4",
+            "AOx3",
+            "AOx2",
+            "AOx1",
+            "AOx0",
+            null
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_enum_negative_positive_pending_not_done": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "negative",
+            "positive",
+            "pending",
+            "not_done",
+            null
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_enum_none_contact_droplet_airborne": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "none",
+            "contact",
+            "droplet",
+            "airborne",
+            null
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_enum_negative_positive_not_tested": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "negative",
+            "positive",
+            "not_tested",
+            null
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_enum_none_peripheral_midline_picc_port": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "none",
+            "peripheral",
+            "midline",
+            "picc",
+            "port",
+            null
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_enum_none_mature_self_care_ventilator_other": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "none",
+            "mature_self_care",
+            "ventilator",
+            "other",
+            null
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_rows_WoundRow": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/WoundRow"
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_rows_VitalsRow": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/VitalsRow"
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_rows_LabRow": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/LabRow"
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_enum_improving_stable_worsening_insufficient_data": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "improving",
+            "stable",
+            "worsening",
+            "insufficient_data",
+            null
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_enum_current_resolved_none": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "current",
+            "resolved",
+            "none",
+            null
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_rows_CultureRow": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CultureRow"
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_rows_ProblemRow": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ProblemRow"
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_enum_none_mild_moderate_severe": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "none",
+            "mild",
+            "moderate",
+            "severe",
+            null
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_enum_none_ordered_established_coordinated_and_scheduled": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "none",
+            "ordered",
+            "established",
+            "coordinated_and_scheduled",
+            null
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

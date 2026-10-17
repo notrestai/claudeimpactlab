@@ -1,0 +1,7 @@
+fastapi>=0.115
+uvicorn[standard]>=0.30
+anthropic>=0.60
+pypdfium2>=4.30
+jsonschema>=4.23
+python-multipart>=0.0.9
+pydantic>=2.7

@@ -1,0 +1,26 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# real de-identified packets: never commit
+data/packets/*
+!data/packets/README.md
+*.pdf
+!providers/ihh/source/*.pdf
+
+# generated at runtime
+data/runs/
+data/pages/
+*.sqlite
+*.db
+
+# python / node
+__pycache__/
+*.pyc
+.venv/
+venv/
+node_modules/
+dist/
+.next/
+.DS_Store

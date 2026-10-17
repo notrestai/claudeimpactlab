@@ -1,0 +1,60 @@
+{
+  "source": "Illumination Health + Home's actual decision on each referral, as labelled by IHH when it shared the packets. No reasons were recorded.",
+  "packets": [
+    {
+      "packet_id": "R01",
+      "pages": 34,
+      "decision": "deny"
+    },
+    {
+      "packet_id": "R02",
+      "pages": 22,
+      "decision": "approve"
+    },
+    {
+      "packet_id": "R03",
+      "pages": 23,
+      "decision": "approve"
+    },
+    {
+      "packet_id": "R04",
+      "pages": 18,
+      "decision": "approve"
+    },
+    {
+      "packet_id": "R05",
+      "pages": 14,
+      "decision": "deny"
+    },
+    {
+      "packet_id": "R06",
+      "pages": 30,
+      "decision": "approve"
+    },
+    {
+      "packet_id": "R07",
+      "pages": 30,
+      "decision": "approve"
+    },
+    {
+      "packet_id": "R08",
+      "pages": 29,
+      "decision": "approve"
+    },
+    {
+      "packet_id": "R09",
+      "pages": 30,
+      "decision": "deny"
+    },
+    {
+      "packet_id": "R10",
+      "pages": 21,
+      "decision": "deny"
+    },
+    {
+      "packet_id": "R11",
+      "pages": 31,
+      "decision": "approve"
+    }
+  ]
+}
