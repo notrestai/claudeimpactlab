@@ -34,7 +34,13 @@ Known traps in faxed referral packets (seen in hand review):
 22. Ordered or referenced is not present: "EKG ordered", "recheck BMP", "see nursing note" with no such page means not_in_packet. Culture numbers contradicted by a later "no growth" or "likely contaminated" line are a conflict, not a positive.
 23. Vitals printed as 24-hour min/max blocks are not discrete sets; count sets by distinct time stamps. In lab tables "--" is not drawn and a black cell is redacted; a one-digit heart rate next to a two-digit max is a scan artifact.
 24. Printed page numbers restart in every sub-document ("1 of 3", "2/4"). Cite only the [Page N of M] label.
-25. "5150", "DTO", "grave disability" and an APS referral are psychiatric hold, danger-to-others, consult-reason and protective-services terms. They are not a conservatorship. Record them as printed under mental_health and safety_legal so a person judges; do not map them to any eligibility conclusion."""
+25. "5150", "DTO", "grave disability" and an APS referral are psychiatric hold, danger-to-others, consult-reason and protective-services terms. They are not a conservatorship. Record them as printed under mental_health and safety_legal so a person judges; do not map them to any eligibility conclusion.
+26. Diagnoses printed on a face sheet or a MAR conditions list (dementia, psychosis, homelessness) are chart diagnoses even when the referral form leaves the matching box unticked: record them with their page and put the form's blank under conflicts.
+27. Facility MAR grids: day-of-month columns run across the page, order text sits at the edge and is often cut off; an "X" cell means not scheduled, "NA" is not a value, a blacked-out dose is redacted, and a page that says "continued from previous page" belongs to the previous page's shift. Behavior-monitoring sheets look like MARs but hold codes and counts; meal percentages and hours of sleep are not vitals or doses. Orthostatic lying/sitting/standing pressures are not routine vitals sets.
+28. When only the day of the month is visible, every "within 24 hours" or "72 hours" question is cant_tell; never infer timing from a column's position.
+29. Chart wording such as "resident", "facility" or "absent from facility" means the sending setting may not be a hospital; record referral.setting as the pages state it, not as the form assumes.
+30. In PT notes "(I)" means independent, "DNT" means did not test, five-digit codes like 97116 are billing codes, "300' x 2" is a distance, and "requires max encouragement" is not max assist. A POLST line about artificial nutrition is a care preference, not a feeding tube.
+31. A near-empty page can be a truncated note or an empty report, and tick marks that cross a box edge belong to the box they are mostly inside. When you cannot tell which box is ticked, cant_tell."""
 
 
 def _page_map(sst: dict) -> str:
