@@ -8,7 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from . import sstlib, store, roles, forms
 from .pipeline import ingest, page_index, extract, gaps as gaps_mod, score as score_mod, analyze as analyze_mod, summary as summary_mod, conversations as conv_mod, claude_client as cc
 
-app = FastAPI(title="Referral SST", version="0.2")
+app = FastAPI(title="Relay Health", version="0.2")
 import threading
 JOBS: dict[str, dict] = {}
 
