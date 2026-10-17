@@ -1,7 +1,7 @@
 """Stage D: the patient's plain-language summary. Status and logistics only. Staff review before it is shown."""
 from __future__ import annotations
 import json
-from .. import sstlib
+from .. import sstlib, roles
 from . import claude_client as cc
 
 SYSTEM = """You write a short plain-language status note for a patient in hospital whose case manager has referred them to a recuperative care program (a short stay with a bed, meals and health monitoring for people leaving hospital with nowhere safe to recover).
@@ -15,7 +15,8 @@ def patient_summary(sst: dict, rid: str, language: str | None = None) -> dict:
     code = {v.lower(): k for k, v in LANG.items()}.get(str(lang).lower(), str(lang)[:2].lower())
     inputs = {
         "documents": {k: f["status"] for k, f in sst["documents"].items()},
-        "gaps": [{"what": g["what"], "who": g["who_can_supply"], "status": g["status"]} for g in sst["gaps"] if g["status"] != "resolved"],
+        # Patient-safe labels only: document kinds and who is getting them, never the clinical detail.
+        "gaps": [{"what": roles.patient_safe_gap(g)["what"], "who": roles.patient_safe_gap(g)["who_is_getting_it"], "status": g["status"]} for g in sst["gaps"] if g["status"] != "resolved"],
         "providers": sst["meta"]["parties"]["providers"],
         "language": LANG.get(code, lang),
     }
