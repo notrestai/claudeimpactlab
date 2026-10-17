@@ -107,7 +107,9 @@
       "sst_fields": [
         "mental_health.psychiatric_diagnoses",
         "mental_health.stable_on_medications",
-        "mental_health.psychiatry_consult_present"
+        "mental_health.psychiatry_consult_present",
+        "forms.ihh_referral_form.mental_health_dx",
+        "forms.ihh_referral_form.mental_health_dx_type"
       ]
     },
     "MH-2": {
@@ -157,7 +159,8 @@
         "cognition.can_self_administer_insulin",
         "cognition.can_receive_education",
         "medications.high_risk_categories",
-        "medications.self_administers_all_meds"
+        "medications.self_administers_all_meds",
+        "forms.ihh_referral_form.forgetful"
       ]
     },
     "COG-2": {
@@ -182,7 +185,8 @@
       "section": "Other Factors",
       "sst_fields": [
         "safety_legal.registered_sex_offender",
-        "safety_legal.offense_involved_violence"
+        "safety_legal.offense_involved_violence",
+        "forms.ihh_referral_form.registered_sex_offender"
       ]
     },
     "OTH-3": {
@@ -193,7 +197,8 @@
         "medications.iv_medications_ongoing_at_discharge",
         "lines_devices_oxygen.iv_access",
         "arrangements.home_health_status",
-        "arrangements.home_health_purpose"
+        "arrangements.home_health_purpose",
+        "forms.ihh_referral_form.home_health_will_be_ordered"
       ]
     },
     "OTH-4": {
@@ -210,7 +215,8 @@
       "section": "End of life care",
       "sst_fields": [
         "patient.hospice_enrolled",
-        "arrangements.hospice_arranged"
+        "arrangements.hospice_arranged",
+        "forms.ihh_referral_form.hospice"
       ]
     },
     "INF-1": {
@@ -304,7 +310,8 @@
       "section": "Diabetes",
       "sst_fields": [
         "medications.insulin_regimen",
-        "medications.insulin_pump"
+        "medications.insulin_pump",
+        "forms.ihh_referral_form.insulin"
       ]
     },
     "DM-Q2": {
@@ -312,7 +319,9 @@
       "kind": "ask",
       "section": "Diabetes",
       "sst_fields": [
-        "medications.oral_diabetes_meds"
+        "medications.oral_diabetes_meds",
+        "forms.ihh_referral_form.diabetes",
+        "forms.ihh_referral_form.diabetes_oral_meds"
       ]
     },
     "DM-Q3": {
@@ -356,7 +365,8 @@
         "conditions.flags.active_infection",
         "disease_specific.infection.on_iv_antibiotics",
         "arrangements.home_health_status",
-        "arrangements.home_health_purpose"
+        "arrangements.home_health_purpose",
+        "forms.ihh_referral_form.home_health_will_be_ordered"
       ]
     },
     "ID-Q1": {
@@ -415,7 +425,8 @@
         "lines_devices_oxygen.oxygen_required",
         "lines_devices_oxygen.oxygen_flow_lpm",
         "conditions.flags.respiratory_illness",
-        "arrangements.oxygen_ordered_tank_ready_day_before"
+        "arrangements.oxygen_ordered_tank_ready_day_before",
+        "forms.ihh_referral_form.o2"
       ]
     },
     "RESP-4": {
@@ -525,7 +536,8 @@
         "wounds.patient_independent_with_wound_care",
         "arrangements.home_health_status",
         "arrangements.home_health_purpose",
-        "arrangements.wound_care_scheduled"
+        "arrangements.wound_care_scheduled",
+        "forms.ihh_referral_form.independent_with_wound_care"
       ]
     },
     "INT-E3": {
@@ -957,7 +969,8 @@
       "sst_fields": [
         "function.continence.foley_catheter",
         "function.continence.can_empty_catheter_bag",
-        "arrangements.specialty_followups"
+        "arrangements.specialty_followups",
+        "forms.ihh_referral_form.foley"
       ]
     },
     "GU-E7": {
@@ -1133,7 +1146,8 @@
       "kind": "form_must",
       "section": "Referral form screen",
       "sst_fields": [
-        "housing.housing_situation"
+        "housing.housing_situation",
+        "forms.ihh_referral_form.currently_unhoused"
       ]
     },
     "FORM-M2": {
@@ -1168,7 +1182,8 @@
       "section": "Referral form screen",
       "sst_fields": [
         "cognition.can_self_administer_meds",
-        "medications.self_administers_all_meds"
+        "medications.self_administers_all_meds",
+        "forms.ihh_referral_form.self_administers_all_meds"
       ]
     },
     "FORM-M6": {
@@ -1178,7 +1193,9 @@
       "sst_fields": [
         "function.mobility.ambulatory",
         "function.mobility.ambulation_distance_ft",
-        "function.mobility.transfers_independent"
+        "function.mobility.transfers_independent",
+        "forms.ihh_referral_form.ambulatory",
+        "forms.ihh_referral_form.assistive_device"
       ]
     },
     "FORM-X1": {
@@ -1186,7 +1203,8 @@
       "kind": "form_exclude",
       "section": "Referral form screen",
       "sst_fields": [
-        "cognition.cognitive_impairment"
+        "cognition.cognitive_impairment",
+        "forms.ihh_referral_form.cognitive_impairment"
       ]
     },
     "FORM-X2": {
@@ -1216,7 +1234,10 @@
         "infection_control.tb_screen_result",
         "infection_control.c_diff",
         "infection_control.active_infection_cleared_by_physician",
-        "conditions.flags.active_infection"
+        "conditions.flags.active_infection",
+        "forms.ihh_referral_form.tb_test_type",
+        "forms.ihh_referral_form.tb_result",
+        "forms.ihh_referral_form.active_infection"
       ]
     },
     "FORM-X5": {
@@ -1224,7 +1245,8 @@
       "kind": "form_exclude",
       "section": "Referral form screen",
       "sst_fields": [
-        "substance_use.detox_noncompliance_or_refusal_to_abstain"
+        "substance_use.detox_noncompliance_or_refusal_to_abstain",
+        "forms.ihh_referral_form.non_compliant"
       ]
     },
     "FORM-X6": {
@@ -1232,7 +1254,8 @@
       "kind": "form_exclude",
       "section": "Referral form screen",
       "sst_fields": [
-        "safety_legal.registered_sex_offender"
+        "safety_legal.registered_sex_offender",
+        "forms.ihh_referral_form.registered_sex_offender"
       ]
     },
     "FORM-X7": {
@@ -1279,7 +1302,52 @@
         "wounds.patient_independent_with_wound_care",
         "conditions.flags.diabetes",
         "conditions.flags.active_infection",
-        "arrangements.home_health_status"
+        "arrangements.home_health_status",
+        "forms.ihh_referral_form.present",
+        "forms.ihh_referral_form.form_code",
+        "forms.ihh_referral_form.referring_department",
+        "forms.ihh_referral_form.referrer_role",
+        "forms.ihh_referral_form.referrer_contact_filled",
+        "forms.ihh_referral_form.authorized_by_filled",
+        "forms.ihh_referral_form.patient_identifiers_complete",
+        "forms.ihh_referral_form.gender",
+        "forms.ihh_referral_form.ethnicity",
+        "forms.ihh_referral_form.insurance",
+        "forms.ihh_referral_form.preferred_language",
+        "forms.ihh_referral_form.currently_unhoused",
+        "forms.ihh_referral_form.four_plus_episodes_3y",
+        "forms.ihh_referral_form.chief_complaint",
+        "forms.ihh_referral_form.admit_date_filled",
+        "forms.ihh_referral_form.wounds_reported",
+        "forms.ihh_referral_form.wounds_description",
+        "forms.ihh_referral_form.independent_with_wound_care",
+        "forms.ihh_referral_form.home_health_will_be_ordered",
+        "forms.ihh_referral_form.tb_test_type",
+        "forms.ihh_referral_form.tb_result",
+        "forms.ihh_referral_form.o2",
+        "forms.ihh_referral_form.self_administers_all_meds",
+        "forms.ihh_referral_form.continent",
+        "forms.ihh_referral_form.ostomy",
+        "forms.ihh_referral_form.foley",
+        "forms.ihh_referral_form.diabetes",
+        "forms.ihh_referral_form.insulin",
+        "forms.ihh_referral_form.diabetes_oral_meds",
+        "forms.ihh_referral_form.active_infection",
+        "forms.ihh_referral_form.ambulatory",
+        "forms.ihh_referral_form.assistive_device",
+        "forms.ihh_referral_form.hospice",
+        "forms.ihh_referral_form.car",
+        "forms.ihh_referral_form.service_animal",
+        "forms.ihh_referral_form.limitations_or_challenges",
+        "forms.ihh_referral_form.mental_health_dx",
+        "forms.ihh_referral_form.mental_health_dx_type",
+        "forms.ihh_referral_form.non_compliant",
+        "forms.ihh_referral_form.forgetful",
+        "forms.ihh_referral_form.cognitive_impairment",
+        "forms.ihh_referral_form.registered_sex_offender",
+        "forms.ihh_referral_form.behavioral_other",
+        "forms.ihh_referral_form.length_of_stay_authorized_days",
+        "forms.ihh_referral_form.staff_section_completed"
       ]
     },
     "DOC-2": {
@@ -1298,7 +1366,17 @@
         "documents.doc_3_authorization",
         "referral.length_of_stay_authorized_days",
         "referral.insurance_plan",
-        "referral.authorization_status"
+        "referral.authorization_status",
+        "forms.calaim_authorization.present",
+        "forms.calaim_authorization.health_plan",
+        "forms.calaim_authorization.community_support_requested",
+        "forms.calaim_authorization.requested_days",
+        "forms.calaim_authorization.requested_start_date_filled",
+        "forms.calaim_authorization.icd10_codes",
+        "forms.calaim_authorization.requesting_provider_type",
+        "forms.calaim_authorization.status",
+        "forms.calaim_authorization.authorization_number_filled",
+        "forms.calaim_authorization.member_id_filled"
       ]
     },
     "DOC-4": {

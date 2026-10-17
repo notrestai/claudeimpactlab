@@ -54,6 +54,7 @@ SECTIONS = {
     "conditions": "Diagnoses and the condition flags that map onto IHH's eligible and ineligible lists by body system.",
     "disease_specific": "The extra questions IHH asks for diabetes, infection, respiratory and cardiac cases.",
     "arrangements": "Things that must be set up before the person arrives: home health, wound care, therapy, hospice, follow-up visits, oxygen delivery.",
+    "forms": "The forms inside the packet as written: IHH's referral form and the CalAIM authorization form. Kept separate from the chart sections so the record can show where the form and the chart disagree, and so a filled electronic form can be generated from the SST.",
 }
 
 FIELDS = [
@@ -273,6 +274,64 @@ FIELDS = [
     F("arrangements.specialty_followups", "list", "hospital", ["INT-E5", "GU-E6", "CIR-E5"], ["DOC-5"], True, "Booked follow-ups: suture removal, catheter removal, cardiac surgery clinic"),
     F("arrangements.oxygen_ordered_tank_ready_day_before", "bool", "hospital", ["RESP-3"], ["DOC-5"], True, "Hospital ordered O2 and the tank will be at the site the day before"),
     F("arrangements.dialysis_schedule_confirmed", "bool", "hospital", ["GU-E7"], ["DOC-5"], True, "Dialysis days and chair confirmed"),
+
+    # ---- forms: the referral form and the authorization form AS WRITTEN, so the SST is the electronic form ----
+    # Patient identifiers (name, MRN, DOB, SSN) are never stored; only whether the form has them filled in.
+    F("forms.ihh_referral_form.present", "bool", "hospital", [], ["DOC-1"], True, "IHH referral form is in the packet"),
+    F("forms.ihh_referral_form.form_code", "text", "hospital", [], ["DOC-1"], False, "Form code printed on it, for example RC0725-SH"),
+    F("forms.ihh_referral_form.referring_department", "text", "hospital", [], ["DOC-1"], False, "Department or floor, as written"),
+    F("forms.ihh_referral_form.referrer_role", "enum:social_worker|case_manager|nurse|physician|other", "hospital", [], ["DOC-1"], False, "Who filled it in"),
+    F("forms.ihh_referral_form.referrer_contact_filled", "bool", "hospital", [], ["DOC-1"], False, "Phone or email filled in (the values are never stored)"),
+    F("forms.ihh_referral_form.authorized_by_filled", "bool", "hospital", [], ["DOC-1"], False, "Authorized-by line filled in"),
+    F("forms.ihh_referral_form.patient_identifiers_complete", "bool", "hospital", [], ["DOC-1"], False, "Name, MRN, DOB and insurance all filled in (values never stored)"),
+    F("forms.ihh_referral_form.gender", "text", "hospital", [], ["DOC-1"], False, "As written on the form"),
+    F("forms.ihh_referral_form.ethnicity", "text", "hospital", [], ["DOC-1"], False, "As written on the form"),
+    F("forms.ihh_referral_form.insurance", "text", "hospital", [], ["DOC-1"], False, "As written on the form"),
+    F("forms.ihh_referral_form.preferred_language", "text", "hospital", [], ["DOC-1"], False, "As written on the form"),
+    F("forms.ihh_referral_form.currently_unhoused", "bool", "hospital", ["FORM-M1"], ["DOC-1"], False, "Form: currently unhoused"),
+    F("forms.ihh_referral_form.four_plus_episodes_3y", "bool", "hospital", [], ["DOC-1"], False, "Form: 4+ episodes of homelessness in 3 years"),
+    F("forms.ihh_referral_form.chief_complaint", "text", "hospital", [], ["DOC-1"], False, "Chief complaint or admitting diagnosis, as written on the form"),
+    F("forms.ihh_referral_form.admit_date_filled", "bool", "hospital", [], ["DOC-1"], False, "Admit date filled in (redacted in event packets)"),
+    F("forms.ihh_referral_form.wounds_reported", "bool", "hospital", [], ["DOC-1"], False, "Form: any wounds"),
+    F("forms.ihh_referral_form.wounds_description", "text", "hospital", [], ["DOC-1"], False, "Number, location, size and stage, as written"),
+    F("forms.ihh_referral_form.independent_with_wound_care", "bool", "hospital", ["INT-E2"], ["DOC-1"], False, "Form: independent with wound care"),
+    F("forms.ihh_referral_form.home_health_will_be_ordered", "bool", "hospital", ["OTH-3", "ID-3"], ["DOC-1"], False, "Form: home health will be ordered"),
+    F("forms.ihh_referral_form.tb_test_type", "enum:ppd|chest_xray|none", "hospital", ["FORM-X4"], ["DOC-1"], False, "Form: PPD/TB test or chest X-ray"),
+    F("forms.ihh_referral_form.tb_result", "text", "hospital", ["FORM-X4"], ["DOC-1"], False, "Form: TB result as written (date never stored)"),
+    F("forms.ihh_referral_form.o2", "bool", "hospital", ["RESP-3"], ["DOC-1"], False, "Form yes/no: oxygen"),
+    F("forms.ihh_referral_form.self_administers_all_meds", "bool", "hospital", ["FORM-M5"], ["DOC-1"], False, "Form yes/no: self-administers all medications"),
+    F("forms.ihh_referral_form.continent", "bool", "hospital", [], ["DOC-1"], False, "Form yes/no: continent of bowel and bladder"),
+    F("forms.ihh_referral_form.ostomy", "bool", "hospital", [], ["DOC-1"], False, "Form yes/no: colostomy or ileostomy"),
+    F("forms.ihh_referral_form.foley", "bool", "hospital", ["GU-E6"], ["DOC-1"], False, "Form yes/no: Foley catheter"),
+    F("forms.ihh_referral_form.diabetes", "bool", "hospital", ["DM-Q2"], ["DOC-1"], False, "Form yes/no: diabetes"),
+    F("forms.ihh_referral_form.insulin", "bool", "hospital", ["DM-Q1"], ["DOC-1"], False, "Form yes/no: insulin"),
+    F("forms.ihh_referral_form.diabetes_oral_meds", "bool", "hospital", ["DM-Q2"], ["DOC-1"], False, "Form yes/no: oral diabetes medication"),
+    F("forms.ihh_referral_form.active_infection", "bool", "hospital", ["FORM-X4"], ["DOC-1"], False, "Form yes/no: active infection"),
+    F("forms.ihh_referral_form.ambulatory", "bool", "hospital", ["FORM-M6"], ["DOC-1"], False, "Form yes/no: ambulatory"),
+    F("forms.ihh_referral_form.assistive_device", "bool", "hospital", ["FORM-M6"], ["DOC-1"], False, "Form yes/no: assistive device"),
+    F("forms.ihh_referral_form.hospice", "bool", "hospital", ["EOL-1"], ["DOC-1"], False, "Form yes/no: hospice"),
+    F("forms.ihh_referral_form.car", "bool", "hospital", [], ["DOC-1"], False, "Form yes/no: car"),
+    F("forms.ihh_referral_form.service_animal", "bool", "hospital", [], ["DOC-1"], False, "Form yes/no: service animal"),
+    F("forms.ihh_referral_form.limitations_or_challenges", "text", "hospital", [], ["DOC-1"], False, "Behavioral section: limitations or challenges, as written"),
+    F("forms.ihh_referral_form.mental_health_dx", "bool", "hospital", ["MH-1"], ["DOC-1"], False, "Form: mental health diagnosis"),
+    F("forms.ihh_referral_form.mental_health_dx_type", "text", "hospital", ["MH-1"], ["DOC-1"], False, "Form: type, as written"),
+    F("forms.ihh_referral_form.non_compliant", "bool", "hospital", ["FORM-X5"], ["DOC-1"], False, "Form: non-compliant"),
+    F("forms.ihh_referral_form.forgetful", "bool", "hospital", ["COG-1"], ["DOC-1"], False, "Form: forgetful"),
+    F("forms.ihh_referral_form.cognitive_impairment", "bool", "hospital", ["FORM-X1"], ["DOC-1"], False, "Form: cognitive impairment"),
+    F("forms.ihh_referral_form.registered_sex_offender", "bool", "hospital", ["FORM-X6", "OTH-2"], ["DOC-1"], False, "Form: registered sex offender"),
+    F("forms.ihh_referral_form.behavioral_other", "text", "hospital", [], ["DOC-1"], False, "Form: other, as written"),
+    F("forms.ihh_referral_form.length_of_stay_authorized_days", "int", "hospital", [], ["DOC-1"], False, "Form: length of stay authorized, in days"),
+    F("forms.ihh_referral_form.staff_section_completed", "bool", "provider", [], ["DOC-1"], False, "IHH staff-only section filled in (blank in all event packets)"),
+    F("forms.calaim_authorization.present", "bool", "hospital", [], ["DOC-3"], True, "CalAIM / CalOptima authorization form, LOA or auth is in the packet"),
+    F("forms.calaim_authorization.health_plan", "text", "hospital", [], ["DOC-3"], True, "Plan named on the form"),
+    F("forms.calaim_authorization.community_support_requested", "text", "hospital", [], ["DOC-3"], False, "Which Community Support is requested, as written (recuperative care expected)"),
+    F("forms.calaim_authorization.requested_days", "int", "hospital", [], ["DOC-3"], True, "Days requested"),
+    F("forms.calaim_authorization.requested_start_date_filled", "bool", "hospital", [], ["DOC-3"], False, "Start date filled in (redacted in event packets)"),
+    F("forms.calaim_authorization.icd10_codes", "list", "hospital", [], ["DOC-3"], False, "Diagnosis codes listed"),
+    F("forms.calaim_authorization.requesting_provider_type", "text", "hospital", [], ["DOC-3"], False, "Hospital, clinic, other, as written"),
+    F("forms.calaim_authorization.status", "enum:not_requested|submitted|approved|denied", "hospital", [], ["DOC-3"], True, "Authorization status as far as the packet shows"),
+    F("forms.calaim_authorization.authorization_number_filled", "bool", "hospital", [], ["DOC-3"], False, "Authorization number present (value never stored)"),
+    F("forms.calaim_authorization.member_id_filled", "bool", "hospital", [], ["DOC-3"], False, "Member ID present (value never stored)"),
 ]
 
 # ---------- schema building ----------
@@ -837,6 +896,14 @@ def build_example(blank):
         {"ts": "2026-10-17T10:42:00-07:00", "actor_role": "provider", "actor_label": "Referral coordinator", "action": "requested", "path": "gaps.G1", "old_value": "open", "new_value": "requested", "note": "Draft sent to hospital case manager by phone (outside the tool)"},
         {"ts": "2026-10-17T10:45:00-07:00", "actor_role": "hospital", "actor_label": "Hospital case manager", "action": "edited", "path": "arrangements.pcp_followup_scheduled", "old_value": None, "new_value": "true", "note": None},
     ]
+    # Let the real rules engine compute eligibility, gaps and the score when the backend is importable,
+    # so the example never disagrees with the code.
+    try:
+        sys.path.insert(0, str(ROOT))
+        from backend.pipeline import gaps as _gaps
+        _gaps.run_all(ex, "ihh")
+    except Exception as e:  # backend not built yet
+        print("example: kept hand-written eligibility (", type(e).__name__, ")")
     return ex
 
 

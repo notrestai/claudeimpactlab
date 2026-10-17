@@ -331,6 +331,68 @@ Things that must be set up before the person arrives: home health, wound care, t
 | `oxygen_ordered_tank_ready_day_before` | bool | hospital | RESP-3 | DOC-5 | yes | Hospital ordered O2 and the tank will be at the site the day before |
 | `dialysis_schedule_confirmed` | bool | hospital | GU-E7 | DOC-5 | yes | Dialysis days and chair confirmed |
 
+### forms
+
+The forms inside the packet as written: IHH's referral form and the CalAIM authorization form. Kept separate from the chart sections so the record can show where the form and the chart disagree, and so a filled electronic form can be generated from the SST.
+
+| Field | Type | Supplied by | Feeds rules | Checklist docs | Patient view | Meaning |
+|---|---|---|---|---|---|---|
+| `ihh_referral_form.present` | bool | hospital |  | DOC-1 | yes | IHH referral form is in the packet |
+| `ihh_referral_form.form_code` | text | hospital |  | DOC-1 |  | Form code printed on it, for example RC0725-SH |
+| `ihh_referral_form.referring_department` | text | hospital |  | DOC-1 |  | Department or floor, as written |
+| `ihh_referral_form.referrer_role` | one of: social_worker, case_manager, nurse, physician, other | hospital |  | DOC-1 |  | Who filled it in |
+| `ihh_referral_form.referrer_contact_filled` | bool | hospital |  | DOC-1 |  | Phone or email filled in (the values are never stored) |
+| `ihh_referral_form.authorized_by_filled` | bool | hospital |  | DOC-1 |  | Authorized-by line filled in |
+| `ihh_referral_form.patient_identifiers_complete` | bool | hospital |  | DOC-1 |  | Name, MRN, DOB and insurance all filled in (values never stored) |
+| `ihh_referral_form.gender` | text | hospital |  | DOC-1 |  | As written on the form |
+| `ihh_referral_form.ethnicity` | text | hospital |  | DOC-1 |  | As written on the form |
+| `ihh_referral_form.insurance` | text | hospital |  | DOC-1 |  | As written on the form |
+| `ihh_referral_form.preferred_language` | text | hospital |  | DOC-1 |  | As written on the form |
+| `ihh_referral_form.currently_unhoused` | bool | hospital | FORM-M1 | DOC-1 |  | Form: currently unhoused |
+| `ihh_referral_form.four_plus_episodes_3y` | bool | hospital |  | DOC-1 |  | Form: 4+ episodes of homelessness in 3 years |
+| `ihh_referral_form.chief_complaint` | text | hospital |  | DOC-1 |  | Chief complaint or admitting diagnosis, as written on the form |
+| `ihh_referral_form.admit_date_filled` | bool | hospital |  | DOC-1 |  | Admit date filled in (redacted in event packets) |
+| `ihh_referral_form.wounds_reported` | bool | hospital |  | DOC-1 |  | Form: any wounds |
+| `ihh_referral_form.wounds_description` | text | hospital |  | DOC-1 |  | Number, location, size and stage, as written |
+| `ihh_referral_form.independent_with_wound_care` | bool | hospital | INT-E2 | DOC-1 |  | Form: independent with wound care |
+| `ihh_referral_form.home_health_will_be_ordered` | bool | hospital | OTH-3, ID-3 | DOC-1 |  | Form: home health will be ordered |
+| `ihh_referral_form.tb_test_type` | one of: ppd, chest_xray, none | hospital | FORM-X4 | DOC-1 |  | Form: PPD/TB test or chest X-ray |
+| `ihh_referral_form.tb_result` | text | hospital | FORM-X4 | DOC-1 |  | Form: TB result as written (date never stored) |
+| `ihh_referral_form.o2` | bool | hospital | RESP-3 | DOC-1 |  | Form yes/no: oxygen |
+| `ihh_referral_form.self_administers_all_meds` | bool | hospital | FORM-M5 | DOC-1 |  | Form yes/no: self-administers all medications |
+| `ihh_referral_form.continent` | bool | hospital |  | DOC-1 |  | Form yes/no: continent of bowel and bladder |
+| `ihh_referral_form.ostomy` | bool | hospital |  | DOC-1 |  | Form yes/no: colostomy or ileostomy |
+| `ihh_referral_form.foley` | bool | hospital | GU-E6 | DOC-1 |  | Form yes/no: Foley catheter |
+| `ihh_referral_form.diabetes` | bool | hospital | DM-Q2 | DOC-1 |  | Form yes/no: diabetes |
+| `ihh_referral_form.insulin` | bool | hospital | DM-Q1 | DOC-1 |  | Form yes/no: insulin |
+| `ihh_referral_form.diabetes_oral_meds` | bool | hospital | DM-Q2 | DOC-1 |  | Form yes/no: oral diabetes medication |
+| `ihh_referral_form.active_infection` | bool | hospital | FORM-X4 | DOC-1 |  | Form yes/no: active infection |
+| `ihh_referral_form.ambulatory` | bool | hospital | FORM-M6 | DOC-1 |  | Form yes/no: ambulatory |
+| `ihh_referral_form.assistive_device` | bool | hospital | FORM-M6 | DOC-1 |  | Form yes/no: assistive device |
+| `ihh_referral_form.hospice` | bool | hospital | EOL-1 | DOC-1 |  | Form yes/no: hospice |
+| `ihh_referral_form.car` | bool | hospital |  | DOC-1 |  | Form yes/no: car |
+| `ihh_referral_form.service_animal` | bool | hospital |  | DOC-1 |  | Form yes/no: service animal |
+| `ihh_referral_form.limitations_or_challenges` | text | hospital |  | DOC-1 |  | Behavioral section: limitations or challenges, as written |
+| `ihh_referral_form.mental_health_dx` | bool | hospital | MH-1 | DOC-1 |  | Form: mental health diagnosis |
+| `ihh_referral_form.mental_health_dx_type` | text | hospital | MH-1 | DOC-1 |  | Form: type, as written |
+| `ihh_referral_form.non_compliant` | bool | hospital | FORM-X5 | DOC-1 |  | Form: non-compliant |
+| `ihh_referral_form.forgetful` | bool | hospital | COG-1 | DOC-1 |  | Form: forgetful |
+| `ihh_referral_form.cognitive_impairment` | bool | hospital | FORM-X1 | DOC-1 |  | Form: cognitive impairment |
+| `ihh_referral_form.registered_sex_offender` | bool | hospital | FORM-X6, OTH-2 | DOC-1 |  | Form: registered sex offender |
+| `ihh_referral_form.behavioral_other` | text | hospital |  | DOC-1 |  | Form: other, as written |
+| `ihh_referral_form.length_of_stay_authorized_days` | int | hospital |  | DOC-1 |  | Form: length of stay authorized, in days |
+| `ihh_referral_form.staff_section_completed` | bool | provider |  | DOC-1 |  | IHH staff-only section filled in (blank in all event packets) |
+| `calaim_authorization.present` | bool | hospital |  | DOC-3 | yes | CalAIM / CalOptima authorization form, LOA or auth is in the packet |
+| `calaim_authorization.health_plan` | text | hospital |  | DOC-3 | yes | Plan named on the form |
+| `calaim_authorization.community_support_requested` | text | hospital |  | DOC-3 |  | Which Community Support is requested, as written (recuperative care expected) |
+| `calaim_authorization.requested_days` | int | hospital |  | DOC-3 | yes | Days requested |
+| `calaim_authorization.requested_start_date_filled` | bool | hospital |  | DOC-3 |  | Start date filled in (redacted in event packets) |
+| `calaim_authorization.icd10_codes` | list | hospital |  | DOC-3 |  | Diagnosis codes listed |
+| `calaim_authorization.requesting_provider_type` | text | hospital |  | DOC-3 |  | Hospital, clinic, other, as written |
+| `calaim_authorization.status` | one of: not_requested, submitted, approved, denied | hospital |  | DOC-3 | yes | Authorization status as far as the packet shows |
+| `calaim_authorization.authorization_number_filled` | bool | hospital |  | DOC-3 |  | Authorization number present (value never stored) |
+| `calaim_authorization.member_id_filled` | bool | hospital |  | DOC-3 |  | Member ID present (value never stored) |
+
 ## IHH rules with no SST field yet
 
 These rule IDs from `providers/ihh/admission-criteria.json` are not fed by any field. Most are condition names that belong in `conditions.problem_list` via `matched_rule_ids`.

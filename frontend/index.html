@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Referral SST</title>
+<script src="config.js"></script>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1b1f24;--mute:#6b7280;--line:#e5e7eb;--ok:#15803d;--warn:#b45309;--bad:#b91c1c;--info:#1d4ed8;--accent:#0f766e}
+*{box-sizing:border-box}body{margin:0;font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);background:var(--bg)}
+header{display:flex;gap:12px;align-items:center;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;flex-wrap:wrap}
+header h1{font-size:16px;margin:0 8px 0 0}select,button,input,textarea{font:inherit}button{border:1px solid var(--line);background:#fff;border-radius:6px;padding:6px 10px;cursor:pointer}
+button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}button:disabled{opacity:.5;cursor:default}
+main{display:grid;grid-template-columns:260px 1fr;gap:16px;padding:16px;max-width:1500px}
+@media(max-width:900px){main{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
+.card h2{font-size:14px;margin:0 0 10px;text-transform:uppercase;letter-spacing:.04em;color:var(--mute)}
+.badge{display:inline-block;padding:1px 7px;border-radius:999px;font-size:11px;border:1px solid var(--line);background:#f3f4f6;color:#374151;white-space:nowrap}
+.badge.found,.badge.met,.badge.confirmed,.badge.entered,.badge.resolved,.badge.received{background:#dcfce7;color:var(--ok);border-color:#bbf7d0}
+.badge.cant_tell,.badge.not_in_packet,.badge.pending,.badge.needs_confirmation,.badge.requested,.badge.open{background:#fef3c7;color:var(--warn);border-color:#fde68a}
+.badge.not_met,.badge.conflict,.badge.blocked_by_hard_stop{background:#fee2e2;color:var(--bad);border-color:#fecaca}
+.badge.redacted,.badge.not_applicable{background:#f3f4f6;color:var(--mute)}
+table{width:100%;border-collapse:collapse}td,th{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{font-size:12px;color:var(--mute)}
+.bar{height:8px;background:#eee;border-radius:4px;overflow:hidden;margin:4px 0 8px}.bar i{display:block;height:100%;background:var(--accent)}
+.big{font-size:40px;font-weight:700;line-height:1}.mute{color:var(--mute)}.small{font-size:12px}
+.nav button{display:block;width:100%;text-align:left;margin-bottom:4px}.nav button.on{background:#e6f4f1;border-color:var(--accent)}
+.ev{color:var(--info);cursor:pointer;text-decoration:underline dotted}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:20}.modal img{max-width:92vw;max-height:92vh;background:#fff}
+textarea{width:100%;min-height:90px;border:1px solid var(--line);border-radius:6px;padding:8px}input[type=text]{border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:6px 0}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:1100px){.grid2{grid-template-columns:1fr}}
+pre{white-space:pre-wrap;background:#f9fafb;border:1px solid var(--line);border-radius:6px;padding:10px;font-size:12px}
+.hidden{display:none}.notice{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:8px 10px;margin-bottom:10px}
+</style></head><body>
+<header>
+  <h1>Referral SST</h1>
+  <label>Role <select id="role"><option value="provider">Provider (IHH coordinator)</option><option value="hospital">Hospital case manager</option><option value="patient">Patient</option></select></label>
+  <label>Referral <select id="ref"></select></label>
+  <button id="btnFixture">New from fictional example</button>
+  <label class="small">Upload packet <input type="file" id="file" accept="application/pdf"></label>
+  <button id="btnRunAll" class="primary">Run all</button>
+  <span id="status" class="small mute"></span>
+</header>
+<main>
+  <aside>
+    <div class="card nav" id="nav"></div>
+    <div class="card small" id="meta"></div>
+  </aside>
+  <section id="content"></section>
+</main>
+<div class="modal" id="modal" onclick="this.style.display='none'"><img id="modalImg" alt="packet page"></div>
+<script>
+const $=s=>document.querySelector(s); const state={role:'provider',rid:null,sst:null,view:'overview'};
+const API=(window.SST_API_BASE||'').replace(/\/$/,'');
+const api=async(path,opt={})=>{const r=await fetch(API+path,{...opt,headers:{'X-Role':state.role,...(opt.body&&!(opt.body instanceof FormData)?{'Content-Type':'application/json'}:{}),...(opt.headers||{})}});
+  if(!r.ok){let t=await r.text();try{t=JSON.stringify(JSON.parse(t).detail)}catch{};throw new Error(r.status+' '+t)} const ct=r.headers.get('content-type')||''; return ct.includes('json')?r.json():r.text()};
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const badge=s=>`<span class="badge ${esc(s)}">${esc(String(s).replace(/_/g,' '))}</span>`;
+const show=v=>v===null||v===undefined?'':Array.isArray(v)?(v.length?v.map(x=>typeof x==='object'?JSON.stringify(x):x).join(', '):'none'):typeof v==='boolean'?(v?'yes':'no'):String(v);
+const setStatus=(t,err)=>{$('#status').textContent=t;$('#status').style.color=err?'var(--bad)':''};
+const busy=async(label,fn)=>{setStatus(label+'…');try{const r=await fn();setStatus(label+' done');return r}catch(e){setStatus(e.message,true);console.error(e);throw e}};
+
+async function loadRefs(){const list=await api('/referrals');const sel=$('#ref');sel.innerHTML=list.map(r=>`<option value="${esc(r.id)}">${esc(r.id)} ${esc(r.label||'')} · ${esc(r.status||'')}</option>`).join('');
+  if(!state.rid&&list.length)state.rid=list[0].id; if(state.rid)sel.value=state.rid;}
+async function loadSst(){if(!state.rid){$('#content').innerHTML='<div class="card">Create a referral from the fictional example or upload a packet.</div>';return}
+  state.sst=await api(`/referrals/${state.rid}/sst`);render();}
+function nav(){const views=state.role==='patient'?[['overview','My status']]:state.role==='hospital'?[['overview','Gaps & score'],['sst','Record'],['form','Referral form'],['conversations','Conversations'],['pages','Pages']]:
+  [['overview','Score & readout'],['gaps','Gaps & reply'],['sst','Record'],['analyze','Analyze'],['conversations','Conversations'],['form','Referral form'],['pages','Pages'],['history','History']];
+  if(!views.find(v=>v[0]===state.view))state.view=views[0][0];
+  $('#nav').innerHTML=views.map(([k,l])=>`<button class="${state.view===k?'on':''}" onclick="state.view='${k}';render()">${l}</button>`).join('');}
+function render(){nav();const s=state.sst;if(!s)return;const m=s.meta;$('#meta').innerHTML=`<div><b>${esc(m.referral_id)}</b>${m.fictional?' <span class="badge">fictional</span>':''}</div><div class="mute">Pages: ${m.packet.page_count??'–'} · Updated ${esc((m.updated_at||'').slice(0,16).replace('T',' '))}</div>
+  <div class="mute">${(m.parties.providers||[]).map(p=>esc(p.name||p.provider_id)+': '+badge(p.status)).join('<br>')}</div>`;
+  const v=state.view; const fn={overview:state.role==='patient'?patientView:state.role==='hospital'?hospitalOverview:providerOverview,gaps:gapsView,sst:sstView,analyze:analyzeView,conversations:convView,form:formView,pages:pagesView,history:historyView}[v];
+  $('#content').innerHTML=fn();}
+
+/* ---------- provider ---------- */
+function scoreCard(){const sc=state.sst.eligibility.scores;if(!sc||sc.readiness===null)return `<div class="card"><h2>Readiness</h2><div class="mute">Not evaluated yet.</div><button class="primary" onclick="evaluate()">Evaluate against IHH's rules</button></div>`;
+  const c=sc.components;const bar=(l,x)=>`<div class="small">${l} <span class="mute">${x.score}</span></div><div class="bar"><i style="width:${x.score}%"></i></div>`;
+  return `<div class="card"><h2>Readiness to decide (not a prediction of approval)</h2><div class="row"><div class="big">${sc.readiness}</div><div>${badge(sc.band)}<div class="small mute">${c.hard_stop_count} hard stop(s)</div></div></div>
+  ${bar('Documents present',c.completeness)}${bar('Rules answerable',c.rule_coverage)}${bar('Answerable rules met',c.rules_met)}${bar('Arrangements confirmed',c.arrangements)}
+  <p>${esc(sc.explanation)}</p>${sc.top_actions.length?'<ol class="small">'+sc.top_actions.map(a=>`<li>${esc(a)}</li>`).join('')+'</ol>':''}<button onclick="evaluate()">Re-evaluate</button></div>`}
+function providerOverview(){const el=state.sst.eligibility;const rules=el.rules||[];const order={not_met:0,needs_confirmation:1,cant_tell:2,met:3,not_applicable:4,pending:5};
+  const rows=rules.filter(r=>r.status!=='not_applicable').sort((a,b)=>order[a.status]-order[b.status]).map(r=>`<tr><td><b>${esc(r.rule_id)}</b></td><td>${badge(r.status)}</td><td>${esc(r.basis)}${r.evidence&&r.evidence.length?' '+r.evidence.map(e=>evLink(e)).join(' '):''}</td></tr>`).join('');
+  return scoreCard()+`<div class="card"><h2>Recommendation</h2>${el.recommendation?`<p>${badge(el.recommendation)} ${esc(el.recommendation_rationale)}</p>`:'<p class="mute">Not evaluated.</p>'}
+  ${el.hard_stops.length?`<p><b>Hard stops:</b> ${el.hard_stops.map(esc).join(', ')}</p>`:''}
+  <div class="row"><button onclick="decide('approve')">Approve</button><button onclick="decide('request_information')">Request information</button><button onclick="decide('deny')">Deny</button><input type="text" id="reason" placeholder="reason (required for deny)" style="min-width:260px"></div>
+  ${el.coordinator_decision.decision?`<p>Decision: ${badge(el.coordinator_decision.decision)} by ${esc(el.coordinator_decision.decided_by)} · ${esc(el.coordinator_decision.reason||'')}</p>`:''}</div>
+  <div class="card"><h2>Rule-by-rule readout (${rules.filter(r=>r.status!=='not_applicable').length} applicable of ${rules.length})</h2><table><tr><th>Rule</th><th>Status</th><th>Basis</th></tr>${rows}</table></div>`}
+function evLink(e){if(e.source==='transcript')return `<span class="ev small" onclick="state.view='conversations';render()">[${esc(e.ref)} ${esc(e.timestamp||'')}]</span>`;if(e.source==='entered')return `<span class="small mute">[entered]</span>`;
+  return `<span class="ev small" title="${esc(e.quote)}" onclick="openPage(${e.page})">[p${e.page}${e.doc_type?' '+esc(e.doc_type):''}: “${esc((e.quote||'').slice(0,60))}”]</span>`}
+function openPage(n){if(!n)return;$('#modalImg').src=API+`/referrals/${state.rid}/pages/${n}?role=${state.role==='patient'?'provider':state.role}`;$('#modal').style.display='flex'}
+function gapsView(){const g=state.sst.gaps||[];const rows=g.map(x=>`<tr><td><b>${esc(x.id)}</b></td><td>${esc(x.what)}<div class="small mute">${esc(x.why_rule_ids.join(', '))} ${esc(x.doc_ids.join(', '))}</div></td><td>${esc((x.who_can_supply||'').replace(/_/g,' '))}</td><td>${badge(x.status)}</td>
+    <td class="small"><button onclick="gap('${x.id}','requested')">requested</button> <button onclick="gap('${x.id}','received')">received</button> <button onclick="gap('${x.id}','resolved')">resolved</button></td></tr>`).join('');
+  return `<div class="card"><h2>Gaps: what to ask for while the patient is still in the hospital</h2><table><tr><th>#</th><th>What</th><th>Who</th><th>Status</th><th></th></tr>${rows||'<tr><td colspan=5 class="mute">No gaps. Evaluate first.</td></tr>'}</table></div>
+  <div class="card"><h2>Draft reply to the hospital (not sent)</h2><button onclick="loadReply()">Load draft</button><pre id="reply"></pre></div>`}
+async function loadReply(){$('#reply').textContent=await api(`/referrals/${state.rid}/reply`)}
+function sstView(){const s=state.sst;const secs=Object.keys(s).filter(k=>!['meta','eligibility','gaps','patient_summary','conversations','analyses','history'].includes(k));
+  const fields=[];(function walk(node,path){for(const [k,v] of Object.entries(node)){if(v&&typeof v==='object'&&'status' in v&&'value' in v)fields.push([path.concat(k).join('.'),v]);else if(v&&typeof v==='object'&&!Array.isArray(v))walk(v,path.concat(k))}})(Object.fromEntries(secs.map(k=>[k,s[k]])),[]);
+  const filt=$('#fieldFilter')?.value||'';const only=$('#onlyKnown')?.checked;
+  const rows=fields.filter(([p,f])=>(!filt||p.includes(filt))&&(!only||['found','entered','confirmed','conflict'].includes(f.status))).map(([p,f])=>`<tr><td class="small"><code>${esc(p)}</code></td><td>${badge(f.status)}</td><td>${esc(show(f.value))}${f.conflicts&&f.conflicts.length?`<div class="small" style="color:var(--bad)">also: ${f.conflicts.map(c=>esc(c.value)+' (p'+c.page+')').join('; ')}</div>`:''}${f.note?`<div class="small mute">${esc(f.note)}</div>`:''}</td>
+    <td class="small">${(f.evidence||[]).map(evLink).join(' ')}</td><td class="small">${canEdit(p)?`<button onclick="editField('${p}')">edit</button>`:''}${state.role!=='patient'&&['found','entered'].includes(f.status)?` <button onclick="confirmField('${p}')">confirm</button>`:''}</td></tr>`).join('');
+  return `<div class="card"><h2>The record (${fields.length} fields)</h2><div class="row"><input type="text" id="fieldFilter" placeholder="filter by path, e.g. mobility" value="${esc(filt)}" oninput="render()"><label><input type="checkbox" id="onlyKnown" ${only?'checked':''} onchange="render()"> only known or conflicting</label></div>
+  <table><tr><th>Field</th><th>Status</th><th>Value</th><th>Evidence</th><th></th></tr>${rows}</table></div>`}
+function canEdit(p){if(state.role==='provider')return true;const owner=p.startsWith('patient.')?'patient':'hospital';return owner===state.role||(state.role==='hospital'&&!p.startsWith('patient.'))}
+async function editField(p){const cur=JSON.stringify((state.sst[p.split('.')[0]]&&eval('state.sst.'+p)).value);const v=prompt(`New value for ${p}\n(JSON: true/false, number, "text", ["a","b"])`,cur);if(v===null)return;let val;try{val=JSON.parse(v)}catch{val=v}
+  await busy('Saving',()=>api(`/referrals/${state.rid}/sst`,{method:'PATCH',body:JSON.stringify([{path:p,value:val}])}));await loadSst()}
+async function confirmField(p){await busy('Confirming',()=>api(`/referrals/${state.rid}/confirm`,{method:'POST',body:JSON.stringify([p])}));await loadSst()}
+function analyzeView(){const an=state.sst.analyses||[];return `<div class="card"><h2>Analyze (read-only; every claim cites the record)</h2><div class="row"><select id="mode"><option value="briefing">Briefing</option><option value="question">Question</option><option value="compare_sources">Compare form vs chart</option><option value="what_would_change">What would change</option></select>
+  <input type="text" id="q" placeholder="question (for Question mode)" style="min-width:320px"><button class="primary" onclick="runAnalyze()">Run</button></div>
+  ${an.slice().reverse().map(a=>`<div class="card"><div class="small mute">${esc(a.id)} · ${esc(a.mode)} · ${esc(a.ts.slice(0,16).replace('T',' '))} · ${esc(a.model||'')}</div>${a.question?`<div><b>Q:</b> ${esc(a.question)}</div>`:''}<p>${esc(a.answer)}</p>
+  <div class="small">Cited: ${a.cited_sst_paths.map(p=>`<code>${esc(p)}</code>`).join(' ')} ${a.cited_pages.map(p=>`<span class="ev" onclick="openPage(${p})">p${p}</span>`).join(' ')}</div>${a.unknowns.length?`<div class="small mute">Unknown: ${a.unknowns.map(esc).join('; ')}</div>`:''}</div>`).join('')}</div>`}
+async function runAnalyze(){await busy('Analyzing',()=>api(`/referrals/${state.rid}/analyze`,{method:'POST',body:JSON.stringify({mode:$('#mode').value,question:$('#q').value||null})}));await loadSst()}
+let rec=null,dictating=false;
+function convView(){const cs=state.sst.conversations||[];const canDictate='webkitSpeechRecognition' in window||'SpeechRecognition' in window;
+  return `<div class="card"><h2>New conversation</h2><div class="notice small">Recording or dictating a call requires every participant's consent. California is an all-party-consent state. Tick the box only after everyone has agreed.</div>
+  <div class="row"><label><input type="checkbox" id="consent"> Everyone consented</label><select id="kind"><option value="hospital_call">Call with hospital</option><option value="patient_conversation">Conversation with patient</option><option value="provider_internal">Internal</option></select>
+  <select id="speaker"><option>PROVIDER</option><option>HOSPITAL</option><option>PATIENT</option></select><button id="dict" onclick="toggleDictation()" ${canDictate?'':'disabled title="Use Chrome for dictation"'}>${dictating?'Stop dictation':'Start dictation'}</button></div>
+  <textarea id="transcript" placeholder="PROVIDER: ...&#10;HOSPITAL: ..."></textarea><div class="row"><button class="primary" onclick="saveConv()">Save, scrub, summarize</button></div></div>
+  ${cs.slice().reverse().map(c=>`<div class="card"><div class="small mute">${esc(c.id)} · ${esc(c.kind)} · ${esc((c.started_at||'').slice(0,16).replace('T',' '))} · scrub: ${badge(c.identifier_scrub||'not_run')} · ${badge(c.status)}</div><p><b>Summary:</b> ${esc(c.summary||'')}</p>
+   ${c.follow_ups.length?`<div class="small"><b>Follow-ups:</b> ${c.follow_ups.map(f=>esc(f.what)+(f.owner_role?' ('+esc(f.owner_role)+')':'')).join('; ')}</div>`:''}
+   <table><tr><th>Proposed update</th><th>Value</th><th>Quote</th><th></th></tr>${c.extracted_items.map((it,i)=>`<tr><td><code class="small">${esc(it.sst_path)}</code></td><td>${esc(it.proposed_value)}</td><td class="small">“${esc(it.quote)}” ${it.timestamp?esc(it.timestamp):''}</td>
+   <td>${it.status==='proposed'?`<button onclick="decideItem('${c.id}',${i},'accepted')">accept</button> <button onclick="decideItem('${c.id}',${i},'rejected')">reject</button>`:badge(it.status)+' '+esc(it.decided_by||'')}</td></tr>`).join('')}</table>
+   <details class="small"><summary>Transcript (scrubbed)</summary><pre>${esc(c.transcript_text||'')}</pre></details></div>`).join('')}`}
+function toggleDictation(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(dictating){rec&&rec.stop();dictating=false;render();return}
+  rec=new SR();rec.continuous=true;rec.interimResults=false;rec.lang=document.documentElement.lang||'en-US';
+  rec.onresult=e=>{for(let i=e.resultIndex;i<e.results.length;i++)if(e.results[i].isFinal){const t=$('#transcript');t.value+=($('#speaker').value+': '+e.results[i][0].transcript.trim()+'\n')}};
+  rec.onerror=e=>setStatus('dictation: '+e.error,true);rec.onend=()=>{if(dictating)rec.start()};rec.start();dictating=true;render()}
+async function saveConv(){const body={kind:$('#kind').value,consent_confirmed:$('#consent').checked,transcript_source:dictating?'browser_dictation':'pasted_text',transcript_text:$('#transcript').value,participants:['provider',$('#kind').value==='patient_conversation'?'patient':'hospital']};
+  if(dictating)toggleDictation();await busy('Saving conversation',()=>api(`/referrals/${state.rid}/conversations`,{method:'POST',body:JSON.stringify(body)}));await loadSst()}
+async function decideItem(cid,i,status){await busy('Updating',()=>api(`/referrals/${state.rid}/conversations/${cid}/items/${i}`,{method:'POST',body:JSON.stringify({status})}));await loadSst()}
+function formView(){return `<div class="card"><h2>Electronic referral form, generated from the record</h2><p class="small mute">What the form said is preferred; values from the chart are marked. Identifiers are never stored or shown.</p><a href="${API}/referrals/${state.rid}/forms/ihh_referral_form.html?role=${state.role}" target="_blank"><button>Open printable form</button></a><div id="formBox"></div></div>`}
+function pagesView(){const pg=state.sst.meta.packet.pages||[];const n=state.sst.meta.packet.page_count||0;if(!n)return '<div class="card mute">No packet pages. Upload a packet and run Ingest.</div>';
+  return `<div class="card"><h2>Page index (${n} pages)</h2><table><tr><th>Page</th><th>Document</th><th>Orientation</th><th>Legibility</th><th></th></tr>${(pg.length?pg:Array.from({length:n},(_,i)=>({page:i+1}))).map(p=>`<tr><td>${p.page}</td><td>${esc(p.doc_type||'')}</td><td>${esc(p.orientation||'')}</td><td>${esc(p.legibility||'')}${p.from_earlier_stay?' · earlier stay':''}${p.duplicate_of_page?' · dup of p'+p.duplicate_of_page:''}</td><td><span class="ev" onclick="openPage(${p.page})">view</span></td></tr>`).join('')}</table></div>`}
+function historyView(){return `<div class="card"><h2>History</h2><table><tr><th>When</th><th>Who</th><th>Action</th><th>Path</th><th>Change</th></tr>${(state.sst.history||[]).slice().reverse().map(h=>`<tr><td class="small">${esc(h.ts.slice(5,16).replace('T',' '))}</td><td>${esc(h.actor_label||h.actor_role)}</td><td>${badge(h.action)}</td><td class="small"><code>${esc(h.path||'')}</code></td><td class="small">${esc(h.old_value||'')} → ${esc(h.new_value||'')} ${h.note?'<span class="mute">'+esc(h.note)+'</span>':''}</td></tr>`).join('')}</table></div>`}
+
+/* ---------- hospital ---------- */
+function hospitalOverview(){const g=state.sst.gaps||[];const sc=state.sst.eligibility.scores;
+  return `<div class="card"><h2>What the program still needs from you</h2><p class="small mute">Mark each as sent, or enter the value directly if you know it. Nothing is sent by this tool; send the documents the way you do today.</p>
+  <table><tr><th>What</th><th>Who</th><th>Status</th><th></th></tr>${g.filter(x=>x.status!=='resolved').map(x=>`<tr><td>${esc(x.what)}<div class="small mute">${esc(x.doc_ids.join(', '))}</div></td><td>${esc((x.who_can_supply||'').replace(/_/g,' '))}</td><td>${badge(x.status)}</td>
+  <td class="small"><button onclick="gap('${x.id}','requested')">sent</button> ${x.sst_fields.length===1?`<button onclick="editField('${x.sst_fields[0]}')">enter value</button>`:''}</td></tr>`).join('')||'<tr><td colspan=4 class="mute">Nothing open.</td></tr>'}</table></div>
+  <div class="card"><h2>Readiness by provider</h2><button onclick="loadScores()">Load</button><div id="scores">${sc&&sc.readiness!==null?`<p>IHH: <b>${sc.readiness}</b> ${badge(sc.band)} · ${esc(sc.explanation)}</p>`:''}</div></div>`}
+async function loadScores(){const r=await api(`/referrals/${state.rid}/scores`);$('#scores').innerHTML=`<table><tr><th>Provider</th><th>Readiness</th><th>Band</th><th>Missing documents</th><th>Rules can't tell</th></tr>${r.map(x=>`<tr><td>${esc(x.name)}</td><td><b>${x.readiness}</b></td><td>${badge(x.band)}</td><td class="small">${esc(x.missing.join(', '))}</td><td class="small">${esc(x.cant_tell.join(', '))}</td></tr>`).join('')}</table>`}
+
+/* ---------- patient ---------- */
+function patientView(){const s=state.sst;const ps=s.patient_summary;const docs=Object.entries(s.documents||{});const sent=docs.filter(([k,d])=>d.value===true).length;
+  return `<div class="card"><h2>Where things stand</h2>${ps.requires_staff_review?'<p class="mute">Your care team is preparing your summary. Ask them if you have questions.</p>':`<p style="font-size:16px">${esc(ps.where_things_stand)}</p>
+  ${ps.what_is_still_needed.length?`<h3 class="small mute">Still needed</h3><ul>${ps.what_is_still_needed.map(x=>`<li>${esc(x.what)} <span class="mute">· ${esc(x.who_is_getting_it||'')} · ${esc(x.status||'')}</span></li>`).join('')}</ul>`:''}
+  ${ps.your_options.length?`<h3 class="small mute">Programs considering you</h3><ul>${ps.your_options.map(x=>`<li><b>${esc(x.provider_name)}</b>: ${esc(x.what_it_is||'')} <span class="mute">· ${esc(x.status||'')}</span></li>`).join('')}</ul>`:''}
+  ${ps.questions_to_ask_your_team.length?`<h3 class="small mute">Questions you can ask your team</h3><ul>${ps.questions_to_ask_your_team.map(q=>`<li>${esc(q)}</li>`).join('')}</ul>`:''}`}</div>
+  <div class="card"><h2>Documents the hospital has sent</h2><p>${sent} of ${docs.length}</p><table>${docs.map(([k,d])=>`<tr><td>${esc(k.replace(/^doc_\d+_/,'').replace(/_/g,' '))}</td><td>${badge(d.value===true?'found':d.status)}</td></tr>`).join('')}</table></div>
+  <div class="card"><h2>About you (you can change these)</h2><table>${Object.entries(s.patient_fields||{}).map(([p,f])=>`<tr><td>${esc(f.description)}</td><td>${esc(show(f.value))} ${badge(f.status)}</td><td><button onclick="editField('${p}')">change</button></td></tr>`).join('')}</table></div>`}
+
+/* ---------- actions ---------- */
+async function evaluate(){await busy('Evaluating',()=>api(`/referrals/${state.rid}/evaluate`,{method:'POST'}));await loadSst()}
+async function gap(id,status){await busy('Updating gap',()=>api(`/referrals/${state.rid}/gaps/${id}`,{method:'POST',body:JSON.stringify({status})}));await loadSst()}
+async function decide(d){const reason=$('#reason')?.value||null;if(d==='deny'&&!reason){setStatus('A reason is required to deny',true);return}
+  try{await busy('Recording decision',()=>api(`/referrals/${state.rid}/decision`,{method:'POST',body:JSON.stringify({decision:d,reason})}));}catch(e){alert(e.message)}await loadSst()}
+$('#role').onchange=e=>{state.role=e.target.value;state.view='overview';loadSst()};$('#ref').onchange=e=>{state.rid=e.target.value;loadSst()};
+$('#btnFixture').onclick=async()=>{const r=await busy('Creating',()=>api('/referrals?fixture=true',{method:'POST'}));state.rid=r.referral_id;await loadRefs();await loadSst()};
+$('#file').onchange=async e=>{const f=e.target.files[0];if(!f)return;const fd=new FormData();fd.append('packet',f);const r=await busy('Uploading',()=>api(`/referrals?label=${encodeURIComponent(f.name)}`,{method:'POST',body:fd}));state.rid=r.referral_id;await loadRefs();await loadSst();e.target.value=''};
+$('#btnRunAll').onclick=async()=>{if(!state.rid)return;const r=await busy('Running the whole pipeline (minutes on a real packet)',()=>api(`/referrals/${state.rid}/run_all`,{method:'POST'}));await loadRefs();await loadSst();if(r.mock)setStatus('Done in MOCK mode (no API key): fictional example data')};
+(async()=>{try{const h=await api('/health');if(h.mock)setStatus('No API key: mock mode, fictional data only');await loadRefs();await loadSst()}catch(e){setStatus(e.message,true)}})();
+</script></body></html>

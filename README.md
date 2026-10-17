@@ -48,33 +48,40 @@ Start here:
 
 ```bash
 # 1. put the 11 packets in data/packets/ (download from the event's Drive folder; never commit them)
-# 2. python3 -m venv .venv && source .venv/bin/activate
-# 3. pip install -r backend/requirements.txt
-# 4. export ANTHROPIC_API_KEY=...   (or put it in .env, which git ignores)
-# 5. uvicorn backend.app:app --reload
-# 6. open the frontend (see frontend/README.md)
-python3 sst/build.py   # regenerates the schema, blank record, IHH profile and field reference
+pip install -r backend/requirements.txt
+export ANTHROPIC_API_KEY=...        # or put it in .env, which git ignores. Without a key the app runs in MOCK mode on fictional data.
+uvicorn backend.app:app --reload    # then open http://127.0.0.1:8000
 ```
 
-Python 3.13 and an Anthropic API key. No keys in the repo.
+In the page: pick a role, create a referral from the fictional example or upload a packet, press **Run all**.
+Provider sees the score, readout, gaps, draft reply, Analyze and conversations. Hospital sees the gaps and the
+electronic referral form. Patient sees the plain-language status once staff have reviewed it.
+
+```bash
+python3 -m pytest -q backend/tests          # 7 tests, run in mock mode
+python3 backend/eval/run_eval.py            # blind eval over every packet in data/packets (needs the API key)
+python3 sst/build.py                        # regenerates the schema, blank record, IHH profile and field reference
+```
+
+Python 3.13 and an Anthropic API key. No keys in the repo. Launch notes for relayhealth.dev are in `deploy/README.md`.
 
 ## What is real and what is mocked
 
 | Part | Status |
 |---|---|
-| SST schema, blank record, IHH rule map, field reference | working |
-| Packet ingest and page index | [working / partly working / mocked] |
-| Section extraction with evidence | [working / partly working / mocked] |
-| Rule evaluation, gaps, draft reply | [working / partly working / mocked] |
-| Readiness score per provider | [working / partly working / mocked] |
-| Analyze mode (read-only briefing and questions, with citations) | [working / partly working / mocked] |
-| Conversations: consent gate, dictation or pasted transcript, summary, proposed updates | [working / partly working / mocked] |
-| Coordinator view | [working / partly working / mocked] |
-| Hospital view | [working / partly working / mocked] |
-| Patient view and summary | [working / partly working / mocked] |
+| SST schema, blank record, IHH rule map, field reference (234 fields, 145 rules) | working |
+| Packet ingest and page index (Stage A) | working: pages render locally; the index is a Claude call |
+| Section extraction with evidence (Stage B) | working code, tested only in mock mode in the cloud session; live run needs the key |
+| Rule evaluation, gaps, draft reply (Stage C) | working, deterministic, unit-tested on the fixture |
+| Readiness score (Stage E) | working, deterministic, unit-tested |
+| Analyze mode (Stage F) | working code with citation validator; mock answer without a key |
+| Patient summary (Stage D) | working code; mock English/Spanish text without a key |
+| Conversations (Stage G): consent gate, scrub, summary, proposed updates, accept/reject | working; summary and proposals are mock without a key |
+| Electronic referral form generated from the record | working |
+| Coordinator, hospital and patient views (single-page frontend) | working against the API |
+| Role-based access | header-based role switcher, not a login. Backend filters every read and write |
 | Sending anything to anyone | not built, by design |
-| Audio file transcription | not built; browser dictation or pasted text only |
-| Login, accounts | mocked: a role switcher |
+| Audio file transcription | not built; browser dictation (Chrome) or pasted text only |
 
 ## Where it gets things wrong
 

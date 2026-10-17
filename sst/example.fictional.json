@@ -3,7 +3,7 @@
     "sst_version": "0.1",
     "referral_id": "EXAMPLE-FICTIONAL-001",
     "created_at": "2026-10-17T10:00:00-07:00",
-    "updated_at": "2026-10-17T10:45:00-07:00",
+    "updated_at": "2026-10-17T19:10:18+00:00",
     "fictional": true,
     "packet": {
       "source_file": null,
@@ -2110,16 +2110,695 @@
       "note": null
     }
   },
+  "forms": {
+    "ihh_referral_form": {
+      "present": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "form_code": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "referring_department": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "referrer_role": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "referrer_contact_filled": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "authorized_by_filled": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "patient_identifiers_complete": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "gender": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "ethnicity": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "insurance": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "preferred_language": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "currently_unhoused": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "four_plus_episodes_3y": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "chief_complaint": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "admit_date_filled": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "wounds_reported": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "wounds_description": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "independent_with_wound_care": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "home_health_will_be_ordered": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "tb_test_type": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "tb_result": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "o2": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "self_administers_all_meds": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "continent": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "ostomy": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "foley": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "diabetes": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "insulin": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "diabetes_oral_meds": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "active_infection": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "ambulatory": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "assistive_device": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "hospice": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "car": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "service_animal": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "limitations_or_challenges": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "mental_health_dx": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "mental_health_dx_type": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "non_compliant": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "forgetful": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "cognitive_impairment": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "registered_sex_offender": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "behavioral_other": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "length_of_stay_authorized_days": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "staff_section_completed": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      }
+    },
+    "calaim_authorization": {
+      "present": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "health_plan": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "community_support_requested": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "requested_days": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "requested_start_date_filled": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "icd10_codes": {
+        "value": [],
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "requesting_provider_type": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "status": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "authorization_number_filled": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      },
+      "member_id_filled": {
+        "value": null,
+        "status": "pending",
+        "evidence": [],
+        "conflicts": [],
+        "confidence": null,
+        "updated_by": null,
+        "updated_at": null,
+        "note": null
+      }
+    }
+  },
   "eligibility": {
     "provider_id": "ihh",
     "profile_version": "2026-10-17",
-    "evaluated_at": "2026-10-17T10:40:00-07:00",
+    "evaluated_at": "2026-10-17T19:10:18+00:00",
     "rules": [
+      {
+        "rule_id": "GEN-1",
+        "status": "cant_tell",
+        "basis": "Housing status or need for recuperative care not documented.",
+        "sst_fields": [
+          "housing.housing_situation",
+          "housing.too_ill_to_recover_outside"
+        ],
+        "evidence": [
+          {
+            "source": "packet",
+            "page": 2,
+            "doc_type": "referral_form",
+            "ref": null,
+            "timestamp": null,
+            "quote": "Currently unhoused: Yes"
+          }
+        ],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "GEN-2",
+        "status": "not_applicable",
+        "basis": "Not the stated basis.",
+        "sst_fields": [
+          "housing.lives_alone_no_supports"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "GEN-3",
+        "status": "not_applicable",
+        "basis": "Not the stated basis.",
+        "sst_fields": [
+          "housing.readmission_risk"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "ADL-1",
+        "status": "cant_tell",
+        "basis": "Daily living activities not fully documented (PT/OT or nursing notes).",
+        "sst_fields": [
+          "function.adls.bathing",
+          "function.adls.dressing",
+          "function.adls.toileting",
+          "function.adls.eating",
+          "function.adls.hygiene_independent"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "ADL-2",
+        "status": "cant_tell",
+        "basis": "Bathing independence not documented.",
+        "sst_fields": [
+          "function.adls.bathing",
+          "function.adls.gathers_supplies_and_transfers_to_shower"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "ADL-3",
+        "status": "cant_tell",
+        "basis": "Toileting independence not documented.",
+        "sst_fields": [
+          "function.adls.toileting"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "MOB-1",
+        "status": "cant_tell",
+        "basis": "Not in the record: Uses the equipment without help.",
+        "sst_fields": [
+          "function.mobility.dme_type",
+          "function.mobility.dme_independent"
+        ],
+        "evidence": [
+          {
+            "source": "packet",
+            "page": 4,
+            "doc_type": "pt_ot_eval",
+            "ref": null,
+            "timestamp": null,
+            "quote": "FWW"
+          }
+        ],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "MOB-2",
+        "status": "met",
+        "basis": "PT/OT or nursing notes is in the packet.",
+        "sst_fields": [
+          "documents.doc_8_pt_ot_or_nursing_notes"
+        ],
+        "evidence": [
+          {
+            "source": "packet",
+            "page": 4,
+            "doc_type": "pt_ot_eval",
+            "ref": null,
+            "timestamp": null,
+            "quote": "Physical Therapy Evaluation"
+          }
+        ],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
       {
         "rule_id": "MOB-3",
         "status": "met",
-        "basis": "PT documented 150 ft at modified independence with a walker.",
+        "basis": "Walks 150 ft at modified_independent level.",
         "sst_fields": [
+          "function.mobility.wheelchair_dependent",
           "function.mobility.ambulation_distance_ft",
           "function.mobility.ambulation_assist_level"
         ],
@@ -2131,6 +2810,103 @@
             "ref": null,
             "timestamp": null,
             "quote": "ambulated 150 ft with FWW, mod I"
+          },
+          {
+            "source": "packet",
+            "page": 4,
+            "doc_type": "pt_ot_eval",
+            "ref": null,
+            "timestamp": null,
+            "quote": "mod I"
+          }
+        ],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "MOB-4",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "function.mobility.wheelchair_dependent"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "MH-1",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "mental_health.psychiatric_diagnoses"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "MH-2",
+        "status": "cant_tell",
+        "basis": "Not in the record: Current suicidal ideation.",
+        "sst_fields": [
+          "mental_health.suicidal_ideation"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "MH-3",
+        "status": "cant_tell",
+        "basis": "Not in the record: Commanding auditory or visual hallucinations.",
+        "sst_fields": [
+          "mental_health.command_hallucinations"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "MH-4",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "substance_use.admitted_with_acute_alcohol_intoxication"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "MH-5",
+        "status": "cant_tell",
+        "basis": "Not in the record: Under, qualifies for, or history of conservatorship or Full Service Partnership.",
+        "sst_fields": [
+          "mental_health.conservatorship_or_fsp"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "COG-1",
+        "status": "cant_tell",
+        "basis": "Self-administration of medications not documented.",
+        "sst_fields": [
+          "cognition.can_self_administer_meds",
+          "medications.insulin_regimen",
+          "cognition.can_self_administer_insulin",
+          "cognition.can_receive_education"
+        ],
+        "evidence": [
+          {
+            "source": "packet",
+            "page": 6,
+            "doc_type": "mar",
+            "ref": null,
+            "timestamp": null,
+            "quote": "metformin 1000 mg PO BID"
           }
         ],
         "confirmed_by": null,
@@ -2139,7 +2915,7 @@
       {
         "rule_id": "COG-2",
         "status": "met",
-        "basis": "Alert and oriented x4 in the H&P.",
+        "basis": "Alert and oriented x4.",
         "sst_fields": [
           "cognition.orientation"
         ],
@@ -2157,37 +2933,132 @@
         "confirmed_at": null
       },
       {
-        "rule_id": "INF-1",
+        "rule_id": "OTH-1",
         "status": "cant_tell",
-        "basis": "No MRSA swab result in the packet. Needed because the referral is from an inpatient stay.",
+        "basis": "Not in the record: Verbal or physical aggression documented.",
         "sst_fields": [
-          "infection_control.mrsa_swab_result"
+          "mental_health.aggressive_toward_staff_or_patients"
         ],
         "evidence": [],
         "confirmed_by": null,
         "confirmed_at": null
       },
       {
-        "rule_id": "ID-1",
-        "status": "cant_tell",
-        "basis": "No vital signs in the packet; rule asks for the last 5 sets.",
+        "rule_id": "OTH-2",
+        "status": "not_applicable",
+        "basis": "Not documented.",
         "sst_fields": [
-          "vitals.set_count",
-          "vitals.sepsis_signs"
+          "safety_legal.registered_sex_offender",
+          "safety_legal.offense_involved_violence"
         ],
         "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "OTH-3",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "lines_devices_oxygen.iv_access",
+          "medications.iv_medications_ongoing_at_discharge"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "OTH-4",
+        "status": "cant_tell",
+        "basis": "Isolation status not documented.",
+        "sst_fields": [
+          "infection_control.isolation_status"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "EOL-1",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "patient.hospice_enrolled"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "INF-1",
+        "status": "cant_tell",
+        "basis": "No MRSA swab result in the packet.",
+        "sst_fields": [
+          "referral.source_setting",
+          "infection_control.mrsa_swab_result"
+        ],
+        "evidence": [
+          {
+            "source": "packet",
+            "page": 3,
+            "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
+            "quote": "admitted to medicine floor"
+          }
+        ],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "INF-2",
+        "status": "cant_tell",
+        "basis": "No COVID test result in the packet.",
+        "sst_fields": [
+          "referral.source_setting",
+          "infection_control.covid_test_result",
+          "infection_control.covid_test_within_24h_of_admission"
+        ],
+        "evidence": [
+          {
+            "source": "packet",
+            "page": 3,
+            "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
+            "quote": "admitted to medicine floor"
+          }
+        ],
         "confirmed_by": null,
         "confirmed_at": null
       },
       {
         "rule_id": "DM-1",
         "status": "cant_tell",
-        "basis": "Only 2 glucose readings; rule asks for 5 consecutive readings showing improvement.",
+        "basis": "Only 2 glucose readings; 5 consecutive needed.",
         "sst_fields": [
+          "conditions.flags.diabetes",
+          "referral.source_setting",
           "labs.glucose_reading_count",
           "labs.glucose_trend"
         ],
         "evidence": [
+          {
+            "source": "packet",
+            "page": 3,
+            "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
+            "quote": "PMH: DM2"
+          },
+          {
+            "source": "packet",
+            "page": 3,
+            "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
+            "quote": "admitted to medicine floor"
+          },
           {
             "source": "packet",
             "page": 5,
@@ -2199,17 +3070,1440 @@
         ],
         "confirmed_by": null,
         "confirmed_at": null
+      },
+      {
+        "rule_id": "DM-2",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "conditions.flags.diabetes",
+          "referral.source_setting"
+        ],
+        "evidence": [
+          {
+            "source": "packet",
+            "page": 3,
+            "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
+            "quote": "PMH: DM2"
+          },
+          {
+            "source": "packet",
+            "page": 3,
+            "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
+            "quote": "admitted to medicine floor"
+          }
+        ],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "DM-3",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "conditions.flags.diabetes",
+          "medications.insulin_regimen"
+        ],
+        "evidence": [
+          {
+            "source": "packet",
+            "page": 3,
+            "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
+            "quote": "PMH: DM2"
+          },
+          {
+            "source": "packet",
+            "page": 6,
+            "doc_type": "mar",
+            "ref": null,
+            "timestamp": null,
+            "quote": "metformin 1000 mg PO BID"
+          }
+        ],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "DM-4",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "conditions.flags.diabetes",
+          "referral.source_setting"
+        ],
+        "evidence": [
+          {
+            "source": "packet",
+            "page": 3,
+            "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
+            "quote": "PMH: DM2"
+          },
+          {
+            "source": "packet",
+            "page": 3,
+            "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
+            "quote": "admitted to medicine floor"
+          }
+        ],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "DM-5",
+        "status": "cant_tell",
+        "basis": "Not in the record: Knows how to check own blood sugar.",
+        "sst_fields": [
+          "conditions.flags.diabetes",
+          "cognition.understands_glucometer"
+        ],
+        "evidence": [
+          {
+            "source": "packet",
+            "page": 3,
+            "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
+            "quote": "PMH: DM2"
+          }
+        ],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "DM-6",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "medications.insulin_regimen"
+        ],
+        "evidence": [
+          {
+            "source": "packet",
+            "page": 6,
+            "doc_type": "mar",
+            "ref": null,
+            "timestamp": null,
+            "quote": "metformin 1000 mg PO BID"
+          }
+        ],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "DM-Q1",
+        "status": "met",
+        "basis": "Insulin: False; pump: None.",
+        "sst_fields": [
+          "conditions.flags.diabetes",
+          "medications.insulin_regimen",
+          "medications.insulin_pump"
+        ],
+        "evidence": [
+          {
+            "source": "packet",
+            "page": 3,
+            "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
+            "quote": "PMH: DM2"
+          },
+          {
+            "source": "packet",
+            "page": 6,
+            "doc_type": "mar",
+            "ref": null,
+            "timestamp": null,
+            "quote": "metformin 1000 mg PO BID"
+          }
+        ],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "DM-Q2",
+        "status": "cant_tell",
+        "basis": "Oral diabetes medication not documented.",
+        "sst_fields": [
+          "conditions.flags.diabetes",
+          "medications.oral_diabetes_meds"
+        ],
+        "evidence": [
+          {
+            "source": "packet",
+            "page": 3,
+            "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
+            "quote": "PMH: DM2"
+          }
+        ],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "DM-Q3",
+        "status": "cant_tell",
+        "basis": "No A1C in the packet (informational).",
+        "sst_fields": [
+          "conditions.flags.diabetes",
+          "labs.a1c"
+        ],
+        "evidence": [
+          {
+            "source": "packet",
+            "page": 3,
+            "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
+            "quote": "PMH: DM2"
+          }
+        ],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "ID-1",
+        "status": "cant_tell",
+        "basis": "Vital signs not in the packet.",
+        "sst_fields": [
+          "conditions.flags.active_infection",
+          "vitals.set_count",
+          "vitals.sepsis_signs"
+        ],
+        "evidence": [
+          {
+            "source": "packet",
+            "page": 3,
+            "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
+            "quote": "cellulitis"
+          }
+        ],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "ID-2",
+        "status": "cant_tell",
+        "basis": "Not in the record: Takes own medications.",
+        "sst_fields": [
+          "disease_specific.infection.on_oral_antibiotics",
+          "disease_specific.infection.can_self_administer_oral_antibiotics",
+          "cognition.can_self_administer_meds"
+        ],
+        "evidence": [
+          {
+            "source": "packet",
+            "page": 6,
+            "doc_type": "mar",
+            "ref": null,
+            "timestamp": null,
+            "quote": "cephalexin 500 mg PO"
+          }
+        ],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "ID-3",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "disease_specific.infection.on_iv_antibiotics"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "ID-Q1",
+        "status": "met",
+        "basis": "Infection at left lower leg.",
+        "sst_fields": [
+          "conditions.flags.active_infection",
+          "disease_specific.infection.location"
+        ],
+        "evidence": [
+          {
+            "source": "packet",
+            "page": 3,
+            "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
+            "quote": "cellulitis"
+          },
+          {
+            "source": "packet",
+            "page": 3,
+            "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
+            "quote": "left lower extremity"
+          }
+        ],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "ID-Q2",
+        "status": "cant_tell",
+        "basis": "No culture results in the packet.",
+        "sst_fields": [
+          "conditions.flags.active_infection"
+        ],
+        "evidence": [
+          {
+            "source": "packet",
+            "page": 3,
+            "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
+            "quote": "cellulitis"
+          }
+        ],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "ID-Q3",
+        "status": "cant_tell",
+        "basis": "Isolation status not documented.",
+        "sst_fields": [
+          "conditions.flags.active_infection",
+          "infection_control.isolation_status"
+        ],
+        "evidence": [
+          {
+            "source": "packet",
+            "page": 3,
+            "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
+            "quote": "cellulitis"
+          }
+        ],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "RESP-1",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "conditions.flags.respiratory_illness"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "RESP-2",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "conditions.flags.respiratory_illness"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "RESP-3",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "lines_devices_oxygen.oxygen_required"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "RESP-4",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "conditions.flags.respiratory_illness"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "RESP-Q1",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "conditions.flags.respiratory_illness"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "RESP-Q2",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "conditions.flags.respiratory_illness"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "CARD-1",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "conditions.flags.cardiac_condition"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "CARD-2",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "conditions.flags.cardiac_condition",
+          "labs.troponin_count"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "CARD-3",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "conditions.flags.cardiac_condition"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "CARD-4",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "imaging_cardiac.atrial_fibrillation"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "CARD-5",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "imaging_cardiac.ejection_fraction_percent",
+          "conditions.flags.recent_heart_attack",
+          "conditions.flags.on_chemotherapy"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "CARD-6",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "conditions.flags.cardiac_condition",
+          "conditions.flags.hypertension_uncontrolled_or_symptomatic"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "INT-E1",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "INT-E2",
+        "status": "not_applicable",
+        "basis": "No wounds documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "INT-E3",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "INT-E4",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "INT-E5",
+        "status": "not_applicable",
+        "basis": "No wounds documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "INT-E6",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "INT-E7",
+        "status": "not_applicable",
+        "basis": "No wounds documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "INT-X1",
+        "status": "not_applicable",
+        "basis": "No wounds documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "INT-X2",
+        "status": "not_applicable",
+        "basis": "No wounds documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "INT-X3",
+        "status": "not_applicable",
+        "basis": "No wounds documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "OPH-E1",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "OPH-E2",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "OPH-E3",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "OPH-E4",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "OPH-E5",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "OPH-E6",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "OPH-E7",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "RSP-E1",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "RSP-E2",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "RSP-E3",
+        "status": "not_applicable",
+        "basis": "No COPD documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "RSP-E4",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "RSP-E5",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "RSP-E6",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "RSP-E7",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "RSP-X1",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "conditions.flags.pneumothorax_or_hemothorax"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "RSP-X2",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "conditions.flags.pneumothorax_or_hemothorax"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "RSP-X3",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "lines_devices_oxygen.tracheostomy"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "RSP-X4",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "conditions.flags.pulmonary_embolism"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "RSP-X5",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "lines_devices_oxygen.bipap"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "MSK-E1",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "MSK-E2",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "MSK-E3",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "MSK-E4",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "MSK-X1",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "conditions.flags.open_fracture"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "MSK-X2",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "conditions.flags.osteomyelitis"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "MSK-X3",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "lines_devices_oxygen.external_fixation_device"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "MSK-X4",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "conditions.flags.recent_amputation_with_wounds"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "MSK-X5",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "conditions.flags.jaw_wired"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "GI-E1",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "GI-E2",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "GI-E3",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "GI-E4",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "GI-E5",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "GI-E6",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "GI-E7",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "GI-X1",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "conditions.flags.decompensated_cirrhosis"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "GI-X2",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "conditions.flags.recent_gi_bleed_or_varices"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "GI-X3",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "infection_control.c_diff"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "END-E1",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "END-E2",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "END-E3",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "END-X1",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "conditions.flags.immediately_post_parathyroidectomy"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "END-X2",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "conditions.flags.alcoholic_ketoacidosis"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "END-X3",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "labs.dka_status"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "GU-E1",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "GU-E2",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "GU-E3",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "GU-E4",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "GU-E5",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "GU-E6",
+        "status": "not_applicable",
+        "basis": "No indwelling catheter.",
+        "sst_fields": [
+          "function.continence.foley_catheter"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "GU-E7",
+        "status": "not_applicable",
+        "basis": "Not on dialysis.",
+        "sst_fields": [
+          "lines_devices_oxygen.dialysis"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "GU-X1",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "CIR-E1",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "CIR-E2",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "CIR-E3",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "CIR-E4",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "CIR-E5",
+        "status": "not_applicable",
+        "basis": "Does not apply to this patient per the record.",
+        "sst_fields": [
+          "conditions.flags.post_cabg_or_valve_surgery"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "CIR-E6",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "CIR-E7",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "CIR-X1",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "imaging_cardiac.unstable_arrhythmia"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "CIR-X2",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "conditions.flags.hypertension_uncontrolled_or_symptomatic"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "NEU-E1",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "NEU-E2",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "NEU-E3",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "NEU-E4",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "NEU-X1",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "conditions.flags.stroke_with_residual_deficit"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "NEU-X2",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "conditions.flags.new_onset_seizure_with_deficit"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "NEU-X3",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "conditions.flags.tbi_severity"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "NEU-X4",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "cognition.cognitive_impairment"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "NEU-X5",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "conditions.flags.spinal_fusion"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "NEU-X6",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "conditions.flags.immediately_post_neurosurgery"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "FORM-M1",
+        "status": "met",
+        "basis": "Unhoused, at risk, or inadequate environment.",
+        "sst_fields": [
+          "housing.housing_situation"
+        ],
+        "evidence": [
+          {
+            "source": "packet",
+            "page": 2,
+            "doc_type": "referral_form",
+            "ref": null,
+            "timestamp": null,
+            "quote": "Currently unhoused: Yes"
+          }
+        ],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "FORM-M2",
+        "status": "cant_tell",
+        "basis": "Stability not fully documented.",
+        "sst_fields": [
+          "vitals.sepsis_signs",
+          "mental_health.stable_on_medications"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "FORM-M3",
+        "status": "met",
+        "basis": "Alert and oriented x4.",
+        "sst_fields": [
+          "cognition.orientation"
+        ],
+        "evidence": [
+          {
+            "source": "packet",
+            "page": 3,
+            "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
+            "quote": "A&O x4"
+          }
+        ],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "FORM-M4",
+        "status": "cant_tell",
+        "basis": "Daily living activities not fully documented (PT/OT or nursing notes).",
+        "sst_fields": [
+          "function.adls.bathing",
+          "function.adls.dressing",
+          "function.adls.toileting",
+          "function.adls.eating",
+          "function.adls.hygiene_independent"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "FORM-M5",
+        "status": "cant_tell",
+        "basis": "Not in the record: Takes own medications.",
+        "sst_fields": [
+          "cognition.can_self_administer_meds"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "FORM-M6",
+        "status": "not_applicable",
+        "basis": "Superseded by MOB-3/MOB-4 (IHH's internal outline wins over the form).",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "FORM-X1",
+        "status": "cant_tell",
+        "basis": "Not in the record: Dementia, Alzheimer's or other cognitive impairment documented.",
+        "sst_fields": [
+          "cognition.cognitive_impairment"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "FORM-X2",
+        "status": "cant_tell",
+        "basis": "Daily living activities not documented.",
+        "sst_fields": [
+          "function.adls.bathing",
+          "function.adls.dressing",
+          "function.adls.toileting",
+          "function.adls.eating",
+          "function.adls.hygiene_independent"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "FORM-X3",
+        "status": "not_applicable",
+        "basis": "Superseded by MOB-3/MOB-4 (IHH's internal outline wins over the form).",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "FORM-X4",
+        "status": "cant_tell",
+        "basis": "MRSA, TB and C. diff status not documented.",
+        "sst_fields": [
+          "infection_control.mrsa_swab_result",
+          "infection_control.tb_screen_result",
+          "infection_control.c_diff",
+          "infection_control.active_infection_cleared_by_physician"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "FORM-X5",
+        "status": "not_applicable",
+        "basis": "Not documented.",
+        "sst_fields": [
+          "substance_use.detox_noncompliance_or_refusal_to_abstain"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "FORM-X6",
+        "status": "not_applicable",
+        "basis": "Superseded by OTH-2 (IHH's internal outline wins over the form).",
+        "sst_fields": [],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
+      },
+      {
+        "rule_id": "FORM-X7",
+        "status": "cant_tell",
+        "basis": "Not in the record: Verbal or physical aggression documented.",
+        "sst_fields": [
+          "mental_health.aggressive_toward_staff_or_patients"
+        ],
+        "evidence": [],
+        "confirmed_by": null,
+        "confirmed_at": null
       }
     ],
     "hard_stops": [],
     "open_questions": [
       {
+        "rule_id": "DM-Q2",
+        "question": "Does the patient take oral medication?"
+      },
+      {
+        "rule_id": "DM-Q3",
+        "question": "What was the patient's last hemoglobin A1C? This is not a limiting factor for admission but does provide important information about the patient's baseline glucose level"
+      },
+      {
         "rule_id": "ID-Q2",
-        "question": "Were cultures performed? Please send results."
+        "question": "Were cultures performed? Results should be sent"
+      },
+      {
+        "rule_id": "ID-Q3",
+        "question": "Is the patient on isolation?"
       }
     ],
     "recommendation": "request_information",
-    "recommendation_rationale": "Function and cognition rules are met. Infection-control and diabetes documentation is missing, so the packet cannot be approved yet.",
+    "recommendation_rationale": "23 rule(s) cannot be checked from the record: ADL-1, ADL-2, ADL-3, MOB-1, MH-2, MH-3, MH-5, COG-1.... The basis for recuperative care (homeless and too ill to recover outside) is not documented.",
     "coordinator_decision": {
       "decision": null,
       "reason": null,
@@ -2217,44 +4511,63 @@
       "decided_at": null
     },
     "scores": {
-      "computed_at": "2026-10-17T10:40:00-07:00",
-      "readiness": 46,
+      "computed_at": "2026-10-17T19:10:18+00:00",
+      "readiness": 59,
       "band": "needs_documents",
       "components": {
         "completeness": {
-          "score": 50,
+          "score": 44,
           "present": 4,
-          "required": 8,
+          "required": 9,
           "missing_doc_ids": [
             "DOC-2",
             "DOC-3",
             "DOC-6",
+            "DOC-10",
             "DOC-9"
           ]
         },
         "rule_coverage": {
-          "score": 40,
-          "answerable": 2,
-          "applicable": 5,
+          "score": 18,
+          "answerable": 5,
+          "applicable": 28,
           "cant_tell_rule_ids": [
+            "ADL-1",
+            "ADL-2",
+            "ADL-3",
+            "MOB-1",
+            "MH-2",
+            "MH-3",
+            "MH-5",
+            "COG-1",
+            "OTH-1",
+            "OTH-4",
             "INF-1",
+            "INF-2",
+            "DM-1",
+            "DM-5",
             "ID-1",
-            "DM-1"
+            "ID-2",
+            "FORM-M2",
+            "FORM-M4",
+            "FORM-M5",
+            "FORM-X1",
+            "FORM-X2",
+            "FORM-X4",
+            "FORM-X7"
           ]
         },
         "rules_met": {
           "score": 100,
-          "met": 2,
+          "met": 5,
           "not_met": 0,
           "not_met_rule_ids": []
         },
         "arrangements": {
-          "score": 0,
+          "score": 100,
           "confirmed": 0,
-          "needed": 1,
-          "pending_rule_ids": [
-            "DM-4"
-          ]
+          "needed": 0,
+          "pending_rule_ids": []
         },
         "hard_stop_count": 0
       },
@@ -2264,22 +4577,225 @@
         "rules_met": 0.3,
         "arrangements": 0.1
       },
-      "explanation": "Everything the packet does answer is in the patient's favour, but three of five applicable rules cannot be checked yet. The MRSA swab, five sets of vitals and three more glucose readings would move this to nearly ready.",
+      "explanation": "Readiness 59: 23 of 28 applicable rules cannot be checked yet; 5 of 9 checklist documents are missing.",
       "top_actions": [
-        "G1: get the MRSA swab result",
-        "G2: get the last five sets of vital signs",
-        "G3: get five consecutive glucose readings"
+        "G1: Bathing / showering; Dressing; Toileting, or changing own briefs",
+        "G2: Bathing / showering; Can gather own supplies and get to the shower alone",
+        "G3: Toileting, or changing own briefs"
       ]
     }
   },
   "gaps": [
     {
       "id": "G1",
-      "what": "MRSA swab result",
+      "what": "Bathing / showering; Dressing; Toileting, or changing own briefs",
+      "why_rule_ids": [
+        "ADL-1"
+      ],
+      "doc_ids": [
+        "DOC-8"
+      ],
+      "sst_fields": [
+        "function.adls.bathing",
+        "function.adls.dressing",
+        "function.adls.toileting",
+        "function.adls.eating",
+        "function.adls.hygiene_independent"
+      ],
+      "who_can_supply": "pt_ot",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "To review this referral we still need: Bathing / showering; Dressing; Toileting, or changing own briefs. (IHH rule ADL-1: Able to complete all Activities of Daily Living (ADLs) independently including personal hygiene)",
+      "note": null
+    },
+    {
+      "id": "G2",
+      "what": "Bathing / showering; Can gather own supplies and get to the shower alone",
+      "why_rule_ids": [
+        "ADL-2"
+      ],
+      "doc_ids": [
+        "DOC-8"
+      ],
+      "sst_fields": [
+        "function.adls.bathing",
+        "function.adls.gathers_supplies_and_transfers_to_shower"
+      ],
+      "who_can_supply": "pt_ot",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "To review this referral we still need: Bathing / showering; Can gather own supplies and get to the shower alone. (IHH rule ADL-2: Patient must be able to complete personal hygiene independently. Benches are available for bathing so seated shower is acceptable. Patient m)",
+      "note": null
+    },
+    {
+      "id": "G3",
+      "what": "Toileting, or changing own briefs",
+      "why_rule_ids": [
+        "ADL-3"
+      ],
+      "doc_ids": [
+        "DOC-8"
+      ],
+      "sst_fields": [
+        "function.adls.toileting"
+      ],
+      "who_can_supply": "pt_ot",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "To review this referral we still need: Toileting, or changing own briefs. (IHH rule ADL-3: Able to toilet independently and/or change briefs/diapers independently)",
+      "note": null
+    },
+    {
+      "id": "G4",
+      "what": "Uses the equipment without help",
+      "why_rule_ids": [
+        "MOB-1"
+      ],
+      "doc_ids": [
+        "DOC-8"
+      ],
+      "sst_fields": [
+        "function.mobility.dme_independent"
+      ],
+      "who_can_supply": "pt_ot",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "To review this referral we still need: Uses the equipment without help. (IHH rule MOB-1: If using DME (wheelchair, walker, etc) must be able to use independently)",
+      "note": null
+    },
+    {
+      "id": "G5",
+      "what": "Current suicidal ideation",
+      "why_rule_ids": [
+        "MH-2"
+      ],
+      "doc_ids": [
+        "DOC-4",
+        "DOC-5"
+      ],
+      "sst_fields": [
+        "mental_health.suicidal_ideation"
+      ],
+      "who_can_supply": "physician",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "To review this referral we still need: Current suicidal ideation. (IHH rule MH-2: No suicidal ideation)",
+      "note": null
+    },
+    {
+      "id": "G6",
+      "what": "Commanding auditory or visual hallucinations",
+      "why_rule_ids": [
+        "MH-3"
+      ],
+      "doc_ids": [
+        "DOC-4",
+        "DOC-5"
+      ],
+      "sst_fields": [
+        "mental_health.command_hallucinations"
+      ],
+      "who_can_supply": "physician",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "To review this referral we still need: Commanding auditory or visual hallucinations. (IHH rule MH-3: No commanding auditory or visual hallucinations)",
+      "note": null
+    },
+    {
+      "id": "G7",
+      "what": "Under, qualifies for, or history of conservatorship or Full Service Partnership",
+      "why_rule_ids": [
+        "MH-5"
+      ],
+      "doc_ids": [
+        "DOC-4"
+      ],
+      "sst_fields": [
+        "mental_health.conservatorship_or_fsp"
+      ],
+      "who_can_supply": "physician",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "To review this referral we still need: Under, qualifies for, or history of conservatorship or Full Service Partnership. (IHH rule MH-5: Cannot qualify, have history of or currently be under a conservatorship or FSP)",
+      "note": null
+    },
+    {
+      "id": "G8",
+      "what": "Takes own medications; Gives own insulin (must be confirmed when on insulin); Can take in medical teaching",
+      "why_rule_ids": [
+        "COG-1"
+      ],
+      "doc_ids": [
+        "DOC-1",
+        "DOC-8"
+      ],
+      "sst_fields": [
+        "cognition.can_self_administer_meds",
+        "cognition.can_self_administer_insulin",
+        "cognition.can_receive_education"
+      ],
+      "who_can_supply": "hospital_nurse",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "To review this referral we still need: Takes own medications; Gives own insulin (must be confirmed when on insulin); Can take in medical teaching. (IHH rule COG-1: Must be capable of self-administering medications (must confirm that patient can self-administer insulin) and receiving medical education)",
+      "note": null
+    },
+    {
+      "id": "G9",
+      "what": "Verbal or physical aggression documented",
+      "why_rule_ids": [
+        "OTH-1"
+      ],
+      "doc_ids": [
+        "DOC-5",
+        "DOC-8"
+      ],
+      "sst_fields": [
+        "mental_health.aggressive_toward_staff_or_patients"
+      ],
+      "who_can_supply": "physician",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "To review this referral we still need: Verbal or physical aggression documented. (IHH rule OTH-1: Ineligible if client is verbally or physically aggressive towards staff or other patients)",
+      "note": null
+    },
+    {
+      "id": "G10",
+      "what": "Current isolation precautions",
+      "why_rule_ids": [
+        "OTH-4"
+      ],
+      "doc_ids": [
+        "DOC-5",
+        "DOC-8"
+      ],
+      "sst_fields": [
+        "infection_control.isolation_status"
+      ],
+      "who_can_supply": "hospital_nurse",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "To review this referral we still need: Current isolation precautions. (IHH rule OTH-4: Cannot accept patients on isolation unless isolation status is cleared prior to admission to recuperative care)",
+      "note": null
+    },
+    {
+      "id": "G1",
+      "what": "MRSA nasal swab result (needed if coming from inpatient)",
       "why_rule_ids": [
         "INF-1"
       ],
       "doc_ids": [
+        "DOC-5",
         "DOC-9"
       ],
       "sst_fields": [
@@ -2289,31 +4805,33 @@
       "status": "requested",
       "requested_at": "2026-10-17T10:42:00-07:00",
       "received_at": null,
-      "draft_request_text": "Please send the documented MRSA nasal swab result for this patient.",
+      "draft_request_text": "To review this referral we still need: MRSA nasal swab result (needed if coming from inpatient). (IHH rule INF-1: MRSA swab, documented negative prior to recuperative care admission if coming from inpatient hospitalization)",
       "note": null
     },
     {
-      "id": "G2",
-      "what": "Last 5 sets of vital signs",
+      "id": "G12",
+      "what": "COVID test result; Whether the swab is within 24 hours of arrival",
       "why_rule_ids": [
-        "ID-1"
+        "INF-2"
       ],
       "doc_ids": [
-        "DOC-6"
+        "DOC-5",
+        "DOC-9"
       ],
       "sst_fields": [
-        "vitals.sets"
+        "infection_control.covid_test_result",
+        "infection_control.covid_test_within_24h_of_admission"
       ],
       "who_can_supply": "hospital_nurse",
       "status": "open",
       "requested_at": null,
       "received_at": null,
-      "draft_request_text": "Please send the last five sets of vital signs.",
+      "draft_request_text": "To review this referral we still need: COVID test result; Whether the swab is within 24 hours of arrival. (IHH rule INF-2: Covid swab (rapid swab acceptable) documented negative within 24 hours of recuperative care admission if coming from inpatient admission)",
       "note": null
     },
     {
-      "id": "G3",
-      "what": "Three more consecutive glucose readings",
+      "id": "G13",
+      "what": "Improvement and stabilization",
       "why_rule_ids": [
         "DM-1"
       ],
@@ -2321,13 +4839,302 @@
         "DOC-5"
       ],
       "sst_fields": [
-        "labs.glucose_readings"
+        "labs.glucose_trend"
       ],
       "who_can_supply": "hospital_nurse",
       "status": "open",
       "requested_at": null,
       "received_at": null,
-      "draft_request_text": "Please send five consecutive point-of-care glucose readings.",
+      "draft_request_text": "To review this referral we still need: Improvement and stabilization. (IHH rule DM-1: If patient is being referred from inpatient hospitalization, 5 consecutive glucose readings should be sent. Readings must be show improvemen)",
+      "note": null
+    },
+    {
+      "id": "G14",
+      "what": "Knows how to check own blood sugar",
+      "why_rule_ids": [
+        "DM-5"
+      ],
+      "doc_ids": [
+        "DOC-8"
+      ],
+      "sst_fields": [
+        "cognition.understands_glucometer"
+      ],
+      "who_can_supply": "hospital_nurse",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "To review this referral we still need: Knows how to check own blood sugar. (IHH rule DM-5: Patient should understand how to use glucometer)",
+      "note": null
+    },
+    {
+      "id": "G15",
+      "what": "How many sets are in the packet (rules ask for 5); Continued fever, fast heart rate or low blood pressure",
+      "why_rule_ids": [
+        "ID-1"
+      ],
+      "doc_ids": [
+        "DOC-6"
+      ],
+      "sst_fields": [
+        "vitals.set_count",
+        "vitals.sepsis_signs"
+      ],
+      "who_can_supply": "hospital_nurse",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "To review this referral we still need: How many sets are in the packet (rules ask for 5); Continued fever, fast heart rate or low blood pressure. (IHH rule ID-1: The last 5 sets of vital signs should be sent. Patient is ineligible for recuperative care if VS show signs of sepsis (continued fever, elev)",
+      "note": null
+    },
+    {
+      "id": "G16",
+      "what": "Can take oral antibiotics alone; Takes own medications",
+      "why_rule_ids": [
+        "ID-2"
+      ],
+      "doc_ids": [
+        "DOC-1",
+        "DOC-8"
+      ],
+      "sst_fields": [
+        "disease_specific.infection.can_self_administer_oral_antibiotics",
+        "cognition.can_self_administer_meds"
+      ],
+      "who_can_supply": "physician",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "To review this referral we still need: Can take oral antibiotics alone; Takes own medications. (IHH rule ID-2: The patient should be able to administer oral antibiotics independently)",
+      "note": null
+    },
+    {
+      "id": "G17",
+      "what": "Continued fever, fast heart rate or low blood pressure; Mentally stable on current medications",
+      "why_rule_ids": [
+        "FORM-M2"
+      ],
+      "doc_ids": [
+        "DOC-4",
+        "DOC-5",
+        "DOC-6"
+      ],
+      "sst_fields": [
+        "vitals.sepsis_signs",
+        "mental_health.stable_on_medications"
+      ],
+      "who_can_supply": "hospital_nurse",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "To review this referral we still need: Continued fever, fast heart rate or low blood pressure; Mentally stable on current medications. (IHH rule FORM-M2: Medically and psychiatrically stable condition upon discharge)",
+      "note": null
+    },
+    {
+      "id": "G18",
+      "what": "Bathing / showering; Dressing; Toileting, or changing own briefs",
+      "why_rule_ids": [
+        "FORM-M4"
+      ],
+      "doc_ids": [
+        "DOC-8"
+      ],
+      "sst_fields": [
+        "function.adls.bathing",
+        "function.adls.dressing",
+        "function.adls.toileting",
+        "function.adls.eating",
+        "function.adls.hygiene_independent"
+      ],
+      "who_can_supply": "pt_ot",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "To review this referral we still need: Bathing / showering; Dressing; Toileting, or changing own briefs. (IHH rule FORM-M4: Able to manage ADL (activities of daily living))",
+      "note": null
+    },
+    {
+      "id": "G19",
+      "what": "Takes own medications",
+      "why_rule_ids": [
+        "FORM-M5"
+      ],
+      "doc_ids": [
+        "DOC-1",
+        "DOC-8"
+      ],
+      "sst_fields": [
+        "cognition.can_self_administer_meds"
+      ],
+      "who_can_supply": "hospital_nurse",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "To review this referral we still need: Takes own medications. (IHH rule FORM-M5: Able to self-administer medications and manage their medication schedule with staff oversight)",
+      "note": null
+    },
+    {
+      "id": "G20",
+      "what": "Dementia, Alzheimer's or other cognitive impairment documented",
+      "why_rule_ids": [
+        "FORM-X1"
+      ],
+      "doc_ids": [
+        "DOC-4",
+        "DOC-5"
+      ],
+      "sst_fields": [
+        "cognition.cognitive_impairment"
+      ],
+      "who_can_supply": "hospital_nurse",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "To review this referral we still need: Dementia, Alzheimer's or other cognitive impairment documented. (IHH rule FORM-X1: Cognitively impaired (i.e., dementia, Alzheimer's))",
+      "note": null
+    },
+    {
+      "id": "G21",
+      "what": "Bathing / showering; Dressing; Toileting, or changing own briefs",
+      "why_rule_ids": [
+        "FORM-X2"
+      ],
+      "doc_ids": [
+        "DOC-8"
+      ],
+      "sst_fields": [
+        "function.adls.bathing",
+        "function.adls.dressing",
+        "function.adls.toileting",
+        "function.adls.eating",
+        "function.adls.hygiene_independent"
+      ],
+      "who_can_supply": "pt_ot",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "To review this referral we still need: Bathing / showering; Dressing; Toileting, or changing own briefs. (IHH rule FORM-X2: Unable to perform activities of daily living)",
+      "note": null
+    },
+    {
+      "id": "G22",
+      "what": "MRSA nasal swab result (needed if coming from inpatient); PPD / TB test or chest X-ray screen for TB; C",
+      "why_rule_ids": [
+        "FORM-X4"
+      ],
+      "doc_ids": [
+        "DOC-1",
+        "DOC-5",
+        "DOC-9"
+      ],
+      "sst_fields": [
+        "infection_control.mrsa_swab_result",
+        "infection_control.tb_screen_result",
+        "infection_control.c_diff",
+        "infection_control.active_infection_cleared_by_physician"
+      ],
+      "who_can_supply": "hospital_nurse",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "To review this referral we still need: MRSA nasal swab result (needed if coming from inpatient); PPD / TB test or chest X-ray screen for TB; C. (IHH rule FORM-X4: Active infection has not been cleared by a doctor or CID: MRSA, Tuberculosis, C-DIFF)",
+      "note": null
+    },
+    {
+      "id": "G23",
+      "what": "Verbal or physical aggression documented",
+      "why_rule_ids": [
+        "FORM-X7"
+      ],
+      "doc_ids": [
+        "DOC-5",
+        "DOC-8"
+      ],
+      "sst_fields": [
+        "mental_health.aggressive_toward_staff_or_patients"
+      ],
+      "who_can_supply": "physician",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "To review this referral we still need: Verbal or physical aggression documented. (IHH rule FORM-X7: Aggressive or combative behavior directed at staff or other patients)",
+      "note": null
+    },
+    {
+      "id": "G24",
+      "what": "Send Client's Demographic Page",
+      "why_rule_ids": [],
+      "doc_ids": [
+        "DOC-2"
+      ],
+      "sst_fields": [
+        "documents.doc_2_demographics",
+        "referral.insurance_plan",
+        "patient.age_years",
+        "patient.gender",
+        "patient.preferred_language"
+      ],
+      "who_can_supply": "hospital_case_manager",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "Please send the Client's Demographic Page (DOC-2).",
+      "note": null
+    },
+    {
+      "id": "G25",
+      "what": "Send CalOptima Form/LOA/AUTH",
+      "why_rule_ids": [],
+      "doc_ids": [
+        "DOC-3"
+      ],
+      "sst_fields": [
+        "documents.doc_3_authorization",
+        "referral.length_of_stay_authorized_days",
+        "referral.insurance_plan",
+        "referral.authorization_status"
+      ],
+      "who_can_supply": "hospital_case_manager",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "Please send the CalOptima Form/LOA/AUTH (DOC-3).",
+      "note": null
+    },
+    {
+      "id": "G26",
+      "what": "Send 30-day supply of all medications",
+      "why_rule_ids": [],
+      "doc_ids": [
+        "DOC-10"
+      ],
+      "sst_fields": [
+        "documents.doc_10_meds_30_day_supply",
+        "medications.thirty_day_supply_arranged"
+      ],
+      "who_can_supply": "hospital_case_manager",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "Please send the 30-day supply of all medications (DOC-10).",
+      "note": null
+    },
+    {
+      "id": "G27",
+      "what": "Resolve conflict: Age in years",
+      "why_rule_ids": [],
+      "doc_ids": [
+        "DOC-2",
+        "DOC-4"
+      ],
+      "sst_fields": [
+        "patient.age_years"
+      ],
+      "who_can_supply": "patient",
+      "status": "open",
+      "requested_at": null,
+      "received_at": null,
+      "draft_request_text": "The packet gives different values for age in years; please confirm which is current.",
       "note": null
     }
   ],
@@ -2489,6 +5296,26 @@
       "old_value": null,
       "new_value": "true",
       "note": null
+    },
+    {
+      "ts": "2026-10-17T19:10:18+00:00",
+      "actor_role": "system",
+      "actor_label": "system",
+      "action": "evaluated",
+      "path": "eligibility",
+      "old_value": null,
+      "new_value": "request_information",
+      "note": "ihh 2026-10-17"
+    },
+    {
+      "ts": "2026-10-17T19:10:18+00:00",
+      "actor_role": "system",
+      "actor_label": "system",
+      "action": "scored",
+      "path": "eligibility.scores",
+      "old_value": null,
+      "new_value": "59",
+      "note": "needs_documents"
     }
   ]
 }

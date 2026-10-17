@@ -1,0 +1,9 @@
+# cloudflared tunnel --config deploy/cloudflared.yml run relayhealth-api
+tunnel: <TUNNEL-ID>
+credentials-file: ~/.cloudflared/<TUNNEL-ID>.json
+ingress:
+  - hostname: api.relayhealth.dev
+    service: http://127.0.0.1:8000
+  - hostname: relayhealth.dev
+    service: http://127.0.0.1:8000
+  - service: http_status:404

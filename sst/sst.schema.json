@@ -2683,6 +2683,682 @@
       "additionalProperties": false,
       "description": "Things that must be set up before the person arrives: home health, wound care, therapy, hospice, follow-up visits, oxygen delivery."
     },
+    "forms": {
+      "type": "object",
+      "properties": {
+        "ihh_referral_form": {
+          "type": "object",
+          "properties": {
+            "present": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "IHH referral form is in the packet",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": true
+            },
+            "form_code": {
+              "$ref": "#/$defs/Field_text",
+              "description": "Form code printed on it, for example RC0725-SH",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "referring_department": {
+              "$ref": "#/$defs/Field_text",
+              "description": "Department or floor, as written",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "referrer_role": {
+              "$ref": "#/$defs/Field_enum_social_worker_case_manager_nurse_physician_other",
+              "description": "Who filled it in",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "referrer_contact_filled": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Phone or email filled in (the values are never stored)",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "authorized_by_filled": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Authorized-by line filled in",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "patient_identifiers_complete": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Name, MRN, DOB and insurance all filled in (values never stored)",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "gender": {
+              "$ref": "#/$defs/Field_text",
+              "description": "As written on the form",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "ethnicity": {
+              "$ref": "#/$defs/Field_text",
+              "description": "As written on the form",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "insurance": {
+              "$ref": "#/$defs/Field_text",
+              "description": "As written on the form",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "preferred_language": {
+              "$ref": "#/$defs/Field_text",
+              "description": "As written on the form",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "currently_unhoused": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form: currently unhoused",
+              "x-owner": "hospital",
+              "x-rules": [
+                "FORM-M1"
+              ],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "four_plus_episodes_3y": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form: 4+ episodes of homelessness in 3 years",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "chief_complaint": {
+              "$ref": "#/$defs/Field_text",
+              "description": "Chief complaint or admitting diagnosis, as written on the form",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "admit_date_filled": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Admit date filled in (redacted in event packets)",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "wounds_reported": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form: any wounds",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "wounds_description": {
+              "$ref": "#/$defs/Field_text",
+              "description": "Number, location, size and stage, as written",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "independent_with_wound_care": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form: independent with wound care",
+              "x-owner": "hospital",
+              "x-rules": [
+                "INT-E2"
+              ],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "home_health_will_be_ordered": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form: home health will be ordered",
+              "x-owner": "hospital",
+              "x-rules": [
+                "OTH-3",
+                "ID-3"
+              ],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "tb_test_type": {
+              "$ref": "#/$defs/Field_enum_ppd_chest_xray_none",
+              "description": "Form: PPD/TB test or chest X-ray",
+              "x-owner": "hospital",
+              "x-rules": [
+                "FORM-X4"
+              ],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "tb_result": {
+              "$ref": "#/$defs/Field_text",
+              "description": "Form: TB result as written (date never stored)",
+              "x-owner": "hospital",
+              "x-rules": [
+                "FORM-X4"
+              ],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "o2": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form yes/no: oxygen",
+              "x-owner": "hospital",
+              "x-rules": [
+                "RESP-3"
+              ],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "self_administers_all_meds": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form yes/no: self-administers all medications",
+              "x-owner": "hospital",
+              "x-rules": [
+                "FORM-M5"
+              ],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "continent": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form yes/no: continent of bowel and bladder",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "ostomy": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form yes/no: colostomy or ileostomy",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "foley": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form yes/no: Foley catheter",
+              "x-owner": "hospital",
+              "x-rules": [
+                "GU-E6"
+              ],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "diabetes": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form yes/no: diabetes",
+              "x-owner": "hospital",
+              "x-rules": [
+                "DM-Q2"
+              ],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "insulin": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form yes/no: insulin",
+              "x-owner": "hospital",
+              "x-rules": [
+                "DM-Q1"
+              ],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "diabetes_oral_meds": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form yes/no: oral diabetes medication",
+              "x-owner": "hospital",
+              "x-rules": [
+                "DM-Q2"
+              ],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "active_infection": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form yes/no: active infection",
+              "x-owner": "hospital",
+              "x-rules": [
+                "FORM-X4"
+              ],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "ambulatory": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form yes/no: ambulatory",
+              "x-owner": "hospital",
+              "x-rules": [
+                "FORM-M6"
+              ],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "assistive_device": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form yes/no: assistive device",
+              "x-owner": "hospital",
+              "x-rules": [
+                "FORM-M6"
+              ],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "hospice": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form yes/no: hospice",
+              "x-owner": "hospital",
+              "x-rules": [
+                "EOL-1"
+              ],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "car": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form yes/no: car",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "service_animal": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form yes/no: service animal",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "limitations_or_challenges": {
+              "$ref": "#/$defs/Field_text",
+              "description": "Behavioral section: limitations or challenges, as written",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "mental_health_dx": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form: mental health diagnosis",
+              "x-owner": "hospital",
+              "x-rules": [
+                "MH-1"
+              ],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "mental_health_dx_type": {
+              "$ref": "#/$defs/Field_text",
+              "description": "Form: type, as written",
+              "x-owner": "hospital",
+              "x-rules": [
+                "MH-1"
+              ],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "non_compliant": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form: non-compliant",
+              "x-owner": "hospital",
+              "x-rules": [
+                "FORM-X5"
+              ],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "forgetful": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form: forgetful",
+              "x-owner": "hospital",
+              "x-rules": [
+                "COG-1"
+              ],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "cognitive_impairment": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form: cognitive impairment",
+              "x-owner": "hospital",
+              "x-rules": [
+                "FORM-X1"
+              ],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "registered_sex_offender": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Form: registered sex offender",
+              "x-owner": "hospital",
+              "x-rules": [
+                "FORM-X6",
+                "OTH-2"
+              ],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "behavioral_other": {
+              "$ref": "#/$defs/Field_text",
+              "description": "Form: other, as written",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "length_of_stay_authorized_days": {
+              "$ref": "#/$defs/Field_int",
+              "description": "Form: length of stay authorized, in days",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            },
+            "staff_section_completed": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "IHH staff-only section filled in (blank in all event packets)",
+              "x-owner": "provider",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-1"
+              ],
+              "x-patient_visible": false
+            }
+          },
+          "required": [
+            "present",
+            "form_code",
+            "referring_department",
+            "referrer_role",
+            "referrer_contact_filled",
+            "authorized_by_filled",
+            "patient_identifiers_complete",
+            "gender",
+            "ethnicity",
+            "insurance",
+            "preferred_language",
+            "currently_unhoused",
+            "four_plus_episodes_3y",
+            "chief_complaint",
+            "admit_date_filled",
+            "wounds_reported",
+            "wounds_description",
+            "independent_with_wound_care",
+            "home_health_will_be_ordered",
+            "tb_test_type",
+            "tb_result",
+            "o2",
+            "self_administers_all_meds",
+            "continent",
+            "ostomy",
+            "foley",
+            "diabetes",
+            "insulin",
+            "diabetes_oral_meds",
+            "active_infection",
+            "ambulatory",
+            "assistive_device",
+            "hospice",
+            "car",
+            "service_animal",
+            "limitations_or_challenges",
+            "mental_health_dx",
+            "mental_health_dx_type",
+            "non_compliant",
+            "forgetful",
+            "cognitive_impairment",
+            "registered_sex_offender",
+            "behavioral_other",
+            "length_of_stay_authorized_days",
+            "staff_section_completed"
+          ],
+          "additionalProperties": false
+        },
+        "calaim_authorization": {
+          "type": "object",
+          "properties": {
+            "present": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "CalAIM / CalOptima authorization form, LOA or auth is in the packet",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-3"
+              ],
+              "x-patient_visible": true
+            },
+            "health_plan": {
+              "$ref": "#/$defs/Field_text",
+              "description": "Plan named on the form",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-3"
+              ],
+              "x-patient_visible": true
+            },
+            "community_support_requested": {
+              "$ref": "#/$defs/Field_text",
+              "description": "Which Community Support is requested, as written (recuperative care expected)",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-3"
+              ],
+              "x-patient_visible": false
+            },
+            "requested_days": {
+              "$ref": "#/$defs/Field_int",
+              "description": "Days requested",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-3"
+              ],
+              "x-patient_visible": true
+            },
+            "requested_start_date_filled": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Start date filled in (redacted in event packets)",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-3"
+              ],
+              "x-patient_visible": false
+            },
+            "icd10_codes": {
+              "$ref": "#/$defs/Field_list",
+              "description": "Diagnosis codes listed",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-3"
+              ],
+              "x-patient_visible": false
+            },
+            "requesting_provider_type": {
+              "$ref": "#/$defs/Field_text",
+              "description": "Hospital, clinic, other, as written",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-3"
+              ],
+              "x-patient_visible": false
+            },
+            "status": {
+              "$ref": "#/$defs/Field_enum_not_requested_submitted_approved_denied",
+              "description": "Authorization status as far as the packet shows",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-3"
+              ],
+              "x-patient_visible": true
+            },
+            "authorization_number_filled": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Authorization number present (value never stored)",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-3"
+              ],
+              "x-patient_visible": false
+            },
+            "member_id_filled": {
+              "$ref": "#/$defs/Field_bool",
+              "description": "Member ID present (value never stored)",
+              "x-owner": "hospital",
+              "x-rules": [],
+              "x-docs": [
+                "DOC-3"
+              ],
+              "x-patient_visible": false
+            }
+          },
+          "required": [
+            "present",
+            "health_plan",
+            "community_support_requested",
+            "requested_days",
+            "requested_start_date_filled",
+            "icd10_codes",
+            "requesting_provider_type",
+            "status",
+            "authorization_number_filled",
+            "member_id_filled"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "ihh_referral_form",
+        "calaim_authorization"
+      ],
+      "additionalProperties": false,
+      "description": "The forms inside the packet as written: IHH's referral form and the CalAIM authorization form. Kept separate from the chart sections so the record can show where the form and the chart disagree, and so a filled electronic form can be generated from the SST."
+    },
     "eligibility": {
       "$ref": "#/$defs/Eligibility"
     },
@@ -2735,6 +3411,7 @@
     "conditions",
     "disease_specific",
     "arrangements",
+    "forms",
     "eligibility",
     "gaps",
     "patient_summary",
@@ -6803,6 +7480,285 @@
             "ordered",
             "established",
             "coordinated_and_scheduled",
+            null
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_enum_social_worker_case_manager_nurse_physician_other": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "social_worker",
+            "case_manager",
+            "nurse",
+            "physician",
+            "other",
+            null
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_enum_ppd_chest_xray_none": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "ppd",
+            "chest_xray",
+            "none",
+            null
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "found",
+            "entered",
+            "confirmed",
+            "not_in_packet",
+            "redacted",
+            "cant_tell",
+            "conflict"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Conflict"
+          }
+        },
+        "confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            null
+          ]
+        },
+        "updated_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system",
+            null
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "status",
+        "evidence",
+        "conflicts",
+        "confidence",
+        "updated_by",
+        "updated_at",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Field_enum_not_requested_submitted_approved_denied": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "not_requested",
+            "submitted",
+            "approved",
+            "denied",
             null
           ]
         },
