@@ -3,7 +3,7 @@
     "sst_version": "0.1",
     "referral_id": "EXAMPLE-FICTIONAL-001",
     "created_at": "2026-10-17T10:00:00-07:00",
-    "updated_at": "2026-10-17T19:10:18+00:00",
+    "updated_at": "2026-10-17T20:47:36+00:00",
     "fictional": true,
     "packet": {
       "source_file": null,
@@ -2669,7 +2669,7 @@
   "eligibility": {
     "provider_id": "ihh",
     "profile_version": "2026-10-17",
-    "evaluated_at": "2026-10-17T19:10:18+00:00",
+    "evaluated_at": "2026-10-17T20:47:36+00:00",
     "rules": [
       {
         "rule_id": "GEN-1",
@@ -4511,7 +4511,7 @@
       "decided_at": null
     },
     "scores": {
-      "computed_at": "2026-10-17T19:10:18+00:00",
+      "computed_at": "2026-10-17T20:47:36+00:00",
       "readiness": 59,
       "band": "needs_documents",
       "components": {
@@ -5092,7 +5092,17 @@
         "documents.doc_3_authorization",
         "referral.length_of_stay_authorized_days",
         "referral.insurance_plan",
-        "referral.authorization_status"
+        "referral.authorization_status",
+        "forms.calaim_authorization.present",
+        "forms.calaim_authorization.health_plan",
+        "forms.calaim_authorization.community_support_requested",
+        "forms.calaim_authorization.requested_days",
+        "forms.calaim_authorization.requested_start_date_filled",
+        "forms.calaim_authorization.icd10_codes",
+        "forms.calaim_authorization.requesting_provider_type",
+        "forms.calaim_authorization.status",
+        "forms.calaim_authorization.authorization_number_filled",
+        "forms.calaim_authorization.member_id_filled"
       ],
       "who_can_supply": "hospital_case_manager",
       "status": "open",
@@ -5298,7 +5308,7 @@
       "note": null
     },
     {
-      "ts": "2026-10-17T19:10:18+00:00",
+      "ts": "2026-10-17T20:47:36+00:00",
       "actor_role": "system",
       "actor_label": "system",
       "action": "evaluated",
@@ -5308,7 +5318,7 @@
       "note": "ihh 2026-10-17"
     },
     {
-      "ts": "2026-10-17T19:10:18+00:00",
+      "ts": "2026-10-17T20:47:36+00:00",
       "actor_role": "system",
       "actor_label": "system",
       "action": "scored",

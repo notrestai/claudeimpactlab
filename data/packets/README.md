@@ -1,8 +1,8 @@
 # Referral packets go here (never in git)
 
-Download the 11 de-identified packets from the event's Google Drive folder
-(https://drive.google.com/drive/folders/1ISmUtoNCTW3NJNqCQJHJzb6C319RgrXM), choose **Download all**,
-unzip, and move `R01.pdf` to `R11.pdf` into this folder.
+Run `python3 scripts/fetch_packets.py` from the repo root. It downloads the 11 de-identified packets from
+the event's Google Drive folder (https://drive.google.com/drive/folders/1ISmUtoNCTW3NJNqCQJHJzb6C319RgrXM)
+into this folder. By hand: open the folder, choose **Download all**, unzip, and move `R01.pdf` to `R11.pdf` here.
 
 Rules from the event ground rules:
 

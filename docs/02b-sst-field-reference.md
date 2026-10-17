@@ -77,7 +77,7 @@ Why recuperative care is being requested (IHH general criteria GEN-1 to GEN-3).
 | Field | Type | Supplied by | Feeds rules | Checklist docs | Patient view | Meaning |
 |---|---|---|---|---|---|---|
 | `housing_situation` | one of: unhoused, at_risk, inadequate_environment, housed | hospital | GEN-1, FORM-M1 | DOC-1, DOC-4 | yes | Housing status as documented |
-| `too_ill_to_recover_outside` | bool | hospital | GEN-1, GEN-2 | DOC-4, DOC-5 |  | Too ill or frail to recover on the street or in a shelter |
+| `too_ill_to_recover_outside` | bool | hospital | GEN-1, GEN-2 | DOC-4, DOC-5 |  | Too ill or frail to recover on the street or in a shelter, as a clinician states it about this patient (a form's eligibility wording does not count) |
 | `lives_alone_no_supports` | bool | hospital | GEN-2 | DOC-4 |  | Lives alone with no formal supports |
 | `readmission_risk` | bool | hospital | GEN-3 | DOC-4, DOC-5 |  | At risk of hospitalization or re-hospitalization |
 
@@ -134,7 +134,7 @@ Psychiatric stability and the behaviours IHH cannot accept.
 | `suicidal_ideation` | bool | hospital | MH-2 | DOC-4, DOC-5 |  | Current suicidal ideation |
 | `command_hallucinations` | bool | hospital | MH-3 | DOC-4, DOC-5 |  | Commanding auditory or visual hallucinations |
 | `conservatorship_or_fsp` | bool | hospital | MH-5 | DOC-4 |  | Under, qualifies for, or history of conservatorship or Full Service Partnership |
-| `aggressive_toward_staff_or_patients` | bool | hospital | OTH-1, FORM-X7 | DOC-5, DOC-8 |  | Verbal or physical aggression documented |
+| `aggressive_toward_staff_or_patients` | bool | hospital | OTH-1, FORM-X7 | DOC-5, DOC-8 |  | Verbal or physical aggression toward staff or other patients documented during this stay. A danger-to-others hold or threats toward family before admission are not this; leave cant_tell and note them for a person to judge |
 | `psychiatry_consult_present` | bool | hospital | MH-1 | DOC-5 |  | A psychiatry consult is in the packet |
 
 ### substance_use

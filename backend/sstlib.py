@@ -206,6 +206,46 @@ def _clean_for_output(node):
     return out
 
 
+def _prune_defs(node: dict, defs: dict) -> dict:
+    """Keep only the $defs the node reaches through $ref (transitively). The API compiles every definition it is
+    given into the output grammar; sending all 47 SST definitions on every call made the grammar too large."""
+    keep: set[str] = set()
+
+    def walk(n):
+        if isinstance(n, dict):
+            ref = n.get("$ref")
+            if isinstance(ref, str) and ref.startswith("#/$defs/"):
+                name = ref[len("#/$defs/"):]
+                if name not in keep and name in defs:
+                    keep.add(name)
+                    walk(defs[name])
+            for v in n.values():
+                walk(v)
+        elif isinstance(n, list):
+            for v in n:
+                walk(v)
+
+    walk(node)
+    return {k: defs[k] for k in defs if k in keep}
+
+
+# Bookkeeping the extractor never needs to produce; the pipeline fills them after the call (extract._postprocess).
+OUTPUT_DROP = {"Field_": ("updated_by", "updated_at"), "Evidence": ("source", "ref", "timestamp")}
+
+
+def _slim_defs(defs: dict) -> dict:
+    """Drop the bookkeeping properties from Field_* and Evidence so the output grammar stays small."""
+    out = {}
+    for name, d in defs.items():
+        drop = OUTPUT_DROP["Field_"] if name.startswith("Field_") else OUTPUT_DROP.get(name, ())
+        if drop and isinstance(d, dict) and "properties" in d:
+            d = dict(d)
+            d["properties"] = {k: v for k, v in d["properties"].items() if k not in drop}
+            d["required"] = [r for r in d.get("required", []) if r not in drop]
+        out[name] = d
+    return out
+
+
 def section_schema(section: str) -> dict:
     """A self-contained schema for one top-level SST section, for Claude's structured output."""
     schema = load_schema()
@@ -215,7 +255,7 @@ def section_schema(section: str) -> dict:
         "properties": {section: sec},
         "required": [section],
         "additionalProperties": False,
-        "$defs": schema["$defs"],
+        "$defs": _slim_defs(_prune_defs(sec, schema["$defs"])),
     })
 
 
@@ -227,7 +267,7 @@ def defs_schema(def_name: str, wrap_key: str | None = None, as_array: bool = Fal
     key = wrap_key or def_name.lower()
     return _clean_for_output({
         "type": "object", "properties": {key: body}, "required": [key], "additionalProperties": False,
-        "$defs": schema["$defs"],
+        "$defs": _prune_defs(body, schema["$defs"]),
     })
 
 

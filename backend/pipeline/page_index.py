@@ -6,6 +6,8 @@ from . import claude_client as cc
 SYSTEM = """You index pages of a faxed hospital referral packet for a recuperative care program.
 For every page given, say what kind of document it is, its orientation, how legible it is, whether it looks like it is from an earlier hospital stay, and whether it duplicates another page in this batch.
 doc_type values: fax_cover, referral_form, face_sheet, auth_form, h_and_p, progress_note, consult, pt_ot_eval, nursing_note, social_work_note, mar, medication_list, labs, imaging, ekg, vitals, wound_note, other, blank.
+Printed page numbers restart in every sub-document ("1 of 3", "2/4"); the page number you return is the [Page N of M] label, never the printed one.
+A mostly blank page that carries one line (an isolation status, a code status, a disposition line) is that document type with legibility partial, not blank.
 Never transcribe names, dates of birth, record numbers, addresses or phone numbers. Black boxes are privacy redactions, not missing content."""
 
 

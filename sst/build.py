@@ -96,7 +96,7 @@ FIELDS = [
 
     # ---- housing / basis ----
     F("housing.housing_situation", "enum:unhoused|at_risk|inadequate_environment|housed", "hospital", ["GEN-1", "FORM-M1"], ["DOC-1", "DOC-4"], True, "Housing status as documented"),
-    F("housing.too_ill_to_recover_outside", "bool", "hospital", ["GEN-1", "GEN-2"], ["DOC-4", "DOC-5"], False, "Too ill or frail to recover on the street or in a shelter"),
+    F("housing.too_ill_to_recover_outside", "bool", "hospital", ["GEN-1", "GEN-2"], ["DOC-4", "DOC-5"], False, "Too ill or frail to recover on the street or in a shelter, as a clinician states it about this patient (a form's eligibility wording does not count)"),
     F("housing.lives_alone_no_supports", "bool", "hospital", ["GEN-2"], ["DOC-4"], False, "Lives alone with no formal supports"),
     F("housing.readmission_risk", "bool", "hospital", ["GEN-3"], ["DOC-4", "DOC-5"], False, "At risk of hospitalization or re-hospitalization"),
 
@@ -138,7 +138,7 @@ FIELDS = [
     F("mental_health.suicidal_ideation", "bool", "hospital", ["MH-2"], ["DOC-4", "DOC-5"], False, "Current suicidal ideation"),
     F("mental_health.command_hallucinations", "bool", "hospital", ["MH-3"], ["DOC-4", "DOC-5"], False, "Commanding auditory or visual hallucinations"),
     F("mental_health.conservatorship_or_fsp", "bool", "hospital", ["MH-5"], ["DOC-4"], False, "Under, qualifies for, or history of conservatorship or Full Service Partnership"),
-    F("mental_health.aggressive_toward_staff_or_patients", "bool", "hospital", ["OTH-1", "FORM-X7"], ["DOC-5", "DOC-8"], False, "Verbal or physical aggression documented"),
+    F("mental_health.aggressive_toward_staff_or_patients", "bool", "hospital", ["OTH-1", "FORM-X7"], ["DOC-5", "DOC-8"], False, "Verbal or physical aggression toward staff or other patients documented during this stay. A danger-to-others hold or threats toward family before admission are not this; leave cant_tell and note them for a person to judge"),
     F("mental_health.psychiatry_consult_present", "bool", "hospital", ["MH-1"], ["DOC-5"], False, "A psychiatry consult is in the packet"),
 
     # ---- substance use ----

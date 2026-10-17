@@ -1,20 +1,42 @@
 """Exercise the LIVE code path (page images, section schemas, post-processing, merge, analyze, summary,
 conversations) with a stand-in for the Claude call. Catches plumbing bugs before the first real run."""
 import os, sys, pathlib, json
+import pytest
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
-os.environ["SST_MOCK"] = "0"
-os.environ["ANTHROPIC_API_KEY"] = "test-stand-in"
 from backend import sstlib, store
 from backend.pipeline import claude_client as cc, ingest, page_index, extract, analyze, summary, conversations, gaps
 import jsonschema
 
-store.DB_PATH = ROOT / "data" / "test-live.sqlite"
-if store.DB_PATH.exists():
-    store.DB_PATH.unlink()
-store.init_db()
 EX = sstlib.load_example()
 CALLS = []
+
+
+@pytest.fixture(autouse=True)
+def live_path(monkeypatch):
+    """Pretend a key exists and swap the Claude call for the stand-in, for this module only.
+    Module-level side effects would leak into test_core (which runs in mock mode)."""
+    monkeypatch.setenv("SST_MOCK", "0")
+    monkeypatch.setenv("SST_API_KEY", "test-stand-in")
+    monkeypatch.setattr(cc, "structured", fake_structured)
+    monkeypatch.setattr(store, "DB_PATH", ROOT / "data" / "test-live.sqlite")
+    if store.DB_PATH.exists():
+        store.DB_PATH.unlink()
+    store.init_db()
+    yield
+
+
+def strip_bookkeeping(node):
+    """What the model is asked for omits the bookkeeping the pipeline fills in afterwards (sstlib.OUTPUT_DROP)."""
+    if isinstance(node, list):
+        return [strip_bookkeeping(n) for n in node]
+    if isinstance(node, dict):
+        if "status" in node and "value" in node and "evidence" in node:
+            node = {k: v for k, v in node.items() if k not in sstlib.OUTPUT_DROP["Field_"]}
+            node["evidence"] = [{k: v for k, v in ev.items() if k not in sstlib.OUTPUT_DROP["Evidence"]} for ev in node["evidence"]]
+            return node
+        return {k: strip_bookkeeping(v) for k, v in node.items()}
+    return node
 
 
 def fake_structured(system, content, schema, **kw):
@@ -27,7 +49,7 @@ def fake_structured(system, content, schema, **kw):
     key = schema["required"][0]
     CALLS.append(key)
     if key in EX:
-        out = {key: json.loads(json.dumps(EX[key]))}
+        out = {key: strip_bookkeeping(json.loads(json.dumps(EX[key])))}
     elif key == "pages":
         pages = [int(b["text"].split()[1]) for b in content if b.get("type") == "text" and b["text"].startswith("[Page ")]
         out = {"pages": [{"page": n, "doc_type": "other", "orientation": "upright", "legibility": "good", "from_earlier_stay": False, "duplicate_of_page": None} for n in pages]}
@@ -44,9 +66,6 @@ def fake_structured(system, content, schema, **kw):
         raise AssertionError(f"unexpected schema key {key}")
     jsonschema.validate(out, schema)
     return out, {"input_tokens": 10, "cache_read_input_tokens": 5, "cache_creation_input_tokens": 0, "output_tokens": 3}, "fake-model"
-
-
-cc.structured = fake_structured
 
 
 def test_live_path_end_to_end():
