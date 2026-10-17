@@ -78,8 +78,8 @@ Python 3.13 and an Anthropic API key. No keys in the repo. Launch notes for rela
 | Part | Status |
 |---|---|
 | SST schema, blank record, IHH rule map, field reference (234 fields, 145 rules) | working |
-| Packet ingest and page index (Stage A) | working: pages render locally; the index is a Claude call |
-| Section extraction with evidence (Stage B) | working code; the live path is exercised on the real R01 with a stand-in model. A real model run still needs the key |
+| Packet ingest and page index (Stage A) | ran live on all 11 packets (`claude-sonnet-5-5`, one call per 10 pages) |
+| Section extraction with evidence (Stage B) | ran live on all 11 packets (`claude-opus-5-5`, one call per section, 20 per packet, shared cached page prefix); results in the tables below |
 | Rule evaluation, gaps, draft reply (Stage C) | working, deterministic, unit-tested on the fixture |
 | Readiness score (Stage E) | working, deterministic, unit-tested |
 | Analyze mode (Stage F) | working code with citation validator; mock answer without a key |
@@ -93,25 +93,81 @@ Python 3.13 and an Anthropic API key. No keys in the repo. Launch notes for rela
 
 ## Where it gets things wrong
 
-**Status at the 3:00 PM freeze: the live blind eval has not run yet.** The cloud session that built the
-pipeline never received an API key (the hosting strips `ANTHROPIC_API_KEY` by name; see "Try it"), so
-every live-path check so far used a stand-in for Claude. What is verified without a key:
+**Status at the 3:00 PM freeze: the live blind eval ran on all 11 packets.** 3 of 11 recommendations match
+IHH's decision outright, 5 are partial (we asked for more information where IHH decided, four of those
+approvals) and 3 disagree. The three disagreements are all packets IHH approved that the rules rejected on
+a hard stop: R03 on an ejection fraction of 21.5% read from the echo report (p17); R06 and R07 on cognitive
+impairment, a traumatic brain injury with encephalopathy (R06 p21, p28) and an acute metabolic
+encephalopathy with fluctuating mental status (R07 p19, p22, p27), plus BiPAP for probable sleep apnea that
+the patient refuses (R07 p22, p29). Those conditions are on the pages; the exclusion rules as written are
+stricter than IHH's own judgment on those packets. Nothing was tuned after seeing a decision.
 
-- All 11 packets download, render and index: 282 pages in total (R01 34, R02 22, R03 23, R04 18, R05 14,
-  R06 30, R07 30, R08 29, R09 30, R10 21, R11 31). Rendering takes about 2 seconds per packet.
-- The live code path (page images, strict per-section schemas, evidence gate, identifier scrub, merge,
-  analyze citation validator, conversation scrub) runs end to end on R01 with a stand-in model.
-- The eval harness refuses to run live without a key, so a mock run can never be mistaken for a result.
+The quality table shows every found value carries a page and a quote (the evidence gate downgrades any that
+do not), caching works (one to three million cached input tokens per packet; the page images are a shared
+prefix for the 20 section calls), and most fields in most packets are "not in packet", which is honest:
+the packets are thin. The first live attempt failed before reading a page because the per-section output
+schemas were too large for the API's constrained-output grammar, and the constrained calls also missed the
+cache (each schema becomes its own prefix). Section calls now ask for JSON in the prompt and validate it
+locally against the same schema.
+
+Misses found by comparing R01, R05 and R10 with the hand reviews, before the full run:
+
+- R01 (p2, p7, p8) and R05 (p1): bathing, dressing, toileting, eating, continence and "self-administers
+  medications" were filled from referral-form ticks with no chart support, which made ADL and medication
+  rules "met". Fixed in the prompt: a form tick alone is "can't tell", cited, with the form named in the note.
+- R05 (p9): a danger-to-others hold and threats toward a family member before admission were read as
+  aggression toward staff, a hard stop. Fixed in the field description and prompt: that is for a person to
+  judge; R05 moved from "likely ineligible" to "request information".
+- R10 (p4, p10): orientation was documented ("oriented to self only" versus "person and place") but the
+  rule checker ignored every field in conflict status, so it reported orientation as not documented. Fixed
+  in the evaluator: a conflict carries the extractor's best reading.
+- R01 (p4): "too ill to recover outside" was taken from the authorization form's own eligibility wording.
+  Fixed in the prompt and field description. The housing basis rule now reads "can't tell" on R01 where the
+  hand review expected it met from the homelessness diagnosis (p10), and on R10 the extractor became more
+  cautious about "no supports" (p4, p6, p17) than the hand review. Both are open.
+- Page index: R01's rotated MAR pages (p11-30) are grouped by rotation differently from the hand review, and
+  the vitals grid (p24-25) and the code legends (p28-30) are labelled MAR. The section calls read the pages
+  anyway.
 
 Hand reviews of R01, R05 and R10, written before any model saw them, are in [`eval/hand-review/`](eval/hand-review/).
 They list what the rule checker should find, where the form and the chart disagree, and the traps for an
 extractor (sideways pages, earlier-stay documents, ticked boxes contradicted deeper in the chart). The
 extraction prompt was updated from those traps. The first live run should be compared against them.
 
-The tables below are written by `python3 backend/eval/run_eval.py --readme` and are empty until it runs.
+The tables below are written by `python3 backend/eval/run_eval.py --readme`.
 
 <!-- eval:start -->
-_Not run yet._
+| Packet | Pages | Our recommendation | Hard stops | Rules can't tell | Readiness | IHH decided | Agree | Errors |
+|---|---|---|---|---|---|---|---|---|
+| R01 | 34 | likely_ineligible | NEU-X4, FORM-X1 | 17 | 60 | deny | yes |  |
+| R02 | 22 | request_information |  | 20 | 72 | approve | partial |  |
+| R03 | 23 | likely_ineligible | CARD-5 | 18 | 63 | approve | NO |  |
+| R04 | 18 | request_information |  | 25 | 55 | approve | partial |  |
+| R05 | 14 | request_information |  | 23 | 60 | deny | partial |  |
+| R06 | 30 | likely_ineligible | NEU-X4, FORM-X1 | 23 | 58 | approve | NO |  |
+| R07 | 30 | likely_ineligible | RSP-X5, NEU-X4, FORM-X1 | 19 | 57 | approve | NO |  |
+| R08 | 29 | request_information |  | 18 | 57 | approve | partial |  |
+| R09 | 30 | likely_ineligible | MSK-X1, NEU-X3, NEU-X4, FORM-X1, FORM-X2 | 13 | 47 | deny | yes |  |
+| R10 | 21 | likely_ineligible | NEU-X4, FORM-X1 | 13 | 62 | deny | yes |  |
+| R11 | 31 | request_information |  | 21 | 63 | approve | partial |  |
+
+3 of 11 recommendations match IHH's decision outright; 5 are 'partial' (we asked for more information where IHH decided); 3 disagree or errored. The score is reported as is; nothing was tuned to a packet after seeing its decision.
+
+**Extraction quality** (234 schema fields; a found value without a page and quote is a quality-control failure)
+
+| Packet | Fields found | ...with page and quote | Not in packet | Can't tell | Redacted | Conflict | Seconds | Cached input tokens |
+|---|---|---|---|---|---|---|---|---|
+| R01 | 66 | 66 | 133 | 22 | 10 | 3 | 243 | 3,045,455 |
+| R02 | 90 | 90 | 102 | 23 | 15 | 4 | 211 | 992,223 |
+| R03 | 61 | 61 | 142 | 18 | 8 | 5 | 195 | 1,009,727 |
+| R04 | 78 | 78 | 113 | 24 | 12 | 7 | 186 | 818,546 |
+| R05 | 63 | 63 | 145 | 14 | 12 | 0 | 158 | 1,802,689 |
+| R06 | 76 | 76 | 114 | 26 | 13 | 5 | 307 | 1,265,311 |
+| R07 | 88 | 88 | 112 | 21 | 10 | 3 | 233 | 1,274,031 |
+| R08 | 90 | 90 | 110 | 19 | 11 | 4 | 221 | 1,244,479 |
+| R09 | 102 | 102 | 106 | 11 | 10 | 5 | 264 | 1,265,311 |
+| R10 | 45 | 45 | 169 | 9 | 6 | 5 | 162 | 2,461,644 |
+| R11 | 85 | 85 | 107 | 26 | 11 | 5 | 291 | 1,316,268 |
 <!-- eval:end -->
 
 Known limits: dates are blacked out in the event packets, so every rule that needs hours (24 h insulin,
