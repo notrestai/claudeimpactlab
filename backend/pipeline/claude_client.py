@@ -7,8 +7,21 @@ MODEL_MAIN = os.environ.get("SST_MODEL", "claude-opus-5-5")
 MODEL_FAST = os.environ.get("SST_MODEL_FAST", "claude-sonnet-5-5")
 
 
+# The key is read from the first of these that is set. Some hosted sandboxes drop ANTHROPIC_API_KEY from the
+# environment by name (Claude Code sessions authenticate through the account), so SST_API_KEY is the fallback.
+API_KEY_VARS = ("ANTHROPIC_API_KEY", "SST_API_KEY")
+
+
+def api_key() -> str | None:
+    for name in API_KEY_VARS:
+        v = os.environ.get(name)
+        if v:
+            return v
+    return None
+
+
 def mock_mode() -> bool:
-    return os.environ.get("SST_MOCK") == "1" or not os.environ.get("ANTHROPIC_API_KEY")
+    return os.environ.get("SST_MOCK") == "1" or not api_key()
 
 
 class ClaudeError(RuntimeError):
@@ -22,7 +35,7 @@ def client():
     global _client
     if _client is None:
         import anthropic
-        _client = anthropic.Anthropic(max_retries=2, timeout=600)
+        _client = anthropic.Anthropic(api_key=api_key(), max_retries=2, timeout=600)
     return _client
 
 

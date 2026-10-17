@@ -1,20 +1,29 @@
 """Exercise the LIVE code path (page images, section schemas, post-processing, merge, analyze, summary,
 conversations) with a stand-in for the Claude call. Catches plumbing bugs before the first real run."""
 import os, sys, pathlib, json
+import pytest
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
-os.environ["SST_MOCK"] = "0"
-os.environ["ANTHROPIC_API_KEY"] = "test-stand-in"
 from backend import sstlib, store
 from backend.pipeline import claude_client as cc, ingest, page_index, extract, analyze, summary, conversations, gaps
 import jsonschema
 
-store.DB_PATH = ROOT / "data" / "test-live.sqlite"
-if store.DB_PATH.exists():
-    store.DB_PATH.unlink()
-store.init_db()
 EX = sstlib.load_example()
 CALLS = []
+
+
+@pytest.fixture(autouse=True)
+def live_path(monkeypatch):
+    """Pretend a key exists and swap the Claude call for the stand-in, for this module only.
+    Module-level side effects would leak into test_core (which runs in mock mode)."""
+    monkeypatch.setenv("SST_MOCK", "0")
+    monkeypatch.setenv("SST_API_KEY", "test-stand-in")
+    monkeypatch.setattr(cc, "structured", fake_structured)
+    monkeypatch.setattr(store, "DB_PATH", ROOT / "data" / "test-live.sqlite")
+    if store.DB_PATH.exists():
+        store.DB_PATH.unlink()
+    store.init_db()
+    yield
 
 
 def fake_structured(system, content, schema, **kw):
@@ -44,9 +53,6 @@ def fake_structured(system, content, schema, **kw):
         raise AssertionError(f"unexpected schema key {key}")
     jsonschema.validate(out, schema)
     return out, {"input_tokens": 10, "cache_read_input_tokens": 5, "cache_creation_input_tokens": 0, "output_tokens": 3}, "fake-model"
-
-
-cc.structured = fake_structured
 
 
 def test_live_path_end_to_end():
