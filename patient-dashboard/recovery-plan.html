@@ -1,0 +1,673 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Recovery Plan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: one phone-width column read top to bottom. Status first, then what is missing, what is ready to leave, questions, help. */
+:root {
+  --bg: #F2F5F1;
+  --surface: #FFFFFF;
+  --ink: #13231E;
+  --muted: #4E5F58;
+  --line: #D3DCD5;
+  --accent: #0B6B58;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #DFEEE8;
+  --wait-bg: #E8ECE9; --wait-fg: #3B4843;
+  --work-bg: #FBEED3; --work-fg: #864C00;
+  --good-bg: #DCF0E2; --good-fg: #17663A;
+  --bad-bg: #F7DFDB;  --bad-fg: #992E24;
+  --font: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --fs-small: 0.9375rem;
+  --fs-body: 1.125rem;
+  --fs-h2: 1.375rem;
+  --fs-hero: clamp(1.625rem, 6vw, 2.125rem);
+  --radius: 16px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1613; --surface: #16211D; --ink: #E5EEE9; --muted: #9DAEA7; --line: #2C3934;
+    --accent: #52C3A9; --accent-ink: #0B1C17; --accent-soft: #173A31;
+    --wait-bg: #24302B; --wait-fg: #C3D0CA;
+    --work-bg: #3A2A0E; --work-fg: #F3BC5E;
+    --good-bg: #143021; --good-fg: #86D7A0;
+    --bad-bg: #3C1B17;  --bad-fg: #F3A196;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1613; --surface: #16211D; --ink: #E5EEE9; --muted: #9DAEA7; --line: #2C3934;
+  --accent: #52C3A9; --accent-ink: #0B1C17; --accent-soft: #173A31;
+  --wait-bg: #24302B; --wait-fg: #C3D0CA;
+  --work-bg: #3A2A0E; --work-fg: #F3BC5E;
+  --good-bg: #143021; --good-fg: #86D7A0;
+  --bad-bg: #3C1B17;  --bad-fg: #F3A196;
+  color-scheme: dark;
+}
+
+body { background: var(--bg); color: var(--ink); font-family: var(--font); font-size: var(--fs-body); line-height: 1.5; }
+.wrap {
+  max-width: 36rem; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 48px;
+  display: flex; flex-direction: column; gap: 32px;
+}
+svg.i { width: 24px; height: 24px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* Top bar */
+.top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.brand { display: flex; align-items: center; gap: 10px; margin: 0; font-weight: 700; }
+.brand svg { color: var(--accent); }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; }
+.seg { display: inline-flex; padding: 3px; border: 2px solid var(--line); border-radius: 12px; background: var(--surface); }
+.seg button {
+  font: inherit; font-size: var(--fs-small); font-weight: 700; min-height: 44px; padding: 0 14px;
+  border: 0; border-radius: 9px; background: transparent; color: var(--muted); cursor: pointer;
+}
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.btn {
+  font: inherit; font-size: var(--fs-small); font-weight: 700; min-height: 54px; padding: 0 16px;
+  display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+  border: 2px solid var(--accent); border-radius: 12px; background: var(--surface); color: var(--accent);
+}
+.btn[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.btn svg.i { width: 22px; height: 22px; }
+
+/* Notice line */
+.notice { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: -16px; }
+
+/* Chips: state is carried by color and by the label */
+.chip {
+  display: inline-flex; align-items: center; gap: 7px; padding: 4px 12px; border-radius: 999px;
+  font-size: var(--fs-small); font-weight: 700; line-height: 1.35;
+}
+.chip::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex: none; }
+.tone-wait { background: var(--wait-bg); color: var(--wait-fg); }
+.tone-work { background: var(--work-bg); color: var(--work-fg); }
+.tone-good { background: var(--good-bg); color: var(--good-fg); }
+.tone-bad  { background: var(--bad-bg);  color: var(--bad-fg); }
+.tone-you  { background: var(--accent); color: var(--accent-ink); }
+
+/* Status card */
+.hero {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 22px 20px; display: flex; flex-direction: column; gap: 20px;
+}
+.hero-head { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.hero h1 { margin: 0; font-size: var(--fs-hero); line-height: 1.2; text-wrap: balance; }
+.lead { margin: 0; max-width: 60ch; }
+
+.track { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); }
+.step { position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; font-size: var(--fs-small); color: var(--muted); padding: 0 4px; }
+.step::before { content: ""; position: absolute; top: 13px; right: 50%; width: 100%; height: 3px; background: var(--line); }
+.step:first-child::before { display: none; }
+.step.done::before, .step.current::before, .step.bad::before, .step.stopped::before { background: var(--accent); }
+.dot {
+  position: relative; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center;
+  border: 3px solid var(--line); background: var(--surface); color: var(--accent-ink);
+}
+.dot svg.i { width: 16px; height: 16px; stroke-width: 3; }
+.step.done .dot { background: var(--accent); border-color: var(--accent); }
+.step.current .dot { border-color: var(--accent); }
+.step.current .dot::after { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); }
+.step.bad .dot { background: var(--bad-fg); border-color: var(--bad-fg); color: var(--surface); }
+.step.stopped .dot { background: var(--wait-fg); border-color: var(--wait-fg); }
+.step.current, .step.bad, .step.done:last-child { color: var(--ink); font-weight: 700; }
+
+.programs { display: flex; flex-direction: column; gap: 16px; padding-top: 18px; border-top: 1px solid var(--line); }
+.program { display: flex; gap: 14px; align-items: flex-start; }
+.tile { flex: none; width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); }
+.program-body { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.program-name { font-weight: 700; }
+.program-what { color: var(--muted); }
+
+.facts { margin: 0; padding-top: 18px; border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap: 14px; }
+.fact { min-width: 0; }
+.fact dt { font-size: var(--fs-small); color: var(--muted); }
+.fact dd { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+#main { display: flex; flex-direction: column; gap: 32px; }
+
+/* Sections */
+section { display: flex; flex-direction: column; gap: 12px; }
+h2 { display: flex; align-items: center; gap: 10px; margin: 0; font-size: var(--fs-h2); line-height: 1.25; text-wrap: balance; }
+h2 svg.i { color: var(--accent); width: 26px; height: 26px; }
+.sub { margin: 0; color: var(--muted); max-width: 60ch; }
+
+.rows { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 14px; padding: 16px 18px; }
+.row + .row { border-top: 1px solid var(--line); }
+.row-main { min-width: 0; flex: 1 1 13rem; display: flex; flex-direction: column; gap: 2px; }
+.row-title { font-weight: 700; }
+.row-meta { font-size: var(--fs-small); color: var(--muted); }
+.row-value { font-weight: 700; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.empty { padding: 16px 18px; margin: 0; color: var(--muted); }
+
+.questions { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.q { align-self: flex-start; max-width: 60ch; padding: 14px 18px; border-radius: 18px 18px 18px 4px; background: var(--accent-soft); font-weight: 700; }
+
+.help { display: flex; gap: 14px; align-items: flex-start; padding: 18px; border-radius: var(--radius); background: var(--wait-bg); }
+.help .tile { background: var(--surface); }
+.help p { margin: 0; }
+.help-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+
+/* Staff footer */
+.staff { border-top: 1px solid var(--line); padding-top: 20px; display: flex; flex-direction: column; gap: 12px; font-size: var(--fs-small); color: var(--muted); }
+.staff h2 { font-size: var(--fs-body); color: var(--ink); }
+.staff p { margin: 0; }
+.staff-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn-quiet { min-height: 48px; border-color: var(--line); color: var(--ink); }
+input[type="file"]:focus-visible + label { outline: 3px solid var(--accent); outline-offset: 2px; }
+#fileMsg:empty { display: none; }
+#fileMsg { color: var(--bad-fg); font-weight: 700; }
+code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 0.9em; overflow-wrap: anywhere; }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10"/><path d="M12 12.5v5M9.5 15h5"/></symbol>
+  <symbol id="i-bed" viewBox="0 0 24 24"><path d="M3 6v13M3 15h18v4M21 15v-3a3 3 0 0 0-3-3h-7v6"/><circle cx="7" cy="11.5" r="1.8"/></symbol>
+  <symbol id="i-clip" viewBox="0 0 24 24"><rect x="5.5" y="4.5" width="13" height="16" rx="2"/><path d="M9 3.5h6v3H9zM9 11h6M9 15h4"/></symbol>
+  <symbol id="i-exit" viewBox="0 0 24 24"><path d="M10 4H5v16h5"/><path d="M9 12h11M16 8l4 4-4 4"/></symbol>
+  <symbol id="i-talk" viewBox="0 0 24 24"><path d="M4 5h16v11H10l-6 4V5z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01" stroke-width="3"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h3.5l2 5-2.5 1.5a11 11 0 0 0 5.5 5.5l1.5-2.5 5 2V19a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/></symbol>
+  <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M7 7l10 10M17 7 7 17"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3.5H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8.5z"/><path d="M14 3.5v5h5"/></symbol>
+</svg>
+
+<div class="wrap">
+  <header class="top">
+    <p class="brand"><svg class="i" aria-hidden="true"><use href="#i-home"/></svg><span id="appName">My recovery plan</span></p>
+    <div class="controls">
+      <div class="seg" role="group" id="langGroup" aria-label="Language">
+        <button type="button" id="lang-es" data-lang="es" lang="es">Español</button>
+        <button type="button" id="lang-en" data-lang="en" lang="en">English</button>
+      </div>
+      <button type="button" class="btn" id="listen" aria-pressed="false" hidden>
+        <svg class="i" aria-hidden="true"><use href="#i-sound"/></svg><span>Listen</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main"></main>
+
+  <footer class="staff" id="staff"></footer>
+</div>
+
+<script type="application/json" id="sst-example">{"meta":{"sst_version":"0.1","referral_id":"EXAMPLE-FICTIONAL-001","created_at":"2026-10-17T10:00:00-07:00","updated_at":"2026-10-17T10:45:00-07:00","fictional":true,"packet":{"source_file":null,"page_count":6,"pages":[{"page":1,"doc_type":"fax_cover","orientation":"upright","legibility":"good","from_earlier_stay":false,"duplicate_of_page":null},{"page":2,"doc_type":"referral_form","orientation":"upright","legibility":"good","from_earlier_stay":false,"duplicate_of_page":null},{"page":3,"doc_type":"h_and_p","orientation":"upright","legibility":"partial","from_earlier_stay":false,"duplicate_of_page":null},{"page":4,"doc_type":"pt_ot_eval","orientation":"rotated_90","legibility":"good","from_earlier_stay":false,"duplicate_of_page":null},{"page":5,"doc_type":"labs","orientation":"upright","legibility":"good","from_earlier_stay":false,"duplicate_of_page":null},{"page":6,"doc_type":"mar","orientation":"upright","legibility":"poor","from_earlier_stay":false,"duplicate_of_page":null}]},"parties":{"hospital":{"label":"Referring hospital (fictional)","contact_role":"case_manager"},"patient":{"label":"Patient"},"providers":[{"provider_id":"ihh","name":"Illumination Health + Home","status":"reviewing","updated_at":"2026-10-17T10:45:00-07:00"}]}},"documents":{"doc_1_referral_form":{"value":true,"status":"found","evidence":[{"source":"packet","page":2,"doc_type":"referral_form","ref":null,"timestamp":null,"quote":"Recuperative Care Referral Form"}],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"doc_2_demographics":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"doc_3_authorization":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"doc_4_history_and_physical":{"value":true,"status":"found","evidence":[{"source":"packet","page":3,"doc_type":"h_and_p","ref":null,"timestamp":null,"quote":"HISTORY AND PHYSICAL"}],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"doc_5_progress_notes":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"doc_6_vitals_last_24h":{"value":false,"status":"not_in_packet","evidence":[],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"doc_7_medication_list":{"value":true,"status":"found","evidence":[{"source":"packet","page":6,"doc_type":"mar","ref":null,"timestamp":null,"quote":"Medication Administration Record"}],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"doc_8_pt_ot_or_nursing_notes":{"value":true,"status":"found","evidence":[{"source":"packet","page":4,"doc_type":"pt_ot_eval","ref":null,"timestamp":null,"quote":"Physical Therapy Evaluation"}],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"doc_9_cultures":{"value":false,"status":"not_in_packet","evidence":[],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":"Infection case; cultures not sent"},"doc_10_meds_30_day_supply":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}},"referral":{"referring_facility":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"referring_unit":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"referrer_role":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"source_setting":{"value":"inpatient","status":"found","evidence":[{"source":"packet","page":3,"doc_type":"h_and_p","ref":null,"timestamp":null,"quote":"admitted to medicine floor"}],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"chief_complaint_or_admitting_dx":{"value":"Left lower leg cellulitis","status":"found","evidence":[{"source":"packet","page":3,"doc_type":"h_and_p","ref":null,"timestamp":null,"quote":"CC: left lower extremity cellulitis"}],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"admit_date":{"value":null,"status":"redacted","evidence":[],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":"Blacked out for privacy"},"anticipated_discharge_date":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"length_of_stay_authorized_days":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"insurance_plan":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"authorization_status":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"sent_to_other_providers":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}},"patient":{"age_years":{"value":58,"status":"conflict","evidence":[{"source":"packet","page":2,"doc_type":"referral_form","ref":null,"timestamp":null,"quote":"Age: 58"}],"conflicts":[{"page":3,"doc_type":"h_and_p","quote":"57 y/o","value":"57"}],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"gender":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"preferred_language":{"value":"Spanish","status":"entered","evidence":[],"conflicts":[],"confidence":"high","updated_by":"patient","updated_at":"2026-10-17T10:30:00-07:00","note":null},"interpreter_needed":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"has_phone":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"has_car":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"service_animal":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"hospice_enrolled":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"four_plus_homeless_episodes_3y":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}},"housing":{"housing_situation":{"value":"unhoused","status":"found","evidence":[{"source":"packet","page":2,"doc_type":"referral_form","ref":null,"timestamp":null,"quote":"Currently unhoused: Yes"}],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"too_ill_to_recover_outside":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"lives_alone_no_supports":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"readmission_risk":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}},"function":{"adls":{"bathing":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"gathers_supplies_and_transfers_to_shower":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"dressing":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"toileting":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"eating":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"hygiene_independent":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}},"continence":{"bowel_bladder_continent":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"uses_briefs":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"ostomy":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"foley_catheter":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"can_empty_catheter_bag":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"self_catheterizes":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}},"mobility":{"ambulatory":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"ambulation_distance_ft":{"value":150,"status":"found","evidence":[{"source":"packet","page":4,"doc_type":"pt_ot_eval","ref":null,"timestamp":null,"quote":"ambulated 150 ft with FWW, mod I"}],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"ambulation_assist_level":{"value":"modified_independent","status":"found","evidence":[{"source":"packet","page":4,"doc_type":"pt_ot_eval","ref":null,"timestamp":null,"quote":"mod I"}],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"dme_type":{"value":["front wheeled walker"],"status":"found","evidence":[{"source":"packet","page":4,"doc_type":"pt_ot_eval","ref":null,"timestamp":null,"quote":"FWW"}],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"dme_independent":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"wheelchair_dependent":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"transfers_independent":{"value":true,"status":"found","evidence":[{"source":"packet","page":4,"doc_type":"pt_ot_eval","ref":null,"timestamp":null,"quote":"transfers: independent"}],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"weight_bearing_status":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"pt_ot_recommendation":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}}},"cognition":{"orientation":{"value":"AOx4","status":"found","evidence":[{"source":"packet","page":3,"doc_type":"h_and_p","ref":null,"timestamp":null,"quote":"A&O x4"}],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"cognitive_impairment":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"forgetful_flag":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"can_self_administer_meds":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"can_self_administer_insulin":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"can_receive_education":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"understands_glucometer":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}},"mental_health":{"psychiatric_diagnoses":{"value":[],"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"stable_on_medications":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"suicidal_ideation":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"command_hallucinations":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"conservatorship_or_fsp":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"aggressive_toward_staff_or_patients":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"psychiatry_consult_present":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}},"substance_use":{"admitted_with_acute_alcohol_intoxication":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"hours_since_intoxication_admission":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"ciwa_latest_score":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"withdrawal_signs":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"detox_noncompliance_or_refusal_to_abstain":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"active_substances":{"value":[],"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}},"safety_legal":{"registered_sex_offender":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"offense_involved_violence":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}},"infection_control":{"mrsa_swab_result":{"value":null,"status":"not_in_packet","evidence":[],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"covid_test_result":{"value":null,"status":"not_in_packet","evidence":[],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"covid_test_within_24h_of_admission":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"isolation_status":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"tb_screen_result":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"c_diff":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"active_infection_cleared_by_physician":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}},"medications":{"list_present":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"medication_count":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"high_risk_categories":{"value":[],"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"insulin_regimen":{"value":false,"status":"found","evidence":[{"source":"packet","page":6,"doc_type":"mar","ref":null,"timestamp":null,"quote":"metformin 1000 mg PO BID"}],"conflicts":[],"confidence":"medium","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"insulin_pump":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"insulin_started_less_than_24h_before_admission":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"oral_diabetes_meds":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"anticoagulant":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"iv_medications_ongoing_at_discharge":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"iv_antihypertensive_last_24h":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"self_administers_all_meds":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"thirty_day_supply_arranged":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}},"lines_devices_oxygen":{"iv_access":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"oxygen_required":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"oxygen_flow_lpm":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"oxygen_continuous":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"baseline_spo2_room_air":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"cpap":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"bipap":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"tracheostomy":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"dialysis":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"external_fixation_device":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"breathing_treatments":{"value":[],"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"respiratory_therapy_notes_present":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}},"wounds":{"any_wounds":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"items":{"value":[],"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"patient_independent_with_wound_care":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}},"vitals":{"sets":{"value":[],"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"set_count":{"value":0,"status":"not_in_packet","evidence":[],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"sepsis_signs":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"bp_stable_on_oral_meds_24h":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"spo2_stable_at_baseline":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}},"labs":{"glucose_readings":{"value":[],"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"glucose_reading_count":{"value":2,"status":"found","evidence":[{"source":"packet","page":5,"doc_type":"labs","ref":null,"timestamp":null,"quote":"POC glucose 162, 148"}],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"glucose_trend":{"value":"insufficient_data","status":"cant_tell","evidence":[],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":"Only 2 readings; rule asks for 5"},"hypoglycemia_last_week":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"a1c":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"dka_status":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"troponin_results":{"value":[],"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"troponin_count":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"troponin_negative_count":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"cultures":{"value":[],"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"wbc_latest":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"inr_latest":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"hemoglobin_hematocrit_normal":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}},"imaging_cardiac":{"chest_imaging_present":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"chest_imaging_impression":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"ekg_present":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"ekg_impression":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"ejection_fraction_percent":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"ef_is_patient_baseline":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"unstable_arrhythmia":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"atrial_fibrillation":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}},"conditions":{"primary_diagnosis":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"problem_list":{"value":[],"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"flags":{"stroke_with_residual_deficit":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"new_onset_seizure_with_deficit":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"tbi_severity":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"spinal_fusion":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"immediately_post_neurosurgery":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"pulmonary_embolism":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"pneumothorax_or_hemothorax":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"open_fracture":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"osteomyelitis":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"recent_amputation_with_wounds":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"jaw_wired":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"decompensated_cirrhosis":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"recent_gi_bleed_or_varices":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"immediately_post_parathyroidectomy":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"alcoholic_ketoacidosis":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"recent_heart_attack":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"on_chemotherapy":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"post_cabg_or_valve_surgery":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"hypertension_uncontrolled_or_symptomatic":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"diabetes":{"value":true,"status":"found","evidence":[{"source":"packet","page":3,"doc_type":"h_and_p","ref":null,"timestamp":null,"quote":"PMH: DM2"}],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"active_infection":{"value":true,"status":"found","evidence":[{"source":"packet","page":3,"doc_type":"h_and_p","ref":null,"timestamp":null,"quote":"cellulitis"}],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"respiratory_illness":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"cardiac_condition":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}}},"disease_specific":{"diabetes":{"pcp_followup_within_7_days":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"written_glucose_treatment_plan":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}},"infection":{"location":{"value":"left lower leg","status":"found","evidence":[{"source":"packet","page":3,"doc_type":"h_and_p","ref":null,"timestamp":null,"quote":"left lower extremity"}],"conflicts":[],"confidence":"high","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":null},"on_oral_antibiotics":{"value":true,"status":"found","evidence":[{"source":"packet","page":6,"doc_type":"mar","ref":null,"timestamp":null,"quote":"cephalexin 500 mg PO"}],"conflicts":[],"confidence":"medium","updated_by":"extractor","updated_at":"2026-10-17T10:30:00-07:00","note":"MAR page is poorly legible"},"on_iv_antibiotics":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"can_self_administer_oral_antibiotics":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}},"respiratory":{"on_antibiotics_for_respiratory":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}},"cardiac":{"anticoag_independent_and_understands_inr":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}}},"arrangements":{"home_health_status":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"home_health_purpose":{"value":[],"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"wound_care_scheduled":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"pt_scheduled":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"hospice_arranged":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"pcp_followup_scheduled":{"value":true,"status":"entered","evidence":[{"source":"transcript","page":null,"doc_type":null,"ref":"CONV-1","timestamp":"00:03:10","quote":"the PCP follow-up is booked for next week"}],"conflicts":[],"confidence":"high","updated_by":"provider","updated_at":"2026-10-17T10:30:00-07:00","note":"Accepted from the hospital call transcript"},"specialty_followups":{"value":[],"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"oxygen_ordered_tank_ready_day_before":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null},"dialysis_schedule_confirmed":{"value":null,"status":"pending","evidence":[],"conflicts":[],"confidence":null,"updated_by":null,"updated_at":null,"note":null}},"eligibility":{"provider_id":"ihh","profile_version":"2026-10-17","evaluated_at":"2026-10-17T10:40:00-07:00","rules":[{"rule_id":"MOB-3","status":"met","basis":"PT documented 150 ft at modified independence with a walker.","sst_fields":["function.mobility.ambulation_distance_ft","function.mobility.ambulation_assist_level"],"evidence":[{"source":"packet","page":4,"doc_type":"pt_ot_eval","ref":null,"timestamp":null,"quote":"ambulated 150 ft with FWW, mod I"}],"confirmed_by":null,"confirmed_at":null},{"rule_id":"COG-2","status":"met","basis":"Alert and oriented x4 in the H&P.","sst_fields":["cognition.orientation"],"evidence":[{"source":"packet","page":3,"doc_type":"h_and_p","ref":null,"timestamp":null,"quote":"A&O x4"}],"confirmed_by":null,"confirmed_at":null},{"rule_id":"INF-1","status":"cant_tell","basis":"No MRSA swab result in the packet. Needed because the referral is from an inpatient stay.","sst_fields":["infection_control.mrsa_swab_result"],"evidence":[],"confirmed_by":null,"confirmed_at":null},{"rule_id":"ID-1","status":"cant_tell","basis":"No vital signs in the packet; rule asks for the last 5 sets.","sst_fields":["vitals.set_count","vitals.sepsis_signs"],"evidence":[],"confirmed_by":null,"confirmed_at":null},{"rule_id":"DM-1","status":"cant_tell","basis":"Only 2 glucose readings; rule asks for 5 consecutive readings showing improvement.","sst_fields":["labs.glucose_reading_count","labs.glucose_trend"],"evidence":[{"source":"packet","page":5,"doc_type":"labs","ref":null,"timestamp":null,"quote":"POC glucose 162, 148"}],"confirmed_by":null,"confirmed_at":null}],"hard_stops":[],"open_questions":[{"rule_id":"ID-Q2","question":"Were cultures performed? Please send results."}],"recommendation":"request_information","recommendation_rationale":"Function and cognition rules are met. Infection-control and diabetes documentation is missing, so the packet cannot be approved yet.","coordinator_decision":{"decision":null,"reason":null,"decided_by":null,"decided_at":null},"scores":{"computed_at":"2026-10-17T10:40:00-07:00","readiness":46,"band":"needs_documents","components":{"completeness":{"score":50,"present":4,"required":8,"missing_doc_ids":["DOC-2","DOC-3","DOC-6","DOC-9"]},"rule_coverage":{"score":40,"answerable":2,"applicable":5,"cant_tell_rule_ids":["INF-1","ID-1","DM-1"]},"rules_met":{"score":100,"met":2,"not_met":0,"not_met_rule_ids":[]},"arrangements":{"score":0,"confirmed":0,"needed":1,"pending_rule_ids":["DM-4"]},"hard_stop_count":0},"weights":{"completeness":0.3,"rule_coverage":0.3,"rules_met":0.3,"arrangements":0.1},"explanation":"Everything the packet does answer is in the patient's favour, but three of five applicable rules cannot be checked yet. The MRSA swab, five sets of vitals and three more glucose readings would move this to nearly ready.","top_actions":["G1: get the MRSA swab result","G2: get the last five sets of vital signs","G3: get five consecutive glucose readings"]}},"gaps":[{"id":"G1","what":"MRSA swab result","why_rule_ids":["INF-1"],"doc_ids":["DOC-9"],"sst_fields":["infection_control.mrsa_swab_result"],"who_can_supply":"hospital_nurse","status":"requested","requested_at":"2026-10-17T10:42:00-07:00","received_at":null,"draft_request_text":"Please send the documented MRSA nasal swab result for this patient.","note":null},{"id":"G2","what":"Last 5 sets of vital signs","why_rule_ids":["ID-1"],"doc_ids":["DOC-6"],"sst_fields":["vitals.sets"],"who_can_supply":"hospital_nurse","status":"open","requested_at":null,"received_at":null,"draft_request_text":"Please send the last five sets of vital signs.","note":null},{"id":"G3","what":"Three more consecutive glucose readings","why_rule_ids":["DM-1"],"doc_ids":["DOC-5"],"sst_fields":["labs.glucose_readings"],"who_can_supply":"hospital_nurse","status":"open","requested_at":null,"received_at":null,"draft_request_text":"Please send five consecutive point-of-care glucose readings.","note":null}],"conversations":[{"id":"CONV-1","kind":"hospital_call","participants":["provider","hospital"],"started_at":"2026-10-17T10:41:00-07:00","duration_seconds":240,"consent_confirmed":true,"consent_note":"Both parties agreed to dictation at the start of the call (fictional)","transcript_source":"browser_dictation","language":"en","transcript_text":"PROVIDER: Calling about the cellulitis referral. We are missing the MRSA swab. HOSPITAL: It was done, I will fax the result within the hour. PROVIDER: And the last five sets of vitals? HOSPITAL: Yes, sending those too. Also the PCP follow-up is booked for next week.","identifier_scrub":"passed","summary":"Hospital confirmed the MRSA swab was done and will fax the result within the hour, together with the last five sets of vitals. Primary care follow-up is booked.","extracted_items":[{"sst_path":"arrangements.pcp_followup_scheduled","proposed_value":"true","quote":"the PCP follow-up is booked for next week","timestamp":"00:03:10","status":"accepted","decided_by":"Referral coordinator"},{"sst_path":"infection_control.mrsa_swab_result","proposed_value":"pending","quote":"It was done, I will fax the result within the hour","timestamp":"00:00:45","status":"proposed","decided_by":null}],"follow_ups":[{"what":"Receive MRSA result by fax","owner_role":"hospital","due":"within the hour","gap_id":"G1"},{"what":"Receive five sets of vitals","owner_role":"hospital","due":"within the hour","gap_id":"G2"}],"status":"reviewed"}],"analyses":[{"id":"AN-1","ts":"2026-10-17T10:43:00-07:00","actor_role":"provider","mode":"briefing","question":null,"answer":"Fifty-eight-year-old with left lower leg cellulitis on oral antibiotics, walking 150 ft at modified independence with a walker and alert and oriented x4. Nothing in the record excludes admission. Three rules cannot be checked: no MRSA swab, no vital signs and only two glucose readings. The age differs between the referral form and the H&P.","cited_sst_paths":["referral.chief_complaint_or_admitting_dx","function.mobility.ambulation_distance_ft","cognition.orientation","infection_control.mrsa_swab_result","vitals.set_count","labs.glucose_reading_count","patient.age_years"],"cited_pages":[2,3,4,5],"unknowns":["MRSA swab result","Last five sets of vital signs","Three more glucose readings"],"model":"claude-opus-5-5"}],"patient_summary":{"language":"es","requires_staff_review":true,"reviewed_by":null,"reviewed_at":null,"where_things_stand":"Su hospital envió una solicitud a un programa de cuidado de recuperación. El programa está revisando. Faltan tres documentos del hospital.","what_is_still_needed":[{"what":"Resultado de la prueba de MRSA","who_is_getting_it":"Enfermería del hospital","status":"solicitado"},{"what":"Signos vitales recientes","who_is_getting_it":"Enfermería del hospital","status":"pendiente"},{"what":"Lecturas de glucosa","who_is_getting_it":"Enfermería del hospital","status":"pendiente"}],"your_options":[{"provider_name":"Illumination Health + Home","what_it_is":"Cuidado de recuperación: cama, comidas y seguimiento de salud por un tiempo corto","status":"en revisión"}],"questions_to_ask_your_team":["¿Ya enviaron el resultado de la prueba de MRSA?","¿Cuándo esperan una respuesta del programa?"]},"history":[{"ts":"2026-10-17T10:30:00-07:00","actor_role":"extractor","actor_label":"SST extractor","action":"extracted","path":"*","old_value":null,"new_value":null,"note":"Initial extraction from 6-page fictional packet"},{"ts":"2026-10-17T10:40:00-07:00","actor_role":"system","actor_label":"rules","action":"evaluated","path":"eligibility","old_value":null,"new_value":"request_information","note":"IHH profile 2026-10-17"},{"ts":"2026-10-17T10:42:00-07:00","actor_role":"provider","actor_label":"Referral coordinator","action":"requested","path":"gaps.G1","old_value":"open","new_value":"requested","note":"Draft sent to hospital case manager by phone (outside the tool)"},{"ts":"2026-10-17T10:45:00-07:00","actor_role":"hospital","actor_label":"Hospital case manager","action":"edited","path":"arrangements.pcp_followup_scheduled","old_value":null,"new_value":"true","note":null}]}</script>
+<script>
+(function () {
+  "use strict";
+
+  var EXAMPLE = JSON.parse(document.getElementById("sst-example").textContent);
+  var sst = EXAMPLE;
+  var loadedName = null;
+  var lang = "es";
+  var userPickedLang = false;
+
+  /* ---------- words ---------- */
+  var T = {
+    es: {
+      app: "Mi plan de recuperación",
+      langGroup: "Idioma",
+      listen: "Escuchar", stop: "Parar",
+      example: "Ejemplo con datos inventados",
+      draft: "Borrador: el personal todavía no revisó esta página",
+      reviewed: function (who) { return "Revisado por " + who; },
+      progress: "Progreso",
+      steps: ["Solicitud enviada", "En revisión", "Respuesta"],
+      stepApproved: "Aprobada", stepDenied: "No aprobada", stepStopped: "Detenida",
+      stateWords: { done: "hecho", current: "ahora", todo: "pendiente", bad: "no aprobada", stopped: "detenida" },
+      head: {
+        none: "Su equipo está preparando su solicitud",
+        not_sent: "Su solicitud todavía no se ha enviado",
+        sent: "Su solicitud fue enviada",
+        reviewing: "El programa está revisando su solicitud",
+        information_requested: "El programa pidió más información",
+        approved: "Su solicitud fue aprobada",
+        denied: "El programa no aprobó su solicitud",
+        withdrawn: "Esta solicitud se detuvo"
+      },
+      where: function (status, n) {
+        var a = {
+          sent: "Su hospital envió una solicitud a un programa de cuidado de recuperación.",
+          reviewing: "Su hospital envió una solicitud a un programa de cuidado de recuperación. El programa está revisando.",
+          information_requested: "Su hospital envió una solicitud a un programa de cuidado de recuperación. El programa pidió más información.",
+          approved: "Un programa de cuidado de recuperación aprobó su solicitud.",
+          denied: "El programa de cuidado de recuperación no aprobó esta solicitud. Pregunte a su equipo por otras opciones.",
+          withdrawn: "Esta solicitud se detuvo. Pregunte a su equipo qué sigue."
+        }[status] || "Su equipo está preparando una solicitud para un programa de cuidado de recuperación.";
+        return a + (n === 0 ? "" : n === 1 ? " Falta 1 cosa." : " Faltan " + n + " cosas.");
+      },
+      prov: { not_sent: "Sin enviar", sent: "Enviada", reviewing: "En revisión", information_requested: "Pidió más información", approved: "Aprobada", denied: "No aprobada", withdrawn: "Detenida" },
+      recup: "Cuidado de recuperación: cama, comidas y seguimiento de salud por un tiempo corto",
+      noProgram: "Todavía no se eligió un programa.",
+      leave: "Salida del hospital", leaveUnknown: "Todavía no hay fecha",
+      stay: "Días aprobados en el programa", days: function (n) { return n + " días"; },
+      updated: "Actualizado",
+      needTitle: "Lo que todavía falta",
+      needNone: "No falta nada por ahora.",
+      needNotYou: "Usted no tiene que conseguir estas cosas.",
+      needYou: "Algunas cosas le tocan a usted. Si necesita ayuda, pregunte a su equipo.",
+      gets: "Lo consigue",
+      forYou: "Le toca a usted",
+      who: { hospital_case_manager: "Coordinación de casos del hospital", hospital_nurse: "Enfermería del hospital", physician: "Su médico", pt_ot: "Su terapeuta", pharmacy: "La farmacia", patient: "Usted", provider: "El programa" },
+      gap: { open: "Pendiente", requested: "Solicitado", received: "Recibido", resolved: "Listo", not_available: "No disponible" },
+      readyTitle: "Antes de salir del hospital",
+      r: { auth: "Aprobación de su seguro médico", pcp: "Cita con su médico después de salir", meds: "Medicinas para 30 días", dme: "Equipo que usa", pt: "Visitas de terapia física", wound: "Visitas para curar heridas", o2: "Oxígeno listo en el programa", dialysis: "Horario de diálisis", hospice: "Cuidados de hospicio", hh: "Visitas de salud en casa", visit: "Cita" },
+      s: { booked: "Programado", ready: "Listo", confirmed: "Confirmado", notYet: "Todavía no", unconfirmed: "Sin confirmar" },
+      auth: { approved: "Aprobada", requested: "Solicitada", not_requested: "Todavía no se pidió", denied: "Negada" },
+      hh: { ordered: "Pedidas", established: "Establecidas", coordinated_and_scheduled: "Programadas" },
+      qTitle: "Preguntas para su equipo",
+      qHint: "Puede mostrarle esta lista al personal de enfermería o a su trabajador(a) social.",
+      qSent: function (w) { return "¿El hospital ya envió esto: " + w + "?"; },
+      qWhen: "¿Cuándo esperan una respuesta del programa?",
+      qLeave: "¿Cuándo voy a salir del hospital?",
+      qDoctor: "¿Qué día y a qué hora es mi cita con el médico?",
+      helpWorse: "¿Se siente peor? Avísele a su enfermera ahora mismo.",
+      helpEmergency: "En una emergencia, llame al 911.",
+      staff: "Para el personal",
+      staffNote: "Esta página muestra solo los campos del registro SST que el paciente puede ver: el resumen para el paciente y la logística. Nada clínico.",
+      ref: "Registro",
+      showing: "Mostrando",
+      exampleFile: "el ejemplo inventado",
+      open: "Abrir otro archivo SST",
+      back: "Volver al ejemplo",
+      badFile: "Ese archivo no parece un registro SST. Elija el archivo .json de un registro (debe tener meta y patient_summary).",
+      dme: { "front wheeled walker": "andador con ruedas", "walker": "andador", "rolling walker": "andador con ruedas", "cane": "bastón", "wheelchair": "silla de ruedas", "shower bench": "banco para la ducha", "shower chair": "silla para la ducha", "crutches": "muletas" }
+    },
+    en: {
+      app: "My recovery plan",
+      langGroup: "Language",
+      listen: "Listen", stop: "Stop",
+      example: "Example with made-up data",
+      draft: "Draft: staff have not checked this page yet",
+      reviewed: function (who) { return "Checked by " + who; },
+      progress: "Progress",
+      steps: ["Request sent", "In review", "Answer"],
+      stepApproved: "Approved", stepDenied: "Not approved", stepStopped: "Stopped",
+      stateWords: { done: "done", current: "now", todo: "not yet", bad: "not approved", stopped: "stopped" },
+      head: {
+        none: "Your team is getting your request ready",
+        not_sent: "Your request hasn't been sent yet",
+        sent: "Your request was sent",
+        reviewing: "The program is reviewing your request",
+        information_requested: "The program asked for more information",
+        approved: "Your request was approved",
+        denied: "The program did not approve your request",
+        withdrawn: "This request was stopped"
+      },
+      where: function (status, n) {
+        var a = {
+          sent: "Your hospital sent a request to a recovery care program.",
+          reviewing: "Your hospital sent a request to a recovery care program. The program is reviewing it.",
+          information_requested: "Your hospital sent a request to a recovery care program. The program asked for more information.",
+          approved: "A recovery care program approved your request.",
+          denied: "The recovery care program did not approve this request. Ask your team about other options.",
+          withdrawn: "This request was stopped. Ask your team what happens next."
+        }[status] || "Your team is getting a request ready for a recovery care program.";
+        return a + (n === 0 ? "" : n === 1 ? " 1 thing is still missing." : " " + n + " things are still missing.");
+      },
+      prov: { not_sent: "Not sent", sent: "Sent", reviewing: "In review", information_requested: "Asked for more info", approved: "Approved", denied: "Not approved", withdrawn: "Stopped" },
+      recup: "Recovery care: a bed, meals and health check-ins for a short time",
+      noProgram: "No program has been chosen yet.",
+      leave: "Leaving the hospital", leaveUnknown: "No date yet",
+      stay: "Days approved at the program", days: function (n) { return n + " days"; },
+      updated: "Updated",
+      needTitle: "What's still missing",
+      needNone: "Nothing is missing right now.",
+      needNotYou: "You don't need to get these yourself.",
+      needYou: "Some of these are for you. Ask your team if you need help.",
+      gets: "Getting it",
+      forYou: "This one is for you",
+      who: { hospital_case_manager: "Hospital case manager", hospital_nurse: "Hospital nurses", physician: "Your doctor", pt_ot: "Your therapist", pharmacy: "The pharmacy", patient: "You", provider: "The program" },
+      gap: { open: "Pending", requested: "Asked for", received: "Received", resolved: "Done", not_available: "Not available" },
+      readyTitle: "Before you leave the hospital",
+      r: { auth: "Health plan approval", pcp: "Doctor visit after you leave", meds: "30 days of medicine to take with you", dme: "Equipment you use", pt: "Physical therapy visits", wound: "Wound care visits", o2: "Oxygen ready at the program", dialysis: "Dialysis schedule", hospice: "Hospice care", hh: "Home health visits", visit: "Visit" },
+      s: { booked: "Booked", ready: "Ready", confirmed: "Confirmed", notYet: "Not yet", unconfirmed: "Not confirmed yet" },
+      auth: { approved: "Approved", requested: "Requested", not_requested: "Not asked yet", denied: "Denied" },
+      hh: { ordered: "Ordered", established: "Set up", coordinated_and_scheduled: "Booked" },
+      qTitle: "Questions to ask your team",
+      qHint: "You can show this list to your nurse or case manager.",
+      qSent: function (w) {
+        var lowerFirst = w.length > 1 && w[1] === w[1].toLowerCase();
+        return "Has the hospital sent the " + (lowerFirst ? w[0].toLowerCase() + w.slice(1) : w) + "?";
+      },
+      qWhen: "When do you expect an answer from the program?",
+      qLeave: "When will I leave the hospital?",
+      qDoctor: "What day and time is my doctor visit?",
+      helpWorse: "Feeling worse? Tell your nurse right away.",
+      helpEmergency: "In an emergency, call 911.",
+      staff: "For staff",
+      staffNote: "This page shows only the SST fields the patient is allowed to see: the patient summary and logistics. Nothing clinical.",
+      ref: "Record",
+      showing: "Showing",
+      exampleFile: "the made-up example",
+      open: "Open another SST file",
+      back: "Back to the example",
+      badFile: "That file doesn't look like an SST record. Choose a record's .json file (it needs meta and patient_summary).",
+      dme: {}
+    }
+  };
+
+  var PROV_TONE = { not_sent: "wait", sent: "work", reviewing: "work", information_requested: "work", approved: "good", denied: "bad", withdrawn: "wait" };
+  var PROV_RANK = { approved: 6, information_requested: 5, reviewing: 4, sent: 3, not_sent: 2, withdrawn: 1, denied: 0 };
+  var TONE_WORDS = {
+    good: ["received", "resolved", "approved", "ready", "done", "booked", "confirmed", "recibido", "recibida", "resuelto", "aprobado", "aprobada", "listo", "lista", "programado", "programada", "confirmado"],
+    work: ["requested", "asked for", "reviewing", "in review", "sent", "solicitado", "solicitada", "en revisión", "en revision", "revisando", "enviada"],
+    bad: ["denied", "not approved", "not available", "negado", "negada", "no aprobada", "no disponible"]
+  };
+
+  /* ---------- reading the SST ---------- */
+  function at(obj, path) {
+    return path.split(".").reduce(function (o, k) { return o && typeof o === "object" ? o[k] : undefined; }, obj);
+  }
+  function val(path) {
+    var f = at(sst, path);
+    return f && typeof f === "object" && "value" in f ? f.value : null;
+  }
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function toneOf(s) {
+    var k = String(s || "").trim().toLowerCase();
+    for (var t in TONE_WORDS) if (TONE_WORDS[t].indexOf(k) !== -1) return t;
+    return "wait";
+  }
+  function isYou(who) { return ["usted", "you", "patient", "paciente"].indexOf(String(who || "").trim().toLowerCase()) !== -1; }
+  function summary() { return sst.patient_summary || {}; }
+  function summaryInLang() {
+    var l = summary().language;
+    return !!l && String(l).toLowerCase().slice(0, 2) === lang;
+  }
+  function providers() { return (at(sst, "meta.parties.providers") || []).filter(Boolean); }
+  function mainProvider() {
+    var ps = providers().slice().sort(function (a, b) { return (PROV_RANK[b.status] ?? -1) - (PROV_RANK[a.status] ?? -1); });
+    return ps[0] || null;
+  }
+  function fmtDate(iso) {
+    if (!iso) return null;
+    var d = new Date(iso);
+    if (isNaN(d)) return String(iso);
+    try {
+      return new Intl.DateTimeFormat(lang === "es" ? "es-US" : "en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }).format(d);
+    } catch (e) { return d.toLocaleString(); }
+  }
+
+  /* Patient summary first (it is the staff-written text in the patient's language).
+     When the viewer picks another language, build the same facts from the structured fields. */
+  function neededItems() {
+    var t = T[lang];
+    if (summaryInLang()) {
+      return (summary().what_is_still_needed || []).map(function (x) {
+        return { what: x.what, who: x.who_is_getting_it, status: x.status, tone: toneOf(x.status), you: isYou(x.who_is_getting_it) };
+      });
+    }
+    return (sst.gaps || []).filter(function (g) { return g.status === "open" || g.status === "requested"; }).map(function (g) {
+      return { what: g.what, who: t.who[g.who_can_supply] || null, status: t.gap[g.status], tone: g.status === "requested" ? "work" : "wait", you: g.who_can_supply === "patient" };
+    });
+  }
+  function options() {
+    var t = T[lang];
+    if (summaryInLang() && (summary().your_options || []).length) {
+      return summary().your_options.map(function (o) { return { name: o.provider_name, what: o.what_it_is, status: o.status, tone: toneOf(o.status) }; });
+    }
+    return providers().map(function (p) {
+      return { name: p.name || p.provider_id, what: t.recup, status: t.prov[p.status], tone: PROV_TONE[p.status] || "wait" };
+    });
+  }
+  function whereText(status, n) {
+    var s = summary();
+    if (summaryInLang() && s.where_things_stand) return s.where_things_stand;
+    return T[lang].where(status, n);
+  }
+  function questions() {
+    var t = T[lang];
+    if (summaryInLang() && (summary().questions_to_ask_your_team || []).length) return summary().questions_to_ask_your_team;
+    var q = [], p = mainProvider();
+    (sst.gaps || []).filter(function (g) { return g.status === "requested"; }).forEach(function (g) { q.push(t.qSent(g.what)); });
+    if (p && ["sent", "reviewing", "information_requested"].indexOf(p.status) !== -1) q.push(t.qWhen);
+    if (!val("referral.anticipated_discharge_date")) q.push(t.qLeave);
+    if (val("arrangements.pcp_followup_scheduled") === true) q.push(t.qDoctor);
+    return q;
+  }
+  function boolState(v, yes) {
+    var s = T[lang].s;
+    if (v === true) return { status: yes, tone: "good" };
+    if (v === false) return { status: s.notYet, tone: "wait" };
+    return { status: s.unconfirmed, tone: "wait" };
+  }
+  function readyRows() {
+    var t = T[lang], rows = [];
+    var auth = val("referral.authorization_status");
+    rows.push({ label: t.r.auth, status: t.auth[auth] || t.s.unconfirmed, tone: { approved: "good", requested: "work", denied: "bad" }[auth] || "wait" });
+    rows.push(Object.assign({ label: t.r.pcp }, boolState(val("arrangements.pcp_followup_scheduled"), t.s.booked)));
+    rows.push(Object.assign({ label: t.r.meds }, boolState(val("medications.thirty_day_supply_arranged"), t.s.ready)));
+
+    var dme = val("function.mobility.dme_type");
+    if (Array.isArray(dme) && dme.length) {
+      rows.push({ label: t.r.dme, value: dme.map(function (d) { return t.dme[String(d).toLowerCase()] || d; }).join(", ").replace(/^./, function (c) { return c.toUpperCase(); }) });
+    }
+    // Only shown when the record says something about them.
+    [["arrangements.pt_scheduled", "pt", "booked"], ["arrangements.wound_care_scheduled", "wound", "booked"],
+     ["arrangements.oxygen_ordered_tank_ready_day_before", "o2", "ready"], ["arrangements.dialysis_schedule_confirmed", "dialysis", "confirmed"],
+     ["arrangements.hospice_arranged", "hospice", "ready"]].forEach(function (x) {
+      var v = val(x[0]);
+      if (v !== null && v !== undefined) rows.push(Object.assign({ label: t.r[x[1]] }, boolState(v, t.s[x[2]])));
+    });
+    var hh = val("arrangements.home_health_status");
+    if (hh && hh !== "none") rows.push({ label: t.r.hh, status: t.hh[hh] || hh, tone: hh === "coordinated_and_scheduled" ? "good" : "work" });
+    var sp = val("arrangements.specialty_followups");
+    if (Array.isArray(sp)) sp.forEach(function (x) {
+      var name = typeof x === "string" ? x : (x && (x.what || x.name || x.specialty)) || "";
+      if (name) rows.push({ label: t.r.visit + ": " + name, status: t.s.booked, tone: "good" });
+    });
+    return rows;
+  }
+
+  /* ---------- drawing ---------- */
+  function icon(id, cls) { return '<svg class="i' + (cls ? " " + cls : "") + '" aria-hidden="true"><use href="#' + id + '"/></svg>'; }
+  function chip(text, tone) { return text ? '<span class="chip tone-' + (tone || "wait") + '">' + esc(text) + "</span>" : ""; }
+
+  function trackStates(status) {
+    switch (status) {
+      case "sent": case "reviewing": case "information_requested": return ["done", "current", "todo"];
+      case "approved": return ["done", "done", "done"];
+      case "denied": return ["done", "done", "bad"];
+      case "withdrawn": return ["done", "done", "stopped"];
+      default: return ["current", "todo", "todo"];
+    }
+  }
+
+  function render() {
+    var t = T[lang];
+    document.documentElement.lang = lang;
+    document.title = t.app;
+    document.getElementById("appName").textContent = t.app;
+    document.getElementById("langGroup").setAttribute("aria-label", t.langGroup);
+    ["es", "en"].forEach(function (l) { document.getElementById("lang-" + l).setAttribute("aria-pressed", String(l === lang)); });
+    stopSpeaking();
+
+    var p = mainProvider();
+    var status = p ? p.status : null;
+    var needed = neededItems();
+    var html = "";
+
+    // Notice line
+    var s = summary(), notes = "";
+    if (at(sst, "meta.fictional")) notes += chip(t.example, "wait");
+    if (s.reviewed_by) notes += chip(t.reviewed(s.reviewed_by), "good");
+    else if (s.requires_staff_review !== false) notes += chip(t.draft, "work");
+    if (notes) html += '<div class="notice">' + notes + "</div>";
+
+    // Status card
+    var states = trackStates(status);
+    var labels = t.steps.slice();
+    if (states[2] === "done") labels[2] = t.stepApproved;
+    if (states[2] === "bad") labels[2] = t.stepDenied;
+    if (states[2] === "stopped") labels[2] = t.stepStopped;
+    var track = states.map(function (st, i) {
+      var mark = st === "done" ? icon("i-check") : st === "bad" ? icon("i-x") : "";
+      return '<li class="step ' + st + '"><span class="dot">' + mark + "</span><span>" + esc(labels[i]) +
+        '<span class="vh"> (' + esc(t.stateWords[st]) + ")</span></span></li>";
+    }).join("");
+
+    var opts = options();
+    var progs = opts.length ? opts.map(function (o) {
+      return '<div class="program" data-say><span class="tile">' + icon("i-bed") + '</span><div class="program-body">' +
+        '<span class="program-name">' + esc(o.name) + "</span>" +
+        (o.what ? '<span class="program-what">' + esc(o.what) + "</span>" : "") + chip(o.status, o.tone) + "</div></div>";
+    }).join("") : '<p class="program-what" data-say>' + esc(t.noProgram) + "</p>";
+
+    var leave = val("referral.anticipated_discharge_date");
+    var stay = val("referral.length_of_stay_authorized_days");
+    var updated = fmtDate(at(sst, "meta.updated_at"));
+    var facts = '<div class="fact" data-say><dt>' + esc(t.leave) + "</dt><dd>" + esc(leave || t.leaveUnknown) + "</dd></div>";
+    if (stay) facts += '<div class="fact" data-say><dt>' + esc(t.stay) + "</dt><dd>" + esc(t.days(stay)) + "</dd></div>";
+    if (updated) facts += '<div class="fact"><dt>' + esc(t.updated) + "</dt><dd>" + esc(updated) + "</dd></div>";
+
+    html += '<article class="hero" aria-labelledby="statusHead">' +
+      '<div class="hero-head">' + (status ? chip(t.prov[status], PROV_TONE[status]) : "") +
+      '<h1 id="statusHead" data-say>' + esc(t.head[status] || t.head.none) + "</h1></div>" +
+      '<ol class="track" aria-label="' + esc(t.progress) + '">' + track + "</ol>" +
+      '<p class="lead" data-say>' + esc(whereText(status, needed.length)) + "</p>" +
+      '<div class="programs">' + progs + "</div>" +
+      '<dl class="facts">' + facts + "</dl></article>";
+
+    // What's still missing
+    var needRows = needed.length ? '<ul class="rows">' + needed.map(function (n) {
+      return '<li class="row" data-say><div class="row-main"><span class="row-title">' + esc(n.what) + "</span>" +
+        (n.who ? '<span class="row-meta">' + esc(t.gets) + ": " + esc(n.who) + "</span>" : "") + "</div>" +
+        '<span class="chips">' + (n.you ? chip(t.forYou, "you") : "") + chip(n.status, n.tone) + "</span></li>";
+    }).join("") + "</ul>" : '<div class="rows"><p class="empty" data-say>' + esc(t.needNone) + "</p></div>";
+    var needSub = !needed.length ? "" : needed.some(function (n) { return n.you; }) ? t.needYou : t.needNotYou;
+    html += '<section aria-labelledby="needHead"><h2 id="needHead" data-say>' + icon("i-clip") + esc(t.needTitle) + "</h2>" +
+      (needSub ? '<p class="sub" data-say>' + esc(needSub) + "</p>" : "") + needRows + "</section>";
+
+    // Before you leave
+    html += '<section aria-labelledby="readyHead"><h2 id="readyHead" data-say>' + icon("i-exit") + esc(t.readyTitle) + '</h2><ul class="rows">' +
+      readyRows().map(function (r) {
+        return '<li class="row" data-say><div class="row-main"><span class="row-title">' + esc(r.label) + "</span></div>" +
+          (r.value ? '<span class="row-value">' + esc(r.value) + "</span>" : chip(r.status, r.tone)) + "</li>";
+      }).join("") + "</ul></section>";
+
+    // Questions
+    var qs = questions();
+    if (qs.length) {
+      html += '<section aria-labelledby="qHead"><h2 id="qHead" data-say>' + icon("i-talk") + esc(t.qTitle) + "</h2>" +
+        '<p class="sub" data-say>' + esc(t.qHint) + '</p><ul class="questions">' +
+        qs.map(function (q) { return '<li class="q" data-say>' + esc(q) + "</li>"; }).join("") + "</ul></section>";
+    }
+
+    // Help
+    html += '<aside class="help"><span class="tile">' + icon("i-phone") + '</span><div class="help-text">' +
+      '<p data-say><strong>' + esc(t.helpWorse) + "</strong></p><p data-say>" + esc(t.helpEmergency) + "</p></div></aside>";
+
+    document.getElementById("main").innerHTML = html;
+    renderStaff();
+  }
+
+  function renderStaff() {
+    var t = T[lang];
+    var ref = at(sst, "meta.referral_id");
+    var ver = at(sst, "meta.sst_version");
+    document.getElementById("staff").innerHTML =
+      "<h2>" + esc(t.staff) + "</h2><p>" + esc(t.staffNote) + "</p>" +
+      "<p>" + esc(t.showing) + ": " + (loadedName ? "<code>" + esc(loadedName) + "</code>" : esc(t.exampleFile)) +
+      (ref ? " · " + esc(t.ref) + " <code>" + esc(ref) + "</code>" : "") + (ver ? " · SST " + esc(ver) : "") + "</p>" +
+      '<div class="staff-actions">' +
+      '<input type="file" id="file" accept=".json,application/json" class="vh">' +
+      '<label for="file" class="btn btn-quiet">' + icon("i-file") + esc(t.open) + "</label>" +
+      (loadedName ? '<button type="button" class="btn btn-quiet" id="backBtn">' + esc(t.back) + "</button>" : "") +
+      '</div><p id="fileMsg" role="status"></p>';
+
+    document.getElementById("file").addEventListener("change", onFile);
+    var back = document.getElementById("backBtn");
+    if (back) back.addEventListener("click", function () { sst = EXAMPLE; loadedName = null; if (!userPickedLang) lang = recordLang(); render(); });
+  }
+
+  function onFile(e) {
+    var f = e.target.files && e.target.files[0];
+    if (!f) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      try {
+        var d = JSON.parse(reader.result);
+        if (!d || typeof d !== "object" || !d.meta || !("patient_summary" in d)) throw new Error("not an SST record");
+        sst = d; loadedName = f.name;
+        if (!userPickedLang) lang = recordLang();
+        render();
+      } catch (err) {
+        document.getElementById("fileMsg").textContent = T[lang].badFile;
+      }
+    };
+    reader.readAsText(f);
+  }
+
+  /* ---------- language ---------- */
+  function recordLang() {
+    var l = String(summary().language || "").toLowerCase().slice(0, 2);
+    if (l === "es" || l === "en") return l;
+    var pref = String(val("patient.preferred_language") || "");
+    if (/span|espa/i.test(pref)) return "es";
+    return "en";
+  }
+  function savedLang() { try { return localStorage.getItem("sst-patient-lang"); } catch (e) { return null; } }
+  document.getElementById("langGroup").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-lang]");
+    if (!b || b.dataset.lang === lang) return;
+    lang = b.dataset.lang; userPickedLang = true;
+    try { localStorage.setItem("sst-patient-lang", lang); } catch (err) {}
+    render();
+  });
+
+  /* ---------- read aloud ---------- */
+  var listenBtn = document.getElementById("listen");
+  var canSpeak = "speechSynthesis" in window && typeof window.SpeechSynthesisUtterance === "function";
+  var speaking = false;
+  function setListen(on) {
+    speaking = on;
+    var t = T[lang];
+    listenBtn.setAttribute("aria-pressed", String(on));
+    listenBtn.innerHTML = icon(on ? "i-stop" : "i-sound") + "<span>" + esc(on ? t.stop : t.listen) + "</span>";
+  }
+  function stopSpeaking() {
+    if (canSpeak) { try { window.speechSynthesis.cancel(); } catch (e) {} }
+    if (canSpeak) setListen(false);
+  }
+  if (canSpeak) {
+    listenBtn.hidden = false;
+    listenBtn.addEventListener("click", function () {
+      if (speaking) { stopSpeaking(); return; }
+      var parts = Array.prototype.map.call(document.querySelectorAll("#main [data-say]"), function (el) {
+        return el.innerText.replace(/\s+/g, " ").trim();
+      }).filter(Boolean);
+      if (!parts.length) return;
+      setListen(true);
+      parts.forEach(function (text, i) {
+        var u = new SpeechSynthesisUtterance(text);
+        u.lang = lang === "es" ? "es-US" : "en-US";
+        u.rate = 0.92;
+        if (i === parts.length - 1) { u.onend = function () { setListen(false); }; }
+        u.onerror = function () { setListen(false); };
+        window.speechSynthesis.speak(u);
+      });
+    });
+  }
+
+  var saved = savedLang();
+  if (saved === "es" || saved === "en") { lang = saved; userPickedLang = true; } else { lang = recordLang(); }
+  render();
+})();
+</script>
