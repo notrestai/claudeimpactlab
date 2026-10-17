@@ -24,6 +24,8 @@ criteria are loaded as a requirements profile; the SST is checked rule by rule, 
 of what to ask the hospital for, and a draft reply is written in IHH's format. The hospital, the patient
 and the provider see the same record through three views.
 
+**Live demo:** https://relayhealth.dev (frontend on Cloudflare; the backend runs on a team laptop through a Cloudflare Tunnel, so it is up during the demo)
+
 **Demo video:** [link]
 
 Start here:
