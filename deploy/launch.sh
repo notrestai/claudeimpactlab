@@ -3,7 +3,7 @@
 # Needs: python3, cloudflared (brew install cloudflared), an Anthropic API key, Cloudflare login for the account that owns the domain.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-HOST="${1:-relayhealth.dev}"
+HOST="${1:-api.relayhealth.dev}"   # default: API only; the frontend comes from Cloudflare Pages. Pass relayhealth.dev to serve both from the laptop.
 TUNNEL="${TUNNEL_NAME:-relayhealth-api}"
 
 if [ -z "${ANTHROPIC_API_KEY:-}" ] && [ -f .env ]; then set -a; . ./.env; set +a; fi

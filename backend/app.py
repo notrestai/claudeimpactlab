@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import os as _os
 app.add_middleware(CORSMiddleware,
                    allow_origins=[o.strip() for o in _os.environ.get("SST_CORS_ORIGINS", "https://relayhealth.dev,https://www.relayhealth.dev").split(",") if o.strip()],
-                   allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?",
+                   allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?|https://[a-z0-9-]+\.pages\.dev|https://([a-z0-9-]+\.)?relayhealth\.dev",
                    allow_methods=["*"], allow_headers=["*"])
 store.init_db()
 FRONTEND = sstlib.ROOT / "frontend"

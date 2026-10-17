@@ -1,5 +1,30 @@
 # Launching on relayhealth.dev (Cloudflare)
 
+## Connect GitHub to Cloudflare Pages (frontend, automatic on every save)
+
+In the Cloudflare dashboard: **Workers & Pages → Create → Pages → Connect to Git**, authorize GitHub for
+`notrestai/claudeimpactlab`, then:
+
+| Setting | Value |
+|---|---|
+| Production branch | `claude/sleepy-planck-khriw0` (the project's main line today) |
+| Framework preset | None |
+| Build command | leave empty |
+| Build output directory | `frontend` |
+
+Save and deploy. Then **Custom domains → Set up a custom domain → relayhealth.dev**. Every save to the
+project republishes the page within a minute. `frontend/config.js` already points the page at
+`https://api.relayhealth.dev` when it is opened from relayhealth.dev or a `*.pages.dev` preview.
+
+The backend cannot live on Pages (it is Python that renders PDFs and calls Claude), so it runs on a laptop
+or a container host and is reached through a Cloudflare Tunnel at `api.relayhealth.dev`:
+
+```bash
+export ANTHROPIC_API_KEY=...
+./deploy/launch.sh            # routes api.relayhealth.dev -> this laptop's backend
+```
+
+
 **Fastest path (five minutes, from the laptop that has the key):**
 
 ```bash
