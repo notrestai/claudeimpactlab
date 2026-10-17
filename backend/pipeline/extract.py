@@ -22,7 +22,19 @@ Rules that do not bend:
 12. Packets can contain pages from an earlier hospital stay or an older referral. Prefer the current stay. If the only evidence is from an earlier stay, say so in note and set confidence low.
 13. A ticked box or a one-word answer on the referral form is one person's claim. When a chart page (H&P, progress note, PT/OT, nursing, MAR, labs) says otherwise, the chart wins: put the chart reading in value and the form's reading under conflicts.
 14. Evidence doc_type uses this vocabulary: fax_cover, referral_form, face_sheet, auth_form, h_and_p, progress_note, consult, pt_ot_eval, nursing_note, social_work_note, mar, medication_list, labs, imaging, ekg, vitals, wound_note, other.
-15. Quotes are copied as printed, under about 20 words, and skip over any identifier (write [redacted] in its place). A quote must come from the page you cite."""
+15. Quotes are copied as printed, under about 20 words, and skip over any identifier (write [redacted] in its place). A quote must come from the page you cite.
+
+Known traps in faxed referral packets (seen in hand review):
+16. "Alert", "awake and alert" or "AAO" with the count blacked out is NOT an orientation level. AOx values come only from an explicit count on the page; a blacked-out count is status redacted.
+17. A face sheet "arrival mode: wheelchair" or "ambulance" says nothing about mobility. Ambulation distance, assist level and device come from PT/OT or nursing notes. The PT goal distance is not the achieved distance; record the achieved distance and keep phrases like "with cues for safety" in note.
+18. Progress notes copy earlier text forward word for word. Two pages with the same sentence are one source, not two; prefer the page that adds new text.
+19. Hypoglycemia-protocol PRN orders (dextrose, glucagon, glucose gel), a discontinued sliding scale, or inpatient DVT-prophylaxis injections do not make a patient diabetic or a self-injector. Condition flags need a diagnosis statement; "no pertinent PMH" argues against the flag.
+20. On a MAR, repeated due times are schedule slots, not administrations; one drug under several order lines with different doses is one drug with a changing regimen, never summed. Brand and generic names are the same drug. "D/C medications" can mean discontinued orders, not discharge medications.
+21. On forms a blank box is blank, not "No". A ticked "No" to "any wounds" together with a ticked "No" to "independent with wound care" is a form slip, not a wound-care need; note it under conflicts.
+22. Ordered or referenced is not present: "EKG ordered", "recheck BMP", "see nursing note" with no such page means not_in_packet. Culture numbers contradicted by a later "no growth" or "likely contaminated" line are a conflict, not a positive.
+23. Vitals printed as 24-hour min/max blocks are not discrete sets; count sets by distinct time stamps. In lab tables "--" is not drawn and a black cell is redacted; a one-digit heart rate next to a two-digit max is a scan artifact.
+24. Printed page numbers restart in every sub-document ("1 of 3", "2/4"). Cite only the [Page N of M] label.
+25. "5150", "DTO", "grave disability" and an APS referral are psychiatric hold, danger-to-others, consult-reason and protective-services terms. They are not a conservatorship. Record them as printed under mental_health and safety_legal so a person judges; do not map them to any eligibility conclusion."""
 
 
 def _page_map(sst: dict) -> str:
