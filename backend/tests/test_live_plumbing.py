@@ -28,6 +28,19 @@ def fake_structured(system, content, schema, **kw):
     CALLS.append(key)
     if key in EX:
         out = {key: json.loads(json.dumps(EX[key]))}
+        def slim(n):
+            if isinstance(n, dict):
+                if "status" in n and "value" in n and "evidence" in n:
+                    for k in ("updated_by", "updated_at"): n.pop(k, None)
+                    n["evidence"] = [ev for ev in n["evidence"] if isinstance(ev.get("page"), int)]  # extractor only cites pages
+                    for ev in n["evidence"]:
+                        for k in ("source", "ref", "timestamp"): ev.pop(k, None)
+                    for c in n.get("conflicts", []): c.pop("doc_type", None)
+                    return
+                for v in n.values(): slim(v)
+            elif isinstance(n, list):
+                for v in n: slim(v)
+        slim(out)
     elif key == "pages":
         pages = [int(b["text"].split()[1]) for b in content if b.get("type") == "text" and b["text"].startswith("[Page ")]
         out = {"pages": [{"page": n, "doc_type": "other", "orientation": "upright", "legibility": "good", "from_earlier_stay": False, "duplicate_of_page": None} for n in pages]}

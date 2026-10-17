@@ -26,7 +26,8 @@ def _instruction(section: str) -> str:
 
 
 def _postprocess(section_obj: dict, section: str):
-    """Evidence gate and identifier scrub on everything the model returned."""
+    """Fill bookkeeping keys, then evidence gate and identifier scrub on everything the model returned."""
+    sstlib.fill_field_defaults(section_obj, "extractor")
     ann = sstlib.annotations()
 
     def walk(node, path):
@@ -114,15 +115,16 @@ def extract(sst: dict, rid: str, sections: list[str] | None = None, pages: list[
         return section, data[section]
 
     with cf.ThreadPoolExecutor(max_workers=workers) as ex:
-        futures = [ex.submit(one, s) for s in sections]
+        futures = {ex.submit(one, s): s for s in sections}
         for f in cf.as_completed(futures):
+            section = futures[f]
             try:
-                section, obj = f.result()
+                _, obj = f.result()
                 _postprocess(obj, section)
                 _merge(sst, section, obj, only_unknown=len(pages) < total)
                 report[section] = "ok"
-            except Exception as e:
-                report[str(e)[:40]] = f"failed: {type(e).__name__}"
+            except Exception as e:  # noqa: BLE001
+                report[section] = f"failed: {type(e).__name__}: {str(e)[:160]}"
     sstlib.add_history(sst, "extractor", "extracted", "*", None, None, f"sections: {', '.join(k for k, v in report.items() if v == 'ok')}; pages {pages[0]}-{pages[-1]}")
     errors = sstlib.validate(sst)
     if errors:

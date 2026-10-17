@@ -9,6 +9,28 @@ from . import sstlib, store, roles, forms
 from .pipeline import ingest, page_index, extract, gaps as gaps_mod, score as score_mod, analyze as analyze_mod, summary as summary_mod, conversations as conv_mod, claude_client as cc
 
 app = FastAPI(title="Referral SST", version="0.2")
+import threading
+JOBS: dict[str, dict] = {}
+
+
+def start_job(rid: str, name: str, fn):
+    """Run fn(progress) in a background thread. Cloudflare cuts requests at 100 s; extraction takes minutes."""
+    if JOBS.get(rid, {}).get("status") == "running":
+        raise HTTPException(409, f"a job is already running for this referral: {JOBS[rid]['job']}")
+    JOBS[rid] = {"job": name, "status": "running", "started_at": sstlib.now_iso(), "ended_at": None, "progress": "starting", "detail": None, "error": None}
+
+    def progress(msg):
+        JOBS[rid]["progress"] = msg
+
+    def target():
+        try:
+            detail = fn(progress)
+            JOBS[rid].update(status="done", detail=detail, ended_at=sstlib.now_iso(), progress="done")
+        except Exception as e:  # noqa: BLE001
+            JOBS[rid].update(status="error", error=f"{type(e).__name__}: {str(e)[:300]}", ended_at=sstlib.now_iso())
+
+    threading.Thread(target=target, daemon=True).start()
+    return JOBS[rid]
 from fastapi.middleware.cors import CORSMiddleware
 import os as _os
 app.add_middleware(CORSMiddleware,
@@ -92,20 +114,25 @@ async def create_referral(x_role: str | None = Header(None), packet: UploadFile 
     return {"referral_id": rid, "packet": bool(path)}
 
 
-@app.post("/referrals/{rid}/ingest")
+@app.post("/referrals/{rid}/ingest", status_code=202)
 def do_ingest(rid: str, x_role: str | None = Header(None)):
     role = role_of(x_role); need(role, "provider", "hospital")
     sst = load(rid); ref = store.get_referral(rid)
     if not ref or not ref["packet_path"]:
         raise HTTPException(400, "no packet on this referral")
-    total = ingest.render(rid, ref["packet_path"])
-    rows = page_index.index_pages(sst, rid, total)
-    store.update_referral(rid, page_count=total, status="indexed")
-    save(rid, sst, role, "ingest")
-    return {"page_count": total, "pages": rows}
+
+    def work(progress):
+        progress("rendering pages")
+        total = ingest.render(rid, ref["packet_path"])
+        progress(f"indexing {total} pages")
+        page_index.index_pages(sst, rid, total)
+        store.update_referral(rid, page_count=total, status="indexed")
+        store.save_sst(rid, sst, role, "ingest")
+        return {"page_count": total}
+    return start_job(rid, "ingest", work)
 
 
-@app.post("/referrals/{rid}/extract")
+@app.post("/referrals/{rid}/extract", status_code=202)
 def do_extract(rid: str, x_role: str | None = Header(None), pages: str | None = Query(None, description="comma-separated page numbers to (re)extract"),
                sections: str | None = Query(None)):
     role = role_of(x_role); need(role, "provider", "hospital")
@@ -114,10 +141,20 @@ def do_extract(rid: str, x_role: str | None = Header(None), pages: str | None = 
         raise HTTPException(400, "run ingest first")
     pg = [int(p) for p in pages.split(",")] if pages else None
     sc = [s for s in sections.split(",")] if sections else None
-    report = extract.extract(sst, rid, sections=sc, pages=pg)
-    store.update_referral(rid, status="extracted")
-    save(rid, sst, role, "extract")
-    return {"report": report, "mock": cc.mock_mode()}
+
+    def work(progress):
+        progress("extracting sections")
+        report = extract.extract(sst, rid, sections=sc, pages=pg)
+        store.update_referral(rid, status="extracted")
+        store.save_sst(rid, sst, role, "extract")
+        return {"report": report, "mock": cc.mock_mode()}
+    return start_job(rid, "extract", work)
+
+
+@app.get("/referrals/{rid}/jobs")
+def job_status(rid: str, x_role: str | None = Header(None)):
+    role_of(x_role)
+    return JOBS.get(rid) or {"status": "idle"}
 
 
 @app.post("/referrals/{rid}/evaluate")
@@ -178,21 +215,32 @@ def review_summary(rid: str, x_role: str | None = Header(None), actor_label: str
     return sst["patient_summary"]
 
 
-@app.post("/referrals/{rid}/run_all")
+@app.post("/referrals/{rid}/run_all", status_code=202)
 def run_all(rid: str, x_role: str | None = Header(None), provider: str = Query("ihh")):
-    """Demo convenience: ingest (if a packet), extract, evaluate, gaps, score, summary."""
+    """Demo convenience, as a background job: ingest (if a packet), extract, evaluate, gaps, score, summary."""
     role = role_of(x_role); need(role, "provider")
     sst = load(rid); ref = store.get_referral(rid)
-    steps = {}
-    if ref and ref["packet_path"]:
-        total = ingest.render(rid, ref["packet_path"]); page_index.index_pages(sst, rid, total); steps["ingest"] = total
-        store.update_referral(rid, page_count=total)
-    steps["extract"] = extract.extract(sst, rid)
-    gaps_mod.run_all(sst, provider); steps["evaluate"] = sst["eligibility"]["recommendation"]
-    summary_mod.patient_summary(sst, rid); steps["summary"] = sst["patient_summary"]["language"]
-    store.update_referral(rid, status="evaluated")
-    save(rid, sst, role, "run_all")
-    return {"steps": steps, "readiness": sst["eligibility"]["scores"]["readiness"], "band": sst["eligibility"]["scores"]["band"], "mock": cc.mock_mode()}
+
+    def work(progress):
+        steps = {}
+        if ref and ref["packet_path"]:
+            progress("rendering pages")
+            total = ingest.render(rid, ref["packet_path"])
+            progress(f"indexing {total} pages")
+            page_index.index_pages(sst, rid, total); steps["ingest"] = total
+            store.update_referral(rid, page_count=total)
+            store.save_sst(rid, sst, role, "run_all: ingest")
+        progress("extracting the record from the pages (minutes)")
+        steps["extract"] = extract.extract(sst, rid)
+        store.save_sst(rid, sst, role, "run_all: extract")
+        progress("evaluating rules, gaps and score")
+        gaps_mod.run_all(sst, provider); steps["evaluate"] = sst["eligibility"]["recommendation"]
+        progress("writing the patient summary")
+        summary_mod.patient_summary(sst, rid); steps["summary"] = sst["patient_summary"]["language"]
+        store.update_referral(rid, status="evaluated")
+        store.save_sst(rid, sst, role, "run_all")
+        return {"steps": steps, "readiness": sst["eligibility"]["scores"]["readiness"], "band": sst["eligibility"]["scores"]["band"], "mock": cc.mock_mode()}
+    return start_job(rid, "run_all", work)
 
 
 @app.get("/referrals/{rid}/sst")
@@ -298,7 +346,7 @@ def do_analyze(rid: str, body: dict = Body(...), x_role: str | None = Header(Non
     role = role_of(x_role); need(role, "provider")
     sst = load(rid)
     try:
-        row = analyze_mod.analyze(sst, rid, body.get("mode", "briefing"), body.get("question"), role, with_pages=body.get("with_pages", True))
+        row = analyze_mod.analyze(sst, rid, body.get("mode", "briefing"), body.get("question"), role, with_pages=body.get("with_pages", False))
     except ValueError as e:
         raise HTTPException(400, str(e))
     save(rid, sst, role, f"analyze {row['mode']}")

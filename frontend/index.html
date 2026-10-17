@@ -59,7 +59,7 @@ const busy=async(label,fn)=>{setStatus(label+'…');try{const r=await fn();setSt
 async function loadRefs(){const list=await api('/referrals');const sel=$('#ref');sel.innerHTML=list.map(r=>`<option value="${esc(r.id)}">${esc(r.id)} ${esc(r.label||'')} · ${esc(r.status||'')}</option>`).join('');
   if(!state.rid&&list.length)state.rid=list[0].id; if(state.rid)sel.value=state.rid;}
 async function loadSst(){if(!state.rid){$('#content').innerHTML='<div class="card">Create a referral from the fictional example or upload a packet.</div>';return}
-  state.sst=await api(`/referrals/${state.rid}/sst`);render();}
+  state.sst=await api(`/referrals/${state.rid}/sst`);render();try{const j=await api(`/referrals/${state.rid}/jobs`);if(j.status==='running')pollJob()}catch(e){}}
 function nav(){const views=state.role==='patient'?[['overview','My status']]:state.role==='hospital'?[['overview','Gaps & score'],['sst','Record'],['form','Referral form'],['conversations','Conversations'],['pages','Pages']]:
   [['overview','Score & readout'],['gaps','Gaps & reply'],['sst','Record'],['analyze','Analyze'],['conversations','Conversations'],['form','Referral form'],['pages','Pages'],['history','History']];
   if(!views.find(v=>v[0]===state.view))state.view=views[0][0];
@@ -154,6 +154,11 @@ async function decide(d){const reason=$('#reason')?.value||null;if(d==='deny'&&!
 $('#role').onchange=e=>{state.role=e.target.value;state.view='overview';loadSst()};$('#ref').onchange=e=>{state.rid=e.target.value;loadSst()};
 $('#btnFixture').onclick=async()=>{const r=await busy('Creating',()=>api('/referrals?fixture=true',{method:'POST'}));state.rid=r.referral_id;await loadRefs();await loadSst()};
 $('#file').onchange=async e=>{const f=e.target.files[0];if(!f)return;const fd=new FormData();fd.append('packet',f);const r=await busy('Uploading',()=>api(`/referrals?label=${encodeURIComponent(f.name)}`,{method:'POST',body:fd}));state.rid=r.referral_id;await loadRefs();await loadSst();e.target.value=''};
-$('#btnRunAll').onclick=async()=>{if(!state.rid)return;const r=await busy('Running the whole pipeline (minutes on a real packet)',()=>api(`/referrals/${state.rid}/run_all`,{method:'POST'}));await loadRefs();await loadSst();if(r.mock)setStatus('Done in MOCK mode (no API key): fictional example data')};
+$('#btnRunAll').onclick=async()=>{if(!state.rid)return;try{await busy('Starting the pipeline',()=>api(`/referrals/${state.rid}/run_all`,{method:'POST'}))}catch(e){return}pollJob()};
+let pollTimer=null;
+async function pollJob(){clearTimeout(pollTimer);let j;try{j=await api(`/referrals/${state.rid}/jobs`)}catch(e){setStatus(e.message,true);return}
+  if(j.status==='running'){setStatus(`Running ${j.job}: ${j.progress||''}`);$('#btnRunAll').disabled=true;pollTimer=setTimeout(pollJob,3000);return}
+  $('#btnRunAll').disabled=false;if(j.status==='error'){setStatus('Pipeline error: '+j.error,true)}else if(j.status==='done'){setStatus('Pipeline done'+(j.detail&&j.detail.mock?' (mock data, no API key)':''))}
+  await loadRefs();await loadSst()}
 (async()=>{try{const h=await api('/health');if(h.mock)setStatus('No API key: mock mode, fictional data only');await loadRefs();await loadSst()}catch(e){setStatus(e.message,true)}})();
 </script></body></html>

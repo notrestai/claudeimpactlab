@@ -206,29 +206,101 @@ def _clean_for_output(node):
     return out
 
 
-def section_schema(section: str) -> dict:
-    """A self-contained schema for one top-level SST section, for Claude's structured output."""
+def _prune_defs(schema: dict) -> dict:
+    """Keep only the $defs the schema actually references (transitively). Big grammars get rejected by the API."""
+    defs = schema.get("$defs", {})
+    needed: set[str] = set()
+
+    def walk(n):
+        if isinstance(n, dict):
+            r = n.get("$ref")
+            if isinstance(r, str) and r.startswith("#/$defs/"):
+                name = r.split("/")[-1]
+                if name not in needed and name in defs:
+                    needed.add(name)
+                    walk(defs[name])
+            for k, v in n.items():
+                if k != "$defs":
+                    walk(v)
+        elif isinstance(n, list):
+            for v in n:
+                walk(v)
+
+    walk({k: v for k, v in schema.items() if k != "$defs"})
+    schema["$defs"] = {k: v for k, v in defs.items() if k in needed}
+    return schema
+
+
+SLIM_FIELD_KEYS = ["value", "status", "evidence", "conflicts", "confidence", "note"]
+SLIM_EVIDENCE = {"type": "object", "properties": {"page": {"type": "integer", "description": "1-based page number from the [Page N of M] label"},
+                                                   "doc_type": {"type": ["string", "null"]},
+                                                   "quote": {"type": "string", "description": "Short verbatim text from the page. Never paraphrase."}},
+                 "required": ["page", "doc_type", "quote"], "additionalProperties": False}
+SLIM_CONFLICT = {"type": "object", "properties": {"page": {"type": "integer"}, "quote": {"type": "string"}, "value": {"type": ["string", "null"]}},
+                 "required": ["page", "quote", "value"], "additionalProperties": False}
+
+
+def _slim_defs(schema: dict) -> dict:
+    """Extraction-time wrappers: the model fills value/status/evidence/conflicts/confidence/note; code fills the rest."""
+    for name, d in schema.get("$defs", {}).items():
+        if name.startswith("Field_"):
+            d["properties"] = {k: v for k, v in d["properties"].items() if k in SLIM_FIELD_KEYS}
+            d["required"] = [k for k in SLIM_FIELD_KEYS if k in d["properties"]]
+    if "Evidence" in schema.get("$defs", {}):
+        schema["$defs"]["Evidence"] = copy.deepcopy(SLIM_EVIDENCE)
+    if "Conflict" in schema.get("$defs", {}):
+        schema["$defs"]["Conflict"] = copy.deepcopy(SLIM_CONFLICT)
+    return schema
+
+
+def section_schema(section: str, slim: bool = True) -> dict:
+    """A self-contained schema for one top-level SST section, for Claude's structured output.
+    slim=True drops the bookkeeping keys the extractor never sets (updated_by, updated_at, evidence.source...)."""
     schema = load_schema()
     sec = schema["properties"][section]
-    return _clean_for_output({
+    out = _clean_for_output({
         "type": "object",
         "properties": {section: sec},
         "required": [section],
         "additionalProperties": False,
-        "$defs": schema["$defs"],
+        "$defs": copy.deepcopy(schema["$defs"]),
     })
+    out = _prune_defs(out)
+    return _slim_defs(out) if slim else out
 
 
 def defs_schema(def_name: str, wrap_key: str | None = None, as_array: bool = False) -> dict:
-    """Schema for one $def (for example PageRow rows or an AnalysisRow)."""
+    """Schema for one $def (for example PageRow rows or an AnalysisRow), with only the defs it needs."""
     schema = load_schema()
     item = {"$ref": f"#/$defs/{def_name}"}
     body = {"type": "array", "items": item} if as_array else item
     key = wrap_key or def_name.lower()
-    return _clean_for_output({
+    out = _clean_for_output({
         "type": "object", "properties": {key: body}, "required": [key], "additionalProperties": False,
-        "$defs": schema["$defs"],
+        "$defs": copy.deepcopy(schema["$defs"]),
     })
+    return _prune_defs(out)
+
+
+def fill_field_defaults(node, by: str = "extractor"):
+    """Turn slim extractor output into full SST shape: add bookkeeping keys and evidence sources."""
+    if isinstance(node, dict):
+        if "status" in node and "value" in node and "evidence" in node:
+            node.setdefault("conflicts", [])
+            node.setdefault("confidence", None)
+            node.setdefault("note", None)
+            node.setdefault("updated_by", by)
+            node.setdefault("updated_at", now_iso())
+            for ev in node["evidence"] or []:
+                ev.setdefault("source", "packet"); ev.setdefault("ref", None); ev.setdefault("timestamp", None); ev.setdefault("doc_type", None)
+            for c in node["conflicts"] or []:
+                c.setdefault("doc_type", None)
+            return
+        for v in node.values():
+            fill_field_defaults(v, by)
+    elif isinstance(node, list):
+        for v in node:
+            fill_field_defaults(v, by)
 
 
 def section_field_guide(section: str) -> str:

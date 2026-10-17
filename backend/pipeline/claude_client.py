@@ -29,25 +29,54 @@ def client():
 def structured(system, content: list, schema: dict, *, model: str = MODEL_MAIN, max_tokens: int = 16000,
                effort: str = "high", stream: bool = True):
     """Returns (parsed_json, usage_dict, model). Raises ClaudeError on refusal, truncation or bad JSON."""
+    import anthropic, jsonschema
     kwargs = dict(model=model, max_tokens=max_tokens, system=system,
                   messages=[{"role": "user", "content": content}],
                   output_config={"format": {"type": "json_schema", "schema": schema}, "effort": effort})
     c = client()
-    if stream:
-        with c.messages.stream(**kwargs) as s:
-            msg = s.get_final_message()
-    else:
-        msg = c.messages.create(**kwargs)
+
+    def send(kw):
+        if stream:
+            with c.messages.stream(**kw) as s:
+                return s.get_final_message()
+        return c.messages.create(**kw)
+
+    fell_back = False
+    try:
+        msg = send(kwargs)
+    except anthropic.BadRequestError as e:
+        if "grammar" not in str(e).lower():
+            raise
+        # Grammar too large for constrained decoding: ask for plain JSON and validate it ourselves.
+        fell_back = True
+        kw2 = dict(kwargs)
+        kw2["output_config"] = {"effort": effort}
+        kw2["messages"] = [{"role": "user", "content": list(content) + [{"type": "text", "text":
+            "Respond with ONLY a JSON object, no prose and no code fences, that validates against this JSON Schema:\n" + json.dumps(schema)}]}]
+        msg = send(kw2)
     if msg.stop_reason in ("refusal", "max_tokens"):
         raise ClaudeError(f"stopped: {msg.stop_reason}")
     text = next((b.text for b in msg.content if b.type == "text"), None)
     if text is None:
         raise ClaudeError("no text block in response")
+    if fell_back:
+        text = text.strip()
+        if text.startswith("```"):
+            text = text.split("\n", 1)[1].rsplit("```", 1)[0]
+        start, end = text.find("{"), text.rfind("}")
+        text = text[start:end + 1] if start >= 0 else text
     try:
         data = json.loads(text)
     except json.JSONDecodeError as e:
         raise ClaudeError(f"bad JSON: {e}")
+    if fell_back:
+        try:
+            jsonschema.validate(data, schema)
+        except jsonschema.ValidationError as e:
+            raise ClaudeError(f"fallback JSON failed schema: {e.message[:200]}")
     usage = msg.usage.model_dump() if hasattr(msg.usage, "model_dump") else dict(msg.usage)
+    if fell_back:
+        usage["fallback_plain_json"] = True
     return data, usage, msg.model
 
 
