@@ -206,6 +206,29 @@ def _clean_for_output(node):
     return out
 
 
+def _prune_defs(node: dict, defs: dict) -> dict:
+    """Keep only the $defs the node reaches through $ref (transitively). The API compiles every definition it is
+    given into the output grammar; sending all 47 SST definitions on every call made the grammar too large."""
+    keep: set[str] = set()
+
+    def walk(n):
+        if isinstance(n, dict):
+            ref = n.get("$ref")
+            if isinstance(ref, str) and ref.startswith("#/$defs/"):
+                name = ref[len("#/$defs/"):]
+                if name not in keep and name in defs:
+                    keep.add(name)
+                    walk(defs[name])
+            for v in n.values():
+                walk(v)
+        elif isinstance(n, list):
+            for v in n:
+                walk(v)
+
+    walk(node)
+    return {k: defs[k] for k in defs if k in keep}
+
+
 def section_schema(section: str) -> dict:
     """A self-contained schema for one top-level SST section, for Claude's structured output."""
     schema = load_schema()
@@ -215,7 +238,7 @@ def section_schema(section: str) -> dict:
         "properties": {section: sec},
         "required": [section],
         "additionalProperties": False,
-        "$defs": schema["$defs"],
+        "$defs": _prune_defs(sec, schema["$defs"]),
     })
 
 
@@ -227,7 +250,7 @@ def defs_schema(def_name: str, wrap_key: str | None = None, as_array: bool = Fal
     key = wrap_key or def_name.lower()
     return _clean_for_output({
         "type": "object", "properties": {key: body}, "required": [key], "additionalProperties": False,
-        "$defs": schema["$defs"],
+        "$defs": _prune_defs(body, schema["$defs"]),
     })
 
 
