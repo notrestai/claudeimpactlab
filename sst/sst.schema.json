@@ -2695,6 +2695,18 @@
     "patient_summary": {
       "$ref": "#/$defs/PatientSummary"
     },
+    "conversations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ConversationRow"
+      }
+    },
+    "analyses": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AnalysisRow"
+      }
+    },
     "history": {
       "type": "array",
       "items": {
@@ -2726,6 +2738,8 @@
     "eligibility",
     "gaps",
     "patient_summary",
+    "conversations",
+    "analyses",
     "history"
   ],
   "additionalProperties": false,
@@ -2733,9 +2747,22 @@
     "Evidence": {
       "type": "object",
       "properties": {
+        "source": {
+          "type": "string",
+          "enum": [
+            "packet",
+            "transcript",
+            "entered",
+            "external"
+          ],
+          "description": "packet = a page of the referral packet; transcript = a recorded coordination conversation; entered = typed by a party; external = another uploaded document"
+        },
         "page": {
-          "type": "integer",
-          "description": "1-based page number in the packet PDF"
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "1-based page number in the packet PDF. Required when source is packet; null otherwise"
         },
         "doc_type": {
           "type": [
@@ -2744,14 +2771,31 @@
           ],
           "description": "What kind of page: referral_form, face_sheet, h_and_p, progress_note, pt_ot_eval, nursing_note, mar, labs, imaging, ekg, auth_form, fax_cover, social_work_note, consult, other"
         },
+        "ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "For transcript or external sources: the conversation id or document id"
+        },
+        "timestamp": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "For transcript sources: position in the conversation, for example 00:04:12"
+        },
         "quote": {
           "type": "string",
-          "description": "Short verbatim text from the page that supports the value. Never paraphrase into a quote."
+          "description": "Short verbatim text from the page or transcript that supports the value. Never paraphrase into a quote."
         }
       },
       "required": [
+        "source",
         "page",
         "doc_type",
+        "ref",
+        "timestamp",
         "quote"
       ],
       "additionalProperties": false,
@@ -3375,6 +3419,9 @@
           ],
           "additionalProperties": false,
           "description": "The human decision. The tool recommends; the coordinator decides."
+        },
+        "scores": {
+          "$ref": "#/$defs/Scores"
         }
       },
       "required": [
@@ -3386,10 +3433,276 @@
         "open_questions",
         "recommendation",
         "recommendation_rationale",
-        "coordinator_decision"
+        "coordinator_decision",
+        "scores"
       ],
       "additionalProperties": false,
       "description": "Computed by the provider's requirements profile. Never extracted from the packet directly."
+    },
+    "Scores": {
+      "type": "object",
+      "properties": {
+        "computed_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "readiness": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "0 to 100. How ready this packet is to be decided by this provider: completeness, rule coverage, rules met, arrangements confirmed. Not a probability of approval. Hard stops are shown separately and are never averaged in."
+        },
+        "band": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "ready_to_decide",
+            "nearly_ready",
+            "needs_documents",
+            "blocked_by_hard_stop",
+            null
+          ]
+        },
+        "components": {
+          "type": "object",
+          "properties": {
+            "completeness": {
+              "type": "object",
+              "properties": {
+                "score": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "description": "0 to 100"
+                },
+                "present": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "required": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "missing_doc_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "score",
+                "present",
+                "required",
+                "missing_doc_ids"
+              ],
+              "additionalProperties": false,
+              "description": "Checklist documents present out of those this packet needs"
+            },
+            "rule_coverage": {
+              "type": "object",
+              "properties": {
+                "score": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "description": "0 to 100"
+                },
+                "answerable": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "applicable": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "cant_tell_rule_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "score",
+                "answerable",
+                "applicable",
+                "cant_tell_rule_ids"
+              ],
+              "additionalProperties": false,
+              "description": "Applicable rules that can be answered from the record"
+            },
+            "rules_met": {
+              "type": "object",
+              "properties": {
+                "score": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "description": "0 to 100"
+                },
+                "met": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "not_met": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "not_met_rule_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "score",
+                "met",
+                "not_met",
+                "not_met_rule_ids"
+              ],
+              "additionalProperties": false,
+              "description": "Of the answerable rules, how many are met"
+            },
+            "arrangements": {
+              "type": "object",
+              "properties": {
+                "score": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "description": "0 to 100"
+                },
+                "confirmed": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "needed": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "pending_rule_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "score",
+                "confirmed",
+                "needed",
+                "pending_rule_ids"
+              ],
+              "additionalProperties": false,
+              "description": "Conditional rules whose arrangement is confirmed"
+            },
+            "hard_stop_count": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "description": "Number of exclude rules that are met. Any value above 0 sets the band to blocked_by_hard_stop"
+            }
+          },
+          "required": [
+            "completeness",
+            "rule_coverage",
+            "rules_met",
+            "arrangements",
+            "hard_stop_count"
+          ],
+          "additionalProperties": false
+        },
+        "weights": {
+          "type": "object",
+          "properties": {
+            "completeness": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "rule_coverage": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "rules_met": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "arrangements": {
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "completeness",
+            "rule_coverage",
+            "rules_met",
+            "arrangements"
+          ],
+          "additionalProperties": false,
+          "description": "Weights used, from the provider profile. Sum to 1"
+        },
+        "explanation": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Two or three plain sentences the coordinator can read out, naming the biggest reason the score is not 100"
+        },
+        "top_actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Up to three actions that would raise readiness the most, each tied to a gap id"
+        }
+      },
+      "required": [
+        "computed_at",
+        "readiness",
+        "band",
+        "components",
+        "weights",
+        "explanation",
+        "top_actions"
+      ],
+      "additionalProperties": false,
+      "description": "A readiness score, computed deterministically from the rule results. Explains itself. Never shown to the patient."
     },
     "Gap": {
       "type": "object",
@@ -3630,8 +3943,13 @@
             "requested",
             "received",
             "evaluated",
+            "scored",
             "decided",
             "viewed",
+            "analyzed",
+            "transcribed",
+            "accepted",
+            "rejected",
             "commented"
           ]
         },
@@ -3831,6 +4149,299 @@
         "parties"
       ],
       "additionalProperties": false
+    },
+    "ConversationRow": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "hospital_call",
+            "patient_conversation",
+            "provider_internal",
+            "other"
+          ]
+        },
+        "participants": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "provider",
+              "hospital",
+              "patient",
+              "interpreter",
+              "family",
+              "other"
+            ]
+          }
+        },
+        "started_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "duration_seconds": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "consent_confirmed": {
+          "type": "boolean",
+          "description": "Every participant agreed to the recording or dictation before it started. Required true before any transcript is stored. California requires all-party consent for recorded calls."
+        },
+        "consent_note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "transcript_source": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "browser_dictation",
+            "uploaded_audio",
+            "pasted_text",
+            "typed_notes",
+            null
+          ]
+        },
+        "language": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "transcript_text": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The transcript, with speaker labels by role. Identifier scrub runs before storage"
+        },
+        "identifier_scrub": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "passed",
+            "flagged",
+            "not_run",
+            null
+          ],
+          "description": "Result of the check for names, dates of birth, phone numbers and record numbers"
+        },
+        "summary": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Three to five plain sentences: what was asked, what was promised, by when"
+        },
+        "extracted_items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "sst_path": {
+                "type": "string"
+              },
+              "proposed_value": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "As text; the field's own type applies once accepted"
+              },
+              "quote": {
+                "type": "string"
+              },
+              "timestamp": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "proposed",
+                  "accepted",
+                  "rejected"
+                ]
+              },
+              "decided_by": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "sst_path",
+              "proposed_value",
+              "quote",
+              "timestamp",
+              "status",
+              "decided_by"
+            ],
+            "additionalProperties": false,
+            "description": "A fact said in the conversation that could update the SST. Nothing changes until a person accepts it."
+          },
+          "description": "Proposed SST updates from this conversation"
+        },
+        "follow_ups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "what": {
+                "type": "string"
+              },
+              "owner_role": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "due": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "gap_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "what",
+              "owner_role",
+              "due",
+              "gap_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "reviewed",
+            "archived"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "participants",
+        "started_at",
+        "duration_seconds",
+        "consent_confirmed",
+        "consent_note",
+        "transcript_source",
+        "language",
+        "transcript_text",
+        "identifier_scrub",
+        "summary",
+        "extracted_items",
+        "follow_ups",
+        "status"
+      ],
+      "additionalProperties": false,
+      "description": "One coordination conversation: a call with the hospital case manager, or a conversation with the patient. Transcribed, summarized, and mined for proposed SST updates that a person accepts or rejects."
+    },
+    "AnalysisRow": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "ts": {
+          "type": "string"
+        },
+        "actor_role": {
+          "type": "string",
+          "enum": [
+            "extractor",
+            "hospital",
+            "patient",
+            "provider",
+            "system"
+          ]
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "briefing",
+            "question",
+            "compare_sources",
+            "what_would_change"
+          ]
+        },
+        "question": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Empty for a briefing"
+        },
+        "answer": {
+          "type": "string"
+        },
+        "cited_sst_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cited_pages": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "unknowns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Things the question needed that the record does not contain"
+        },
+        "model": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "ts",
+        "actor_role",
+        "mode",
+        "question",
+        "answer",
+        "cited_sst_paths",
+        "cited_pages",
+        "unknowns",
+        "model"
+      ],
+      "additionalProperties": false,
+      "description": "One read-only analysis. Analyses never change the SST; they read it and cite it."
     },
     "Field_bool": {
       "type": "object",

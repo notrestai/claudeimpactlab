@@ -83,8 +83,11 @@
       "status": "found",
       "evidence": [
         {
+          "source": "packet",
           "page": 2,
           "doc_type": "referral_form",
+          "ref": null,
+          "timestamp": null,
           "quote": "Recuperative Care Referral Form"
         }
       ],
@@ -119,8 +122,11 @@
       "status": "found",
       "evidence": [
         {
+          "source": "packet",
           "page": 3,
           "doc_type": "h_and_p",
+          "ref": null,
+          "timestamp": null,
           "quote": "HISTORY AND PHYSICAL"
         }
       ],
@@ -155,8 +161,11 @@
       "status": "found",
       "evidence": [
         {
+          "source": "packet",
           "page": 6,
           "doc_type": "mar",
+          "ref": null,
+          "timestamp": null,
           "quote": "Medication Administration Record"
         }
       ],
@@ -171,8 +180,11 @@
       "status": "found",
       "evidence": [
         {
+          "source": "packet",
           "page": 4,
           "doc_type": "pt_ot_eval",
+          "ref": null,
+          "timestamp": null,
           "quote": "Physical Therapy Evaluation"
         }
       ],
@@ -239,8 +251,11 @@
       "status": "found",
       "evidence": [
         {
+          "source": "packet",
           "page": 3,
           "doc_type": "h_and_p",
+          "ref": null,
+          "timestamp": null,
           "quote": "admitted to medicine floor"
         }
       ],
@@ -255,8 +270,11 @@
       "status": "found",
       "evidence": [
         {
+          "source": "packet",
           "page": 3,
           "doc_type": "h_and_p",
+          "ref": null,
+          "timestamp": null,
           "quote": "CC: left lower extremity cellulitis"
         }
       ],
@@ -333,8 +351,11 @@
       "status": "conflict",
       "evidence": [
         {
+          "source": "packet",
           "page": 2,
           "doc_type": "referral_form",
+          "ref": null,
+          "timestamp": null,
           "quote": "Age: 58"
         }
       ],
@@ -438,8 +459,11 @@
       "status": "found",
       "evidence": [
         {
+          "source": "packet",
           "page": 2,
           "doc_type": "referral_form",
+          "ref": null,
+          "timestamp": null,
           "quote": "Currently unhoused: Yes"
         }
       ],
@@ -621,8 +645,11 @@
         "status": "found",
         "evidence": [
           {
+            "source": "packet",
             "page": 4,
             "doc_type": "pt_ot_eval",
+            "ref": null,
+            "timestamp": null,
             "quote": "ambulated 150 ft with FWW, mod I"
           }
         ],
@@ -637,8 +664,11 @@
         "status": "found",
         "evidence": [
           {
+            "source": "packet",
             "page": 4,
             "doc_type": "pt_ot_eval",
+            "ref": null,
+            "timestamp": null,
             "quote": "mod I"
           }
         ],
@@ -655,8 +685,11 @@
         "status": "found",
         "evidence": [
           {
+            "source": "packet",
             "page": 4,
             "doc_type": "pt_ot_eval",
+            "ref": null,
+            "timestamp": null,
             "quote": "FWW"
           }
         ],
@@ -691,8 +724,11 @@
         "status": "found",
         "evidence": [
           {
+            "source": "packet",
             "page": 4,
             "doc_type": "pt_ot_eval",
+            "ref": null,
+            "timestamp": null,
             "quote": "transfers: independent"
           }
         ],
@@ -730,8 +766,11 @@
       "status": "found",
       "evidence": [
         {
+          "source": "packet",
           "page": 3,
           "doc_type": "h_and_p",
+          "ref": null,
+          "timestamp": null,
           "quote": "A&O x4"
         }
       ],
@@ -1066,8 +1105,11 @@
       "status": "found",
       "evidence": [
         {
+          "source": "packet",
           "page": 6,
           "doc_type": "mar",
+          "ref": null,
+          "timestamp": null,
           "quote": "metformin 1000 mg PO BID"
         }
       ],
@@ -1380,8 +1422,11 @@
       "status": "found",
       "evidence": [
         {
+          "source": "packet",
           "page": 5,
           "doc_type": "labs",
+          "ref": null,
+          "timestamp": null,
           "quote": "POC glucose 162, 148"
         }
       ],
@@ -1801,8 +1846,11 @@
         "status": "found",
         "evidence": [
           {
+            "source": "packet",
             "page": 3,
             "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
             "quote": "PMH: DM2"
           }
         ],
@@ -1817,8 +1865,11 @@
         "status": "found",
         "evidence": [
           {
+            "source": "packet",
             "page": 3,
             "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
             "quote": "cellulitis"
           }
         ],
@@ -1879,8 +1930,11 @@
         "status": "found",
         "evidence": [
           {
+            "source": "packet",
             "page": 3,
             "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
             "quote": "left lower extremity"
           }
         ],
@@ -1895,8 +1949,11 @@
         "status": "found",
         "evidence": [
           {
+            "source": "packet",
             "page": 6,
             "doc_type": "mar",
+            "ref": null,
+            "timestamp": null,
             "quote": "cephalexin 500 mg PO"
           }
         ],
@@ -2006,12 +2063,21 @@
     "pcp_followup_scheduled": {
       "value": true,
       "status": "entered",
-      "evidence": [],
+      "evidence": [
+        {
+          "source": "transcript",
+          "page": null,
+          "doc_type": null,
+          "ref": "CONV-1",
+          "timestamp": "00:03:10",
+          "quote": "the PCP follow-up is booked for next week"
+        }
+      ],
       "conflicts": [],
       "confidence": "high",
-      "updated_by": "hospital",
+      "updated_by": "provider",
       "updated_at": "2026-10-17T10:30:00-07:00",
-      "note": "Entered by hospital case manager after request"
+      "note": "Accepted from the hospital call transcript"
     },
     "specialty_followups": {
       "value": [],
@@ -2059,8 +2125,11 @@
         ],
         "evidence": [
           {
+            "source": "packet",
             "page": 4,
             "doc_type": "pt_ot_eval",
+            "ref": null,
+            "timestamp": null,
             "quote": "ambulated 150 ft with FWW, mod I"
           }
         ],
@@ -2076,8 +2145,11 @@
         ],
         "evidence": [
           {
+            "source": "packet",
             "page": 3,
             "doc_type": "h_and_p",
+            "ref": null,
+            "timestamp": null,
             "quote": "A&O x4"
           }
         ],
@@ -2117,8 +2189,11 @@
         ],
         "evidence": [
           {
+            "source": "packet",
             "page": 5,
             "doc_type": "labs",
+            "ref": null,
+            "timestamp": null,
             "quote": "POC glucose 162, 148"
           }
         ],
@@ -2140,6 +2215,61 @@
       "reason": null,
       "decided_by": null,
       "decided_at": null
+    },
+    "scores": {
+      "computed_at": "2026-10-17T10:40:00-07:00",
+      "readiness": 46,
+      "band": "needs_documents",
+      "components": {
+        "completeness": {
+          "score": 50,
+          "present": 4,
+          "required": 8,
+          "missing_doc_ids": [
+            "DOC-2",
+            "DOC-3",
+            "DOC-6",
+            "DOC-9"
+          ]
+        },
+        "rule_coverage": {
+          "score": 40,
+          "answerable": 2,
+          "applicable": 5,
+          "cant_tell_rule_ids": [
+            "INF-1",
+            "ID-1",
+            "DM-1"
+          ]
+        },
+        "rules_met": {
+          "score": 100,
+          "met": 2,
+          "not_met": 0,
+          "not_met_rule_ids": []
+        },
+        "arrangements": {
+          "score": 0,
+          "confirmed": 0,
+          "needed": 1,
+          "pending_rule_ids": [
+            "DM-4"
+          ]
+        },
+        "hard_stop_count": 0
+      },
+      "weights": {
+        "completeness": 0.3,
+        "rule_coverage": 0.3,
+        "rules_met": 0.3,
+        "arrangements": 0.1
+      },
+      "explanation": "Everything the packet does answer is in the patient's favour, but three of five applicable rules cannot be checked yet. The MRSA swab, five sets of vitals and three more glucose readings would move this to nearly ready.",
+      "top_actions": [
+        "G1: get the MRSA swab result",
+        "G2: get the last five sets of vital signs",
+        "G3: get five consecutive glucose readings"
+      ]
     }
   },
   "gaps": [
@@ -2199,6 +2329,89 @@
       "received_at": null,
       "draft_request_text": "Please send five consecutive point-of-care glucose readings.",
       "note": null
+    }
+  ],
+  "conversations": [
+    {
+      "id": "CONV-1",
+      "kind": "hospital_call",
+      "participants": [
+        "provider",
+        "hospital"
+      ],
+      "started_at": "2026-10-17T10:41:00-07:00",
+      "duration_seconds": 240,
+      "consent_confirmed": true,
+      "consent_note": "Both parties agreed to dictation at the start of the call (fictional)",
+      "transcript_source": "browser_dictation",
+      "language": "en",
+      "transcript_text": "PROVIDER: Calling about the cellulitis referral. We are missing the MRSA swab. HOSPITAL: It was done, I will fax the result within the hour. PROVIDER: And the last five sets of vitals? HOSPITAL: Yes, sending those too. Also the PCP follow-up is booked for next week.",
+      "identifier_scrub": "passed",
+      "summary": "Hospital confirmed the MRSA swab was done and will fax the result within the hour, together with the last five sets of vitals. Primary care follow-up is booked.",
+      "extracted_items": [
+        {
+          "sst_path": "arrangements.pcp_followup_scheduled",
+          "proposed_value": "true",
+          "quote": "the PCP follow-up is booked for next week",
+          "timestamp": "00:03:10",
+          "status": "accepted",
+          "decided_by": "Referral coordinator"
+        },
+        {
+          "sst_path": "infection_control.mrsa_swab_result",
+          "proposed_value": "pending",
+          "quote": "It was done, I will fax the result within the hour",
+          "timestamp": "00:00:45",
+          "status": "proposed",
+          "decided_by": null
+        }
+      ],
+      "follow_ups": [
+        {
+          "what": "Receive MRSA result by fax",
+          "owner_role": "hospital",
+          "due": "within the hour",
+          "gap_id": "G1"
+        },
+        {
+          "what": "Receive five sets of vitals",
+          "owner_role": "hospital",
+          "due": "within the hour",
+          "gap_id": "G2"
+        }
+      ],
+      "status": "reviewed"
+    }
+  ],
+  "analyses": [
+    {
+      "id": "AN-1",
+      "ts": "2026-10-17T10:43:00-07:00",
+      "actor_role": "provider",
+      "mode": "briefing",
+      "question": null,
+      "answer": "Fifty-eight-year-old with left lower leg cellulitis on oral antibiotics, walking 150 ft at modified independence with a walker and alert and oriented x4. Nothing in the record excludes admission. Three rules cannot be checked: no MRSA swab, no vital signs and only two glucose readings. The age differs between the referral form and the H&P.",
+      "cited_sst_paths": [
+        "referral.chief_complaint_or_admitting_dx",
+        "function.mobility.ambulation_distance_ft",
+        "cognition.orientation",
+        "infection_control.mrsa_swab_result",
+        "vitals.set_count",
+        "labs.glucose_reading_count",
+        "patient.age_years"
+      ],
+      "cited_pages": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "unknowns": [
+        "MRSA swab result",
+        "Last five sets of vital signs",
+        "Three more glucose readings"
+      ],
+      "model": "claude-opus-5-5"
     }
   ],
   "patient_summary": {

@@ -1879,9 +1879,51 @@
       "reason": null,
       "decided_by": null,
       "decided_at": null
+    },
+    "scores": {
+      "computed_at": null,
+      "readiness": null,
+      "band": null,
+      "components": {
+        "completeness": {
+          "score": null,
+          "present": null,
+          "required": null,
+          "missing_doc_ids": []
+        },
+        "rule_coverage": {
+          "score": null,
+          "answerable": null,
+          "applicable": null,
+          "cant_tell_rule_ids": []
+        },
+        "rules_met": {
+          "score": null,
+          "met": null,
+          "not_met": null,
+          "not_met_rule_ids": []
+        },
+        "arrangements": {
+          "score": null,
+          "confirmed": null,
+          "needed": null,
+          "pending_rule_ids": []
+        },
+        "hard_stop_count": null
+      },
+      "weights": {
+        "completeness": null,
+        "rule_coverage": null,
+        "rules_met": null,
+        "arrangements": null
+      },
+      "explanation": null,
+      "top_actions": []
     }
   },
   "gaps": [],
+  "conversations": [],
+  "analyses": [],
   "patient_summary": {
     "language": null,
     "requires_staff_review": true,

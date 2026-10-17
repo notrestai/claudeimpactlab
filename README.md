@@ -31,7 +31,8 @@ Start here:
 - [`docs/01-idea-evaluation.md`](docs/01-idea-evaluation.md): why this idea, the risks, the cut lines
 - [`docs/02-sst-template.md`](docs/02-sst-template.md): what the SST is and the rules it follows
 - [`docs/02b-sst-field-reference.md`](docs/02b-sst-field-reference.md): every field, who supplies it, which IHH rules it feeds
-- [`docs/03-backend-prd.md`](docs/03-backend-prd.md): the service, pipeline, API and plan for the day
+- [`docs/03-backend-prd.md`](docs/03-backend-prd.md): the service, pipeline, API, scoring, analyze mode and conversations
+- [`docs/04-build-plan.md`](docs/04-build-plan.md): lanes, work packages, timeline, cut lines for the day
 - [`sst/`](sst/): the schema, a blank record, a fictional example, and the generator
 - [`providers/ihh/`](providers/ihh/): IHH's criteria and the rule-to-field map
 
@@ -65,10 +66,14 @@ Python 3.13 and an Anthropic API key. No keys in the repo.
 | Packet ingest and page index | [working / partly working / mocked] |
 | Section extraction with evidence | [working / partly working / mocked] |
 | Rule evaluation, gaps, draft reply | [working / partly working / mocked] |
+| Readiness score per provider | [working / partly working / mocked] |
+| Analyze mode (read-only briefing and questions, with citations) | [working / partly working / mocked] |
+| Conversations: consent gate, dictation or pasted transcript, summary, proposed updates | [working / partly working / mocked] |
 | Coordinator view | [working / partly working / mocked] |
 | Hospital view | [working / partly working / mocked] |
 | Patient view and summary | [working / partly working / mocked] |
 | Sending anything to anyone | not built, by design |
+| Audio file transcription | not built; browser dictation or pasted text only |
 | Login, accounts | mocked: a role switcher |
 
 ## Where it gets things wrong

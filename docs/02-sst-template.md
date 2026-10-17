@@ -51,9 +51,13 @@ imaging_cardiac   chest imaging, EKG, ejection fraction, arrhythmia
 conditions        primary diagnosis, problem list tagged to rule IDs, condition flags
 disease_specific  the extra diabetes, infection, respiratory and cardiac questions
 arrangements      home health, wound care, PT, hospice, follow-ups, oxygen delivery, dialysis
-eligibility       computed: one result per rule, hard stops, recommendation, the coordinator's decision
+eligibility       computed: one result per rule, hard stops, recommendation, the coordinator's decision,
+                  and the readiness score with its breakdown
 gaps              what to ask for, from whom, and whether it has been requested or received
 patient_summary   plain-language status for the patient, reviewed by staff before it is shown
+conversations     transcribed coordination calls and patient conversations, each with a summary and
+                  proposed SST updates that a person accepts or rejects
+analyses          read-only analyses the provider ran: briefings and answered questions, with citations
 history           every change
 ```
 
@@ -63,7 +67,8 @@ Each clinical field (everything from `documents` to `arrangements`) is wrapped t
 {
   "value": 150,
   "status": "found",
-  "evidence": [{"page": 4, "doc_type": "pt_ot_eval", "quote": "ambulated 150 ft with FWW, mod I"}],
+  "evidence": [{"source": "packet", "page": 4, "doc_type": "pt_ot_eval", "ref": null, "timestamp": null,
+                "quote": "ambulated 150 ft with FWW, mod I"}],
   "conflicts": [],
   "confidence": "high",
   "updated_by": "extractor",
@@ -71,6 +76,10 @@ Each clinical field (everything from `documents` to `arrangements`) is wrapped t
   "note": null
 }
 ```
+
+Evidence has a `source`: `packet` (a page), `transcript` (a conversation, with its id and a timestamp),
+`entered` (typed by a party) or `external` (another uploaded document). Whatever the source, a quote is
+required.
 
 ## Statuses
 
@@ -111,6 +120,39 @@ overwrites a `confirmed` or `entered` value; it adds a conflict instead.
 6. **Provider** confirms the key fields, reads the readout, records the decision and the reason.
 7. **Patient** sees a plain-language summary in their language: what was sent, what is still needed, who is
    getting it, which programs are considering them. Staff review it first.
+
+## The readiness score
+
+`eligibility.scores` is computed from the rule results, never by a model, so it can always explain
+itself. It answers "how ready is this packet to be decided by this provider", not "will it be approved".
+
+| Component | What it measures | Default weight |
+|---|---|---|
+| completeness | checklist documents present, out of those this packet needs | 0.3 |
+| rule_coverage | applicable rules that can be answered from the record | 0.3 |
+| rules_met | of the answerable rules, how many are met | 0.3 |
+| arrangements | conditional rules whose arrangement is confirmed | 0.1 |
+
+Hard stops are counted separately and are never averaged in: one hard stop sets the band to
+`blocked_by_hard_stop` whatever the number says. The score comes with a two-sentence explanation and up
+to three actions, each tied to a gap, that would raise it most. Weights live in the provider profile so
+a second provider can weigh things differently. The patient never sees the score.
+
+## Conversations
+
+A conversation is a call with the hospital case manager or a talk with the patient, captured by browser
+dictation, an uploaded recording, pasted text or typed notes. `consent_confirmed` must be true before a
+transcript is stored; California requires every party's consent to record a call. The transcript is
+scrubbed for names, dates of birth, phone numbers and record numbers before storage. Claude writes a
+summary and proposes SST updates with a quote and timestamp each; nothing changes in the record until a
+person accepts the item, and an accepted item carries transcript evidence.
+
+## Analyses
+
+The provider's Analyze button runs in read-only mode. It reads the SST and the page images, never
+writes to either, and every answer cites SST paths and pages and lists what the record does not
+contain. Four modes: a briefing, a question, compare sources (form against chart), and what would change
+(which missing items would flip which rules). Each run is kept under `analyses` and logged in history.
 
 ## What the patient view may contain
 

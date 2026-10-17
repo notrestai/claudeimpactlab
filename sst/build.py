@@ -357,9 +357,12 @@ def S(t, desc=None, nullable=True, **kw):
 
 
 EVIDENCE = obj({
-    "page": S("integer", "1-based page number in the packet PDF", nullable=False),
+    "source": {"type": "string", "enum": ["packet", "transcript", "entered", "external"], "description": "packet = a page of the referral packet; transcript = a recorded coordination conversation; entered = typed by a party; external = another uploaded document"},
+    "page": S("integer", "1-based page number in the packet PDF. Required when source is packet; null otherwise"),
     "doc_type": S("string", "What kind of page: referral_form, face_sheet, h_and_p, progress_note, pt_ot_eval, nursing_note, mar, labs, imaging, ekg, auth_form, fax_cover, social_work_note, consult, other"),
-    "quote": S("string", "Short verbatim text from the page that supports the value. Never paraphrase into a quote.", nullable=False),
+    "ref": S("string", "For transcript or external sources: the conversation id or document id"),
+    "timestamp": S("string", "For transcript sources: position in the conversation, for example 00:04:12"),
+    "quote": S("string", "Short verbatim text from the page or transcript that supports the value. Never paraphrase into a quote.", nullable=False),
 }, "Where a value came from. Every 'found' value needs at least one.")
 
 CONFLICT = obj({
@@ -448,7 +451,62 @@ ELIGIBILITY = obj({
         "decided_by": S("string"),
         "decided_at": S("string"),
     }, "The human decision. The tool recommends; the coordinator decides."),
+    "scores": {"$ref": "#/$defs/Scores"},
 }, "Computed by the provider's requirements profile. Never extracted from the packet directly.")
+
+SCORES = obj({
+    "computed_at": S("string"),
+    "readiness": S("integer", "0 to 100. How ready this packet is to be decided by this provider: completeness, rule coverage, rules met, arrangements confirmed. Not a probability of approval. Hard stops are shown separately and are never averaged in."),
+    "band": {"type": ["string", "null"], "enum": ["ready_to_decide", "nearly_ready", "needs_documents", "blocked_by_hard_stop", None]},
+    "components": obj({
+        "completeness": obj({"score": S("integer", "0 to 100"), "present": S("integer"), "required": S("integer"), "missing_doc_ids": {"type": "array", "items": {"type": "string"}}}, "Checklist documents present out of those this packet needs"),
+        "rule_coverage": obj({"score": S("integer", "0 to 100"), "answerable": S("integer"), "applicable": S("integer"), "cant_tell_rule_ids": {"type": "array", "items": {"type": "string"}}}, "Applicable rules that can be answered from the record"),
+        "rules_met": obj({"score": S("integer", "0 to 100"), "met": S("integer"), "not_met": S("integer"), "not_met_rule_ids": {"type": "array", "items": {"type": "string"}}}, "Of the answerable rules, how many are met"),
+        "arrangements": obj({"score": S("integer", "0 to 100"), "confirmed": S("integer"), "needed": S("integer"), "pending_rule_ids": {"type": "array", "items": {"type": "string"}}}, "Conditional rules whose arrangement is confirmed"),
+        "hard_stop_count": S("integer", "Number of exclude rules that are met. Any value above 0 sets the band to blocked_by_hard_stop"),
+    }),
+    "weights": obj({"completeness": S("number"), "rule_coverage": S("number"), "rules_met": S("number"), "arrangements": S("number")}, "Weights used, from the provider profile. Sum to 1"),
+    "explanation": S("string", "Two or three plain sentences the coordinator can read out, naming the biggest reason the score is not 100"),
+    "top_actions": {"type": "array", "items": {"type": "string"}, "description": "Up to three actions that would raise readiness the most, each tied to a gap id"},
+}, "A readiness score, computed deterministically from the rule results. Explains itself. Never shown to the patient.")
+
+CONVERSATION_ROW = obj({
+    "id": S("string", nullable=False),
+    "kind": {"type": "string", "enum": ["hospital_call", "patient_conversation", "provider_internal", "other"]},
+    "participants": {"type": "array", "items": {"type": "string", "enum": ["provider", "hospital", "patient", "interpreter", "family", "other"]}},
+    "started_at": S("string"),
+    "duration_seconds": S("integer"),
+    "consent_confirmed": S("boolean", "Every participant agreed to the recording or dictation before it started. Required true before any transcript is stored. California requires all-party consent for recorded calls.", nullable=False),
+    "consent_note": S("string"),
+    "transcript_source": {"type": ["string", "null"], "enum": ["browser_dictation", "uploaded_audio", "pasted_text", "typed_notes", None]},
+    "language": S("string"),
+    "transcript_text": S("string", "The transcript, with speaker labels by role. Identifier scrub runs before storage"),
+    "identifier_scrub": {"type": ["string", "null"], "enum": ["passed", "flagged", "not_run", None], "description": "Result of the check for names, dates of birth, phone numbers and record numbers"},
+    "summary": S("string", "Three to five plain sentences: what was asked, what was promised, by when"),
+    "extracted_items": {"type": "array", "items": obj({
+        "sst_path": S("string", nullable=False),
+        "proposed_value": S("string", "As text; the field's own type applies once accepted"),
+        "quote": S("string", nullable=False),
+        "timestamp": S("string"),
+        "status": {"type": "string", "enum": ["proposed", "accepted", "rejected"]},
+        "decided_by": S("string"),
+    }, "A fact said in the conversation that could update the SST. Nothing changes until a person accepts it."), "description": "Proposed SST updates from this conversation"},
+    "follow_ups": {"type": "array", "items": obj({"what": S("string", nullable=False), "owner_role": S("string"), "due": S("string"), "gap_id": S("string")})},
+    "status": {"type": "string", "enum": ["draft", "reviewed", "archived"]},
+}, "One coordination conversation: a call with the hospital case manager, or a conversation with the patient. Transcribed, summarized, and mined for proposed SST updates that a person accepts or rejects.")
+
+ANALYSIS_ROW = obj({
+    "id": S("string", nullable=False),
+    "ts": S("string", nullable=False),
+    "actor_role": {"type": "string", "enum": ACTORS},
+    "mode": {"type": "string", "enum": ["briefing", "question", "compare_sources", "what_would_change"]},
+    "question": S("string", "Empty for a briefing"),
+    "answer": S("string", nullable=False),
+    "cited_sst_paths": {"type": "array", "items": {"type": "string"}},
+    "cited_pages": {"type": "array", "items": {"type": "integer"}},
+    "unknowns": {"type": "array", "items": {"type": "string"}, "description": "Things the question needed that the record does not contain"},
+    "model": S("string"),
+}, "One read-only analysis. Analyses never change the SST; they read it and cite it.")
 
 GAP = obj({
     "id": S("string", nullable=False),
@@ -477,7 +535,7 @@ HISTORY_ROW = obj({
     "ts": S("string", nullable=False),
     "actor_role": {"type": "string", "enum": ACTORS},
     "actor_label": S("string", "Display label, never a real name in the event build"),
-    "action": {"type": "string", "enum": ["extracted", "edited", "confirmed", "requested", "received", "evaluated", "decided", "viewed", "commented"]},
+    "action": {"type": "string", "enum": ["extracted", "edited", "confirmed", "requested", "received", "evaluated", "scored", "decided", "viewed", "analyzed", "transcribed", "accepted", "rejected", "commented"]},
     "path": S("string", "Dotted SST path affected"),
     "old_value": S("string"), "new_value": S("string"), "note": S("string"),
 }, "One change. The SST is append-only in history.")
@@ -502,6 +560,18 @@ META = obj({
         })},
     }),
 })
+
+
+def BLANK_SCORES():
+    comp = lambda **k: {"score": None, **k}
+    return {"computed_at": None, "readiness": None, "band": None,
+            "components": {"completeness": comp(present=None, required=None, missing_doc_ids=[]),
+                           "rule_coverage": comp(answerable=None, applicable=None, cant_tell_rule_ids=[]),
+                           "rules_met": comp(met=None, not_met=None, not_met_rule_ids=[]),
+                           "arrangements": comp(confirmed=None, needed=None, pending_rule_ids=[]),
+                           "hard_stop_count": None},
+            "weights": {"completeness": None, "rule_coverage": None, "rules_met": None, "arrangements": None},
+            "explanation": None, "top_actions": []}
 
 
 def build_schema():
@@ -543,11 +613,16 @@ def build_schema():
     root_props["eligibility"] = {"$ref": "#/$defs/Eligibility"}
     root_props["gaps"] = {"type": "array", "items": {"$ref": "#/$defs/Gap"}}
     root_props["patient_summary"] = {"$ref": "#/$defs/PatientSummary"}
+    root_props["conversations"] = {"type": "array", "items": {"$ref": "#/$defs/ConversationRow"}}
+    root_props["analyses"] = {"type": "array", "items": {"$ref": "#/$defs/AnalysisRow"}}
     root_props["history"] = {"type": "array", "items": {"$ref": "#/$defs/HistoryRow"}}
     blank["eligibility"] = {"provider_id": None, "profile_version": None, "evaluated_at": None, "rules": [], "hard_stops": [],
                             "open_questions": [], "recommendation": None, "recommendation_rationale": None,
-                            "coordinator_decision": {"decision": None, "reason": None, "decided_by": None, "decided_at": None}}
+                            "coordinator_decision": {"decision": None, "reason": None, "decided_by": None, "decided_at": None},
+                            "scores": BLANK_SCORES()}
     blank["gaps"] = []
+    blank["conversations"] = []
+    blank["analyses"] = []
     blank["patient_summary"] = {"language": None, "requires_staff_review": True, "reviewed_by": None, "reviewed_at": None,
                                 "where_things_stand": None, "what_is_still_needed": [], "your_options": [], "questions_to_ask_your_team": []}
     blank["history"] = []
@@ -567,7 +642,8 @@ def build_schema():
         "$defs": {
             "Evidence": EVIDENCE, "Conflict": CONFLICT, "WoundRow": WOUND_ROW, "VitalsRow": VITALS_ROW, "LabRow": LAB_ROW,
             "CultureRow": CULTURE_ROW, "ProblemRow": PROBLEM_ROW, "PageRow": PAGE_ROW, "RuleResult": RULE_RESULT,
-            "Eligibility": ELIGIBILITY, "Gap": GAP, "PatientSummary": PATIENT_SUMMARY, "HistoryRow": HISTORY_ROW, "Meta": META,
+            "Eligibility": ELIGIBILITY, "Scores": SCORES, "Gap": GAP, "PatientSummary": PATIENT_SUMMARY, "HistoryRow": HISTORY_ROW, "Meta": META,
+            "ConversationRow": CONVERSATION_ROW, "AnalysisRow": ANALYSIS_ROW,
             **FIELD_DEFS,
         },
     }
@@ -657,7 +733,8 @@ def build_example(blank):
     ex["meta"]["parties"] = {"hospital": {"label": "Referring hospital (fictional)", "contact_role": "case_manager"},
                              "patient": {"label": "Patient"},
                              "providers": [{"provider_id": "ihh", "name": "Illumination Health + Home", "status": "reviewing", "updated_at": "2026-10-17T10:45:00-07:00"}]}
-    E = lambda p, d, q: [{"page": p, "doc_type": d, "quote": q}]
+    E = lambda p, d, q: [{"source": "packet", "page": p, "doc_type": d, "ref": None, "timestamp": None, "quote": q}]
+    T = lambda cid, ts, q: [{"source": "transcript", "page": None, "doc_type": None, "ref": cid, "timestamp": ts, "quote": q}]
     set_field(ex, "documents.doc_1_referral_form", True, evidence=E(2, "referral_form", "Recuperative Care Referral Form"))
     set_field(ex, "documents.doc_4_history_and_physical", True, evidence=E(3, "h_and_p", "HISTORY AND PHYSICAL"))
     set_field(ex, "documents.doc_8_pt_ot_or_nursing_notes", True, evidence=E(4, "pt_ot_eval", "Physical Therapy Evaluation"))
@@ -685,7 +762,7 @@ def build_example(blank):
     set_field(ex, "infection_control.mrsa_swab_result", None, status="not_in_packet")
     set_field(ex, "infection_control.covid_test_result", None, status="not_in_packet")
     set_field(ex, "vitals.set_count", 0, status="not_in_packet")
-    set_field(ex, "arrangements.pcp_followup_scheduled", True, status="entered", by="hospital", note="Entered by hospital case manager after request")
+    set_field(ex, "arrangements.pcp_followup_scheduled", True, status="entered", by="provider", evidence=T("CONV-1", "00:03:10", "the PCP follow-up is booked for next week"), note="Accepted from the hospital call transcript")
     set_field(ex, "patient.preferred_language", "Spanish", status="entered", by="patient")
     ex["eligibility"] = {
         "provider_id": "ihh", "profile_version": "2026-10-17", "evaluated_at": "2026-10-17T10:40:00-07:00",
@@ -701,7 +778,43 @@ def build_example(blank):
         "recommendation": "request_information",
         "recommendation_rationale": "Function and cognition rules are met. Infection-control and diabetes documentation is missing, so the packet cannot be approved yet.",
         "coordinator_decision": {"decision": None, "reason": None, "decided_by": None, "decided_at": None},
+        "scores": {
+            "computed_at": "2026-10-17T10:40:00-07:00", "readiness": 46, "band": "needs_documents",
+            "components": {
+                "completeness": {"score": 50, "present": 4, "required": 8, "missing_doc_ids": ["DOC-2", "DOC-3", "DOC-6", "DOC-9"]},
+                "rule_coverage": {"score": 40, "answerable": 2, "applicable": 5, "cant_tell_rule_ids": ["INF-1", "ID-1", "DM-1"]},
+                "rules_met": {"score": 100, "met": 2, "not_met": 0, "not_met_rule_ids": []},
+                "arrangements": {"score": 0, "confirmed": 0, "needed": 1, "pending_rule_ids": ["DM-4"]},
+                "hard_stop_count": 0,
+            },
+            "weights": {"completeness": 0.3, "rule_coverage": 0.3, "rules_met": 0.3, "arrangements": 0.1},
+            "explanation": "Everything the packet does answer is in the patient's favour, but three of five applicable rules cannot be checked yet. The MRSA swab, five sets of vitals and three more glucose readings would move this to nearly ready.",
+            "top_actions": ["G1: get the MRSA swab result", "G2: get the last five sets of vital signs", "G3: get five consecutive glucose readings"],
+        },
     }
+    ex["conversations"] = [{
+        "id": "CONV-1", "kind": "hospital_call", "participants": ["provider", "hospital"],
+        "started_at": "2026-10-17T10:41:00-07:00", "duration_seconds": 240, "consent_confirmed": True,
+        "consent_note": "Both parties agreed to dictation at the start of the call (fictional)",
+        "transcript_source": "browser_dictation", "language": "en",
+        "transcript_text": "PROVIDER: Calling about the cellulitis referral. We are missing the MRSA swab. HOSPITAL: It was done, I will fax the result within the hour. PROVIDER: And the last five sets of vitals? HOSPITAL: Yes, sending those too. Also the PCP follow-up is booked for next week.",
+        "identifier_scrub": "passed",
+        "summary": "Hospital confirmed the MRSA swab was done and will fax the result within the hour, together with the last five sets of vitals. Primary care follow-up is booked.",
+        "extracted_items": [
+            {"sst_path": "arrangements.pcp_followup_scheduled", "proposed_value": "true", "quote": "the PCP follow-up is booked for next week", "timestamp": "00:03:10", "status": "accepted", "decided_by": "Referral coordinator"},
+            {"sst_path": "infection_control.mrsa_swab_result", "proposed_value": "pending", "quote": "It was done, I will fax the result within the hour", "timestamp": "00:00:45", "status": "proposed", "decided_by": None},
+        ],
+        "follow_ups": [{"what": "Receive MRSA result by fax", "owner_role": "hospital", "due": "within the hour", "gap_id": "G1"},
+                       {"what": "Receive five sets of vitals", "owner_role": "hospital", "due": "within the hour", "gap_id": "G2"}],
+        "status": "reviewed",
+    }]
+    ex["analyses"] = [{
+        "id": "AN-1", "ts": "2026-10-17T10:43:00-07:00", "actor_role": "provider", "mode": "briefing", "question": None,
+        "answer": "Fifty-eight-year-old with left lower leg cellulitis on oral antibiotics, walking 150 ft at modified independence with a walker and alert and oriented x4. Nothing in the record excludes admission. Three rules cannot be checked: no MRSA swab, no vital signs and only two glucose readings. The age differs between the referral form and the H&P.",
+        "cited_sst_paths": ["referral.chief_complaint_or_admitting_dx", "function.mobility.ambulation_distance_ft", "cognition.orientation", "infection_control.mrsa_swab_result", "vitals.set_count", "labs.glucose_reading_count", "patient.age_years"],
+        "cited_pages": [2, 3, 4, 5], "unknowns": ["MRSA swab result", "Last five sets of vital signs", "Three more glucose readings"],
+        "model": "claude-opus-5-5",
+    }]
     ex["gaps"] = [
         {"id": "G1", "what": "MRSA swab result", "why_rule_ids": ["INF-1"], "doc_ids": ["DOC-9"], "sst_fields": ["infection_control.mrsa_swab_result"], "who_can_supply": "hospital_nurse", "status": "requested", "requested_at": "2026-10-17T10:42:00-07:00", "received_at": None, "draft_request_text": "Please send the documented MRSA nasal swab result for this patient.", "note": None},
         {"id": "G2", "what": "Last 5 sets of vital signs", "why_rule_ids": ["ID-1"], "doc_ids": ["DOC-6"], "sst_fields": ["vitals.sets"], "who_can_supply": "hospital_nurse", "status": "open", "requested_at": None, "received_at": None, "draft_request_text": "Please send the last five sets of vital signs.", "note": None},
