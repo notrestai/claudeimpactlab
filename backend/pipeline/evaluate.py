@@ -14,11 +14,12 @@ class Ctx:
         self.used: list[str] = []
 
     def v(self, path):
-        """Known value or None. Records the path."""
+        """Known value or None. Records the path. A conflict carries the reading the extractor judged most recent
+        (the other reading is listed under conflicts), so rules see it; the conflict itself stays visible in the record."""
         if path not in self.used:
             self.used.append(path)
         value, status = sstlib.val(self.sst, path)
-        return value if status in KNOWN else None
+        return value if status in KNOWN or status == "conflict" else None
 
     def st(self, path):
         return sstlib.val(self.sst, path)[1]
@@ -298,7 +299,7 @@ def _cardiac(c): return c.flag("conditions.flags.cardiac_condition")
 RULES = {
     # general basis (any one of)
     "GEN-1": (always, lambda c: ("met", "Unhoused or at risk and too ill to recover outside.") if (c.v("housing.housing_situation") in ("unhoused", "at_risk", "inadequate_environment") and c.v("housing.too_ill_to_recover_outside") is True) else (("not_met", "Housed or not too ill per the record.") if c.v("housing.housing_situation") == "housed" else ("cant_tell", "Housing status or need for recuperative care not documented."))),
-    "GEN-2": (always, lambda c: ("met", "Lives alone with no supports and too ill to recover.") if (c.v("housing.lives_alone_no_supports") is True and c.v("housing.too_ill_to_recover_outside") is True) else ("not_applicable", "Not the stated basis.")),
+    "GEN-2": (always, lambda c: ("met", "Lives alone with no supports and too ill to recover.") if (c.v("housing.lives_alone_no_supports") is True and c.v("housing.too_ill_to_recover_outside") is True) else (("cant_tell", "No supports documented; whether too ill to recover outside is not stated.") if c.v("housing.lives_alone_no_supports") is True else ("not_applicable", "Not the stated basis."))),
     "GEN-3": (always, lambda c: ("met", "At risk of re-hospitalization.") if c.v("housing.readmission_risk") is True else ("not_applicable", "Not the stated basis.")),
     # ADLs
     "ADL-1": (always, _adl_all),

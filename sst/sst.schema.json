@@ -418,7 +418,7 @@
         },
         "too_ill_to_recover_outside": {
           "$ref": "#/$defs/Field_bool",
-          "description": "Too ill or frail to recover on the street or in a shelter",
+          "description": "Too ill or frail to recover on the street or in a shelter, as a clinician states it about this patient (a form's eligibility wording does not count)",
           "x-owner": "hospital",
           "x-rules": [
             "GEN-1",
@@ -965,7 +965,7 @@
         },
         "aggressive_toward_staff_or_patients": {
           "$ref": "#/$defs/Field_bool",
-          "description": "Verbal or physical aggression documented",
+          "description": "Verbal or physical aggression toward staff or other patients documented during this stay. A danger-to-others hold or threats toward family before admission are not this; leave cant_tell and note them for a person to judge",
           "x-owner": "hospital",
           "x-rules": [
             "OTH-1",

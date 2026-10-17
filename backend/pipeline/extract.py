@@ -44,7 +44,10 @@ Known traps in faxed referral packets (seen in hand review):
 28. When only the day of the month is visible, every "within 24 hours" or "72 hours" question is cant_tell; never infer timing from a column's position.
 29. Chart wording such as "resident", "facility" or "absent from facility" means the sending setting may not be a hospital; record referral.setting as the pages state it, not as the form assumes.
 30. In PT notes "(I)" means independent, "DNT" means did not test, five-digit codes like 97116 are billing codes, "300' x 2" is a distance, and "requires max encouragement" is not max assist. A POLST line about artificial nutrition is a care preference, not a feeding tube.
-31. A near-empty page can be a truncated note or an empty report, and tick marks that cross a box edge belong to the box they are mostly inside. When you cannot tell which box is ticked, cant_tell."""
+31. A near-empty page can be a truncated note or an empty report, and tick marks that cross a box edge belong to the box they are mostly inside. When you cannot tell which box is ticked, cant_tell.
+32. The forms section records what the referral and authorization forms tick, as printed. Every other section needs chart evidence. When the only support for an ADL, continence, medication self-administration, orientation, cognition, psychiatric stability or aggression value is a tick box or one-word answer on a referral or authorization form, the status is cant_tell and the value null: cite the form page in evidence and say in note that only the form claims it. A generic "independent with all ADLs" tick never fills bathing, dressing, toileting, eating or hygiene.
+33. A form's own eligibility wording ("member requires recovery in order to heal", "recuperative care only" pathway) describes the program, not the patient. "Too ill or frail to recover outside" is found only when a clinician writes something to that effect about this patient; otherwise not_in_packet or cant_tell.
+34. Aggression toward staff or patients means behavior documented during this stay toward staff or other patients. A danger-to-others hold, threats or violence toward family or others before admission are recorded as printed under psychiatric_diagnoses and in note, and the aggression field is cant_tell, so a person judges."""
 
 
 def _page_map(sst: dict) -> str:
