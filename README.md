@@ -47,21 +47,29 @@ Start here:
 ## Try it
 
 ```bash
-# 1. put the 11 packets in data/packets/ (download from the event's Drive folder; never commit them)
 pip install -r backend/requirements.txt
-export ANTHROPIC_API_KEY=...        # or put it in .env, which git ignores. Without a key the app runs in MOCK mode on fictional data.
+python3 scripts/fetch_packets.py    # pulls R01.pdf to R11.pdf from the event's Drive folder into data/packets/ (never committed)
+export ANTHROPIC_API_KEY=...        # or SST_API_KEY, or put either in .env, which git ignores. Without a key the app runs in MOCK mode on fictional data.
 uvicorn backend.app:app --reload    # then open http://127.0.0.1:8000
 ```
+
+`SST_API_KEY` exists because hosted Claude Code sessions drop a variable named `ANTHROPIC_API_KEY` from the
+container; add the key to the environment under that second name and the code reads it.
 
 In the page: pick a role, create a referral from the fictional example or upload a packet, press **Run all**.
 Provider sees the score, readout, gaps, draft reply, Analyze and conversations. Hospital sees the gaps and the
 electronic referral form. Patient sees the plain-language status once staff have reviewed it.
 
 ```bash
-python3 -m pytest -q backend/tests          # 7 tests, run in mock mode
-python3 backend/eval/run_eval.py            # blind eval over every packet in data/packets (needs the API key)
-python3 sst/build.py                        # regenerates the schema, blank record, IHH profile and field reference
+python3 -m pytest -q backend/tests                          # 9 tests; mock mode plus the live code path with a stand-in for Claude on the real R01
+python3 backend/eval/run_eval.py --packets R01,R05,R10      # live run on the three hand-reviewed packets; compare with eval/hand-review/
+python3 backend/eval/run_eval.py --readme                   # full blind eval, writes the tables below into this README (needs the key; refuses to run on mock data)
+python3 backend/eval/run_eval.py --mock                     # plumbing check only, clearly labelled MOCK
+python3 sst/build.py                                        # regenerates the schema, blank record, IHH profile and field reference
 ```
+
+Each eval run saves the full record per packet under `data/runs/eval/` (ignored by git), so a wrong value can be
+traced to its page and quote. `--resume` keeps finished packets if a run is interrupted.
 
 Python 3.13 and an Anthropic API key. No keys in the repo. Launch notes for relayhealth.dev are in `deploy/README.md`.
 
@@ -71,7 +79,7 @@ Python 3.13 and an Anthropic API key. No keys in the repo. Launch notes for rela
 |---|---|
 | SST schema, blank record, IHH rule map, field reference (234 fields, 145 rules) | working |
 | Packet ingest and page index (Stage A) | working: pages render locally; the index is a Claude call |
-| Section extraction with evidence (Stage B) | working code, tested only in mock mode in the cloud session; live run needs the key |
+| Section extraction with evidence (Stage B) | working code; the live path is exercised on the real R01 with a stand-in model. A real model run still needs the key |
 | Rule evaluation, gaps, draft reply (Stage C) | working, deterministic, unit-tested on the fixture |
 | Readiness score (Stage E) | working, deterministic, unit-tested |
 | Analyze mode (Stage F) | working code with citation validator; mock answer without a key |
@@ -85,7 +93,26 @@ Python 3.13 and an Anthropic API key. No keys in the repo. Launch notes for rela
 
 ## Where it gets things wrong
 
-[What we saw it miss on the 11 packets, and the blind score against IHH's decisions. Fill in before 4:00 PM.]
+**Status at the 3:00 PM freeze: the live blind eval has not run yet.** The cloud session that built the
+pipeline never received an API key (the hosting strips `ANTHROPIC_API_KEY` by name; see "Try it"), so
+every live-path check so far used a stand-in for Claude. What is verified without a key:
+
+- All 11 packets download, render and index: 282 pages in total (R01 34, R02 22, R03 23, R04 18, R05 14,
+  R06 30, R07 30, R08 29, R09 30, R10 21, R11 31). Rendering takes about 2 seconds per packet.
+- The live code path (page images, strict per-section schemas, evidence gate, identifier scrub, merge,
+  analyze citation validator, conversation scrub) runs end to end on R01 with a stand-in model.
+- The eval harness refuses to run live without a key, so a mock run can never be mistaken for a result.
+
+Hand reviews of R01, R05 and R10, written before any model saw them, are in [`eval/hand-review/`](eval/hand-review/).
+They list what the rule checker should find, where the form and the chart disagree, and the traps for an
+extractor (sideways pages, earlier-stay documents, ticked boxes contradicted deeper in the chart). The
+extraction prompt was updated from those traps. The first live run should be compared against them.
+
+The tables below are written by `python3 backend/eval/run_eval.py --readme` and are empty until it runs.
+
+<!-- eval:start -->
+_Not run yet._
+<!-- eval:end -->
 
 Known limits: dates are blacked out in the event packets, so every rule that needs hours (24 h insulin,
 72 h alcohol, COVID swab within 24 h) comes back "can't tell". The SST is a format we designed today.
