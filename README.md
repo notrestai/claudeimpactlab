@@ -1,4 +1,4 @@
-# Referral SST: one shared record for the hospital, the patient and the provider
+# Relay Health: one shared record for the hospital, the patient and the provider
 
 > For the referral coordinator, the hospital case manager and the patient leaving hospital with nowhere
 > to recover: turns a faxed referral packet into one structured, cited record, checks it against the
